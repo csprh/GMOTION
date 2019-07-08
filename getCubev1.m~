@@ -21,18 +21,20 @@ lat0 = Latitude0S-cubeLenL; lat1 = Latitude0S+cubeLenL;
 lon0 = Longitude0S-cubeLenL; lon1 = Longitude0S+cubeLenL;
 
 lonAll = h5read('030A_03647_101313-vel.h5','/Longitude');
-latAll = h5read('030A_03647_101313-vel.h5','/Latitude');
-dateAll = h5read('030A_03647_101313-vel.h5','/Dates');
 
 [~, minIndLon] = min(abs(lonAll-lon0));
 [~, maxIndLon] = min(abs(lonAll'-lon1));
 [~, minIndLat] = min(abs(latAll-lat0));
 [~, maxIndLat] = min(abs(latAll'-lat1));
 
+
 minIndLon = min(minIndLon);
 maxIndLon = max(maxIndLon);
 minIndLat = min(minIndLat);
 maxIndLat = max(maxIndLat);
+
+latAll = h5read('030A_03647_101313-vel.h5','/Latitude');
+dateAll = h5read('030A_03647_101313-vel.h5','/Date');
 
 startL = [minIndLon minIndLat]; countL = [maxIndLon-minIndLon maxIndLat-minIndLat];
 startLC = [startL 1]; countLC = [countL 170];
@@ -54,7 +56,7 @@ for ii = 2:170
 	thisInd1 = isnan(cThisFrame);
     cThisFrameNoNaN = cThisFrame(~thisInd1);
     thisDate = dateAll(ii);
-    thisTriplet = [lon2; lon2; thisDate*ones(size(lon2); cThisFrameNoNaN];
+    thisTriplet = [lon2; lat2; thisDate*ones(size(lon2)); cThisFrameNoNaN];
     allTriplets = [thisTriplet allTriplets];
 end	
 

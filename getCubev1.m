@@ -21,18 +21,23 @@ lat0 = Latitude0S-cubeLenL; lat1 = Latitude0S+cubeLenL;
 lon0 = Longitude0S-cubeLenL; lon1 = Longitude0S+cubeLenL;
 
 lonAll = h5read('030A_03647_101313-vel.h5','/Longitude');
-latAll = h5read('030A_03647_101313-vel.h5','/Latitude');
-dateAll = h5read('030A_03647_101313-vel.h5','/Date');
 
 [~, minIndLon] = min(abs(lonAll-lon0));
 [~, maxIndLon] = min(abs(lonAll'-lon1));
-[~, minIndLat] = min(abs(latAll-lat0));
-[~, maxIndLat] = min(abs(latAll'-lat1));
+
+
 
 minIndLon = min(minIndLon);
 maxIndLon = max(maxIndLon);
+clear lonAll 
+
+latAll = h5read('030A_03647_101313-vel.h5','/Latitude');
+[~, minIndLat] = min(abs(latAll-lat0));
+[~, maxIndLat] = min(abs(latAll'-lat1));
 minIndLat = min(minIndLat);
 maxIndLat = max(maxIndLat);
+clear latAll 
+dateAll = h5read('030A_03647_101313-vel.h5','/Date');
 
 startL = [minIndLon minIndLat]; countL = [maxIndLon-minIndLon maxIndLat-minIndLat];
 startLC = [startL 1]; countLC = [countL 170];
