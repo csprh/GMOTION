@@ -54,7 +54,7 @@ for ii = 2:170
 	thisInd1 = isnan(cThisFrame);
     cThisFrameNoNaN = cThisFrame(~thisInd1);
     thisDate = dateAll(ii);
-    thisTriplet = [lon2; lon2; thisDate*ones(size(lon2); cThisFrameNoNaN];
+    thisTriplet = [lon2; lat2; thisDate*ones(size(lon2)); cThisFrameNoNaN];
     allTriplets = [thisTriplet allTriplets];
 end	
 
