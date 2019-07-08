@@ -49,7 +49,7 @@ latThis = h5read('030A_03647_101313-vel.h5','/Latitude', startL, countL);
 cThis = h5read('030A_03647_101313-vel.h5','/Cumulative_Displacement_TSmooth',startLC,countLC);
 cThis_100 = cThis(:,:,100);
 thisInd2 = isnan(cThis_100);
-ind2 = ((lat2>lat0)&&(lat2<lat1)&&(lon2>lon0)&&(lon2<lon1));
+ind2 = ((latThis>lat0)&&(latThis<lat1)&&(lonThis>lon0)&&(lonThis<lon1));
 lon2 = lonThis(~thisInd2&&ind2);
 lat2 = latThis(~thisInd2&&ind2);
 
