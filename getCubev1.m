@@ -22,7 +22,7 @@ lon0 = Longitude0S-cubeLenL; lon1 = Longitude0S+cubeLenL;
 
 lonAll = h5read('030A_03647_101313-vel.h5','/Longitude');
 latAll = h5read('030A_03647_101313-vel.h5','/Latitude');
-dateAll = h5read('030A_03647_101313-vel.h5','/Dates');
+dateAll = h5read('030A_03647_101313-vel.h5','/Date');
 
 [~, minIndLon] = min(abs(lonAll-lon0));
 [~, maxIndLon] = min(abs(lonAll'-lon1));
