@@ -7,15 +7,11 @@ DScale = 500000;
 Latitude0 = Latitude(ML==0); Longitude0 = Longitude(ML==0); thisDate0 = thisDate(ML==0);
 Latitude1 = Latitude(ML~=0); Longitude1 = Longitude(ML~=0); thisDate1 = thisDate(ML~=0);
 
-scaleD0 = (thisDate0 - min(thisDate0(:)))./(max(thisDate0(:))-min(thisDate0(:)));
-hold on;
-view(3)
-
 cubeLenL = 0.15/10;
 cubeLenD = 0.025/10;
 Longitude0S = Longitude0(44);
 Latitude0S = Latitude0(44);
-scaleD0S = scaleD0(44); 
+Date0S = thisDate(44);
 
 lat0 = Latitude0S-cubeLenL; lat1 = Latitude0S+cubeLenL;
 lon0 = Longitude0S-cubeLenL; lon1 = Longitude0S+cubeLenL;
@@ -68,11 +64,15 @@ for ii = 2:170
 
 	cThisFrame = cThis(:,:,ii);
 
+    n = datenum(num2str(),'yyyymmdd');
 	thisInd1 = isnan(cThisFrame);
     cThisFrameNoNaN = cThisFrame((~thisInd1)&ind2);
     thisDate = dateAll(ii);
-    thisTriplet = [lon2 lat2 (single(thisDate)*ones(size(lon2))) cThisFrameNoNaN];
-    allTriplets = [thisTriplet; allTriplets];
+    thisDate = datenum(num2str(thisDate),'yyyymmdd');
+    if abs(thisDate-Date0S)<50
+        thisTriplet = [lon2 lat2 (single(thisDate)*ones(size(lon2))) cThisFrameNoNaN];
+        allTriplets = [thisTriplet; allTriplets];
+    end
 end	
 
 save demo44Triplets allTriplets
