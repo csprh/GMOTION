@@ -11,8 +11,8 @@ scaleD0 = (thisDate0 - min(thisDate0(:)))./(max(thisDate0(:))-min(thisDate0(:)))
 hold on;
 view(3)
 
-cubeLenL = 0.15/10;
-cubeLenD = 0.025/10;
+cubeLenL = 0.15/100;
+cubeLenD = 0.025/100;
 Longitude0S = Longitude0(44);
 Latitude0S = Latitude0(44);
 scaleD0S = scaleD0(44);
