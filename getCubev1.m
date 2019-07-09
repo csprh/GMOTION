@@ -71,10 +71,11 @@ for ii = 2:170
 	thisInd1 = isnan(cThisFrame);
     cThisFrameNoNaN = cThisFrame((~thisInd1)&ind2);
     thisDate = dateAll(ii);
-    thisTriplet = [lon2; lat2; thisDate*ones(size(lon2)); cThisFrameNoNaN];
-    allTriplets = [thisTriplet allTriplets];
+    thisTriplet = [lon2 lat2 (single(thisDate)*ones(size(lon2))) cThisFrameNoNaN];
+    allTriplets = [thisTriplet; allTriplets];
 end	
 
+save demo44Triplets allTriplets
 noOfPoints = size(allTriplets,1);
 for ii =1:noOfPoints
 end
