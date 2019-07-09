@@ -64,7 +64,6 @@ for ii = 2:170
 
 	cThisFrame = cThis(:,:,ii);
 
-    n = datenum(num2str(),'yyyymmdd');
 	thisInd1 = isnan(cThisFrame);
     cThisFrameNoNaN = cThisFrame((~thisInd1)&ind2);
     thisDate = dateAll(ii);
