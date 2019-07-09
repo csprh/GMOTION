@@ -13,9 +13,9 @@ view(3)
 
 cubeLenL = 0.15;
 cubeLenD = 0.025;
-Longitude0S = Longitude0(40);
-Latitude0S = Latitude0(40);
-scaleD0S = scaleD0(40);
+Longitude0S = Longitude0(44);
+Latitude0S = Latitude0(44);
+scaleD0S = scaleD0(44);
 
 lat0 = Latitude0S-cubeLenL; lat1 = Latitude0S+cubeLenL;
 lon0 = Longitude0S-cubeLenL; lon1 = Longitude0S+cubeLenL;
@@ -66,6 +66,6 @@ for ii = 2:170
 end	
 
 noOfPoints = size(allTriplets,1);
-for ii = 2:170
+for ii =1:noOfPoints
 end
 
