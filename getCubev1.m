@@ -11,11 +11,11 @@ scaleD0 = (thisDate0 - min(thisDate0(:)))./(max(thisDate0(:))-min(thisDate0(:)))
 hold on;
 view(3)
 
-cubeLenL = 0.15/20;
-cubeLenD = 0.025/20;
+cubeLenL = 0.15/10;
+cubeLenD = 0.025/10;
 Longitude0S = Longitude0(44);
 Latitude0S = Latitude0(44);
-scaleD0S = scaleD0(44);
+scaleD0S = scaleD0(44); 
 
 lat0 = Latitude0S-cubeLenL; lat1 = Latitude0S+cubeLenL;
 lon0 = Longitude0S-cubeLenL; lon1 = Longitude0S+cubeLenL;
@@ -42,7 +42,7 @@ clear lonAll
 %minIndLat = min(minIndLat);
 %maxIndLat = max(maxIndLat);
 %clear latAll 
-%dateAll = h5read('030A_03647_101313-vel.h5','/Date');
+dateAll = h5read('030A_03647_101313-vel.h5','/Date');
 
 [a, b] = find(ind2); 
 minIndLon = min(a);maxIndLon = max(a);
