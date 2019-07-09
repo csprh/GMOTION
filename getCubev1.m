@@ -22,22 +22,27 @@ lon0 = Longitude0S-cubeLenL; lon1 = Longitude0S+cubeLenL;
 
 lonAll = h5read('030A_03647_101313-vel.h5','/Longitude');
 
-[~, minIndLon] = min(abs(lonAll-lon0));
-[~, maxIndLon] = min(abs(lonAll-lon1));
+%[~, minIndLon] = min(abs(lonAll-lon0));
+%[~, maxIndLon] = min(abs(lonAll-lon1));
 
 
 
-minIndLon = min(minIndLon);
-maxIndLon = max(maxIndLon);
-clear lonAll 
+%minIndLon = min(minIndLon);
+%maxIndLon = max(maxIndLon);
+%clear lonAll 
 
 latAll = h5read('030A_03647_101313-vel.h5','/Latitude');
-[~, minIndLat] = min(abs(latAll'-lat0));
-[~, maxIndLat] = min(abs(latAll'-lat1));
-minIndLat = min(minIndLat);
-maxIndLat = max(maxIndLat);
+
+ind2 = ((latAll>lat0)&(latAll<lat1)&(lonAll>lon0)&(lonAll<lon1));
+
 clear latAll 
-dateAll = h5read('030A_03647_101313-vel.h5','/Date');
+clear lonAll 
+%[~, minIndLat] = min(abs(latAll'-lat0));
+%[~, maxIndLat] = min(abs(latAll'-lat1));
+%minIndLat = min(minIndLat);
+%maxIndLat = max(maxIndLat);
+%clear latAll 
+%dateAll = h5read('030A_03647_101313-vel.h5','/Date');
 
 startL = [minIndLon minIndLat]; countL = [maxIndLon-minIndLon maxIndLat-minIndLat];
 startLC = [startL 1]; countLC = [countL 170];
