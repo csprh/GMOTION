@@ -8,11 +8,18 @@ Latitude1 = Latitude(ML~=0); Longitude1 = Longitude(ML~=0); thisDate1 = thisDate
 noOfEQs = length(Latitude);
 cubeLenL = 0.15/10;
 cubeLenD = 0.025/10;
+dateDelta = 50;
 
 for ii = 1:noOfEQs
     
     LongitudeS = Longitude(ii);
     LatitudeS = Latitude(ii);
+    zone = utmzone(thisLat, LongitudeS);
+    utmstruct = defaultm('utm');
+    utmstruct.zone = zone;
+    utmstruct.geoid = wgs84Ellipsoid; %almanac('earth','grs80','meters');
+    utmstruct = defaultm(utmstruct);
+    [centerXProj, centerYProj] = mfwdtran( utmstruct, LatitudeS,LongitudeS);
     DateS = thisDate(ii);
     MLS = ML(ii);
     
@@ -47,23 +54,45 @@ for ii = 1:noOfEQs
     lat2 = latThis((~thisInd2)&ind2);
     
     allTriplets  = [];
-    for ii = 2:170
+    
+
+    [xProj xProj] = mfwdtran( utmstruct, lat2,lon2);
+    xProjDelta = xProj - LongitudeS;
+    yProjDelta = yProj - LatitudeS;
+    for iii = 2:170
         
-        cThisFrame = cThis(:,:,ii);
+        cThisFrame = cThis(:,:,iii);
         
         thisInd1 = isnan(cThisFrame);
         cThisFrameNoNaN = cThisFrame((~thisInd1)&ind2);
-        thisDate = dateAll(ii);
+        thisDate = dateAll(iii);
         thisDate = datenum(num2str(thisDate),'yyyymmdd');
-        if abs(thisDate-Date0S)<50
-            thisTriplet = [lon2 lat2 (single(thisDate)*ones(size(lon2))) cThisFrameNoNaN];
+        
+        
+        if (thisDate-DateS)<dateDeltaThresh
+            dateChange = thisDate-DateS;
+
+            thisTriplet = [xProjDelta yProjDelta (single(dateChange)*ones(size(xProjDelta))) cThisFrameNoNaN];
             allTriplets = [thisTriplet; allTriplets];
         end
     end
 end 
-    save demo44Triplets allTriplets
-    noOfPoints = size(allTriplets,1);
-    for ii =1:noOfPoints
-    end
 
-    
+function addToH5(h5name, , allTriplets)
+fid = H5F.create(h5name);
+plist = 'H5P_DEFAULT';
+gid = H5G.create(fid,'GroundTruth',plist,plist,plist);
+H5G.close(gid);
+H5F.close(fid);
+
+h5writeatt(inStruc.h5name,'/GroundTruth', 'thisLat', thisLat);
+h5writeatt(inStruc.h5name,'/GroundTruth', 'thisLon', thisLon);
+h5writeatt(inStruc.h5name,'/GroundTruth', 'thisCount', thisDate);
+h5writeatt(inStruc.h5name,'/GroundTruth', 'dayEnd', thisML);
+
+hdf5write(h5name,['/' thisMod  '/Ims'],theseImages, 'WriteMode','append');
+hdf5write(h5name,['/' thisMod  '/theseDates'],theseDates, 'WriteMode','append');
+hdf5write(h5name,['/' thisMod  '/theseDeltaDates'],theseDeltaDates, 'WriteMode','append');
+hdf5write(h5name,['/' thisMod  '/Points'],thesePointsOutput, 'WriteMode','append');
+hdf5write(h5name,['/' thisMod  '/PointsProj'],thesePointsOutputProj, 'WriteMode','append');
+end
