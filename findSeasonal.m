@@ -1,11 +1,13 @@
 load  UKEQs2016-2018
 frameName = '030A_03647_101313-vel.h5';
-start = [41809 4012 1];
-count = [44381-41809 4537-4012 170];
+
+
 
 
 dateAll = h5read(frameName,'/Date');
 
+start = [41809 4012 1];
+count = [44381-41809 4537-4012 length(dateAll)];
 theseDates = datenum(num2str(dateAll),'yyyymmdd');
 days = theseDates(end)-theseDates(end-1);
 interpDates = theseDates(1):days:theseDates(end);
@@ -25,10 +27,10 @@ lat2 = lat1(~thisInd2);
 for ii = 1:size(cdTSmooth,1)
     ii
     for jj = 1:size(cdTSmooth,2)
-        thisTScd = cd(ii,jj,:);
-        thisTScdTSmooth = cdTSmooth(ii,jj,:);
-        thisTScdAPS = cdAPS(ii,jj,:);
-        thisTScdFilt = cdFilt(ii,jj,:);
+        thisTScd = cd(ii,jj,:); thisTScd = thisTScd(:);
+        thisTScdTSmooth = cdTSmooth(ii,jj,:); thisTScdTSmooth = thisTScdTSmooth(:);
+        thisTScdAPS = cdAPS(ii,jj,:); thisTScdAPS = thisTScdAPS(:);
+        thisTScdFilt = cdFilt(ii,jj,:); thisTScdFilt = thisTScdFilt(:);
         outcd(ii,jj,:) = interp1(theseDates,thisTScd, interpDates);
         outcdTSmooth(ii,jj,:) = interp1(theseDates,thisTScdTSmooth, interpDates);
         outcdAPS(ii,jj,:) = interp1(theseDates,thisTScdAPS, interpDates);
