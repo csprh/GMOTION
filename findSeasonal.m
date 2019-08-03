@@ -23,15 +23,16 @@ lat2 = lat1(~thisInd2);
 
 
 for ii = 1:size(cdTSmooth,1)
+    ii
     for jj = 1:size(cdTSmooth,2)
         thisTScd = cd(ii,jj,:);
         thisTScdTSmooth = cdTSmooth(ii,jj,:);
         thisTScdAPS = cdAPS(ii,jj,:);
         thisTScdFilt = cdFilt(ii,jj,:);
-        outcd(ii,jj,:) = interp1(dateAll,thisTScd, dateAllOut);
-        outcdTSmooth(ii,jj,:) = interp1(dateAll,thisTScdTSmooth, dateAllOut);
-        outcdAPS(ii,jj,:) = interp1(dateAll,thisTScdAPS, dateAllOut);
-        outcdFilt(ii,jj,:) = interp1(dateAll,thisTScdFilt, dateAllOut);
+        outcd(ii,jj,:) = interp1(theseDates,thisTScd, interpDates);
+        outcdTSmooth(ii,jj,:) = interp1(theseDates,thisTScdTSmooth, interpDates);
+        outcdAPS(ii,jj,:) = interp1(theseDates,thisTScdAPS, interpDates);
+        outcdFilt(ii,jj,:) = interp1(theseDates,thisTScdFilt, interpDates);
     end
 end
 
