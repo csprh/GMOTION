@@ -48,10 +48,8 @@ for ii = 1:size(outcd,3)
     this_cdAPS = this_cdAPS(~thisInd);
     this_cdFilt = this_cdFilt(~thisInd);
     
-    cd_1D(:,ii)= this_cd(:);
 	cdTSmooth_1D(:,ii)= this_cdTSmooth(:);
-	cdAPS_1D(:,ii) = this_cdAPS_1D(:);
-    cdFilt_1D(:,ii) = this_cdAPS_1D(:);
+	
 end	
 
-save stokeData_cdts2 lon2 lat2 cd_1D cdTSmooth_1D cdAPS_1D cdFilt_1D
+save stokeData_cdts2 lon2 lat2 cdTSmooth_1D cd_1D
