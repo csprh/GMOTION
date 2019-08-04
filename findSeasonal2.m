@@ -11,23 +11,26 @@ lagAC = round(daysInYear/daysBetweenSamples);
 threshAC = 0.5;
 load stokeData_cdts2
 
+signal1D = cd_1D;
+%singal1D = cdTSmooth_1D;
+%singal1D = cdAPS_1D;
+%singal1D = cdFilt_1D;
+
 for ii = 1:size(cd_1D,1)
     if rem(ii,10)==0
         ii
     end
-    this_cd = cd_1D(ii,:);
-	this_cdTSmooth = cdTSmooth_1D(ii,:);
-	this_cdAPS = cdAPS_1D(ii,:);
-    this_cdFilt = cdFilt_1D(ii,:);
+    this_singal1D = singal1D(ii,:);
+
     
-    thisCD = this_cdAPS;
-    ac = autocorr(thisCD,lagAC);
+
+    ac = autocorr(this_singal1D,lagAC);
     arrayAC(ii) =  abs(ac(lagAC));
     %> threshAC;
 end
 
 arrayACInd = arrayAC>threshAC;
 
-this_cdFiltInd = this_cdFilt(arrayACInd,:);
-save arrayAC arrayAC this_cdFiltInd 
+this_signal1DInd = signal1D(arrayACInd,:);
+save arrayAC arrayAC this_signal1DInd 
 
