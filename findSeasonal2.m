@@ -12,19 +12,19 @@ threshAC = 0.5;
 load stokeData_cdts2
 
 signal1D = cd_1D;
-%singal1D = cdTSmooth_1D;
-%singal1D = cdAPS_1D;
-%singal1D = cdFilt_1D;
+%signal1D = cdTSmooth_1D;
+%signal1D = cdAPS_1D;
+%signal1D = cdFilt_1D;
 
 for ii = 1:size(cd_1D,1)
     if rem(ii,10)==0
         ii
     end
-    this_singal1D = singal1D(ii,:);
+    this_signal1D = signal1D(ii,:);
 
     
 
-    ac = autocorr(this_singal1D,lagAC);
+    ac = autocorr(this_signal1D,lagAC);
     arrayAC(ii) =  abs(ac(lagAC));
     %> threshAC;
 end
