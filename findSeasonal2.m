@@ -16,7 +16,7 @@ for ii = 1:size(cd_1D,1)
     this_cdFilt = cdFilt_1D(ii,:);
     
     thisCD = this_cdAPS;
-    ac = autocorr(thisCD);
+    ac = autocorr(thisCD,61);
     arrayAC(ii) =  abs(ac(61));
     %> threshAC;
 end
