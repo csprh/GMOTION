@@ -3,10 +3,12 @@ frameName = '030A_03647_101313-vel.h5';
 
 
 
-
+daysBetweenSamples = 6;
+daysInYear = 365.25;
+lagAC = round(daysInYear/daysBetweenSamples);
 %dateAll = h5read(frameName,'/Date');
 
-threshAC = 10;
+threshAC = 0.5;
 load stokeData_cdts2
 
 for ii = 1:size(cd_1D,1)
@@ -19,10 +21,13 @@ for ii = 1:size(cd_1D,1)
     this_cdFilt = cdFilt_1D(ii,:);
     
     thisCD = this_cdAPS;
-    ac = autocorr(thisCD,61);
-    arrayAC(ii) =  abs(ac(61));
+    ac = autocorr(thisCD,lagAC);
+    arrayAC(ii) =  abs(ac(lagAC));
     %> threshAC;
 end
 
-save arrayAC arrayAC
+arrayACInd = arrayAC>threshAC;
+
+this_cdFiltInd = this_cdFilt(arrayACInd,:);
+save arrayAC arrayAC this_cdFiltInd 
 
