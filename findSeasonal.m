@@ -10,7 +10,7 @@ start = [41809 4012 1];
 count = [44381-41809 4537-4012 length(dateAll)];
 theseDates = datenum(num2str(dateAll),'yyyymmdd');
 days = theseDates(end)-theseDates(end-1);
-interpDates = theseDates(1):days:theseDates(end);
+interpDates = theseDates(1):days:theseDates(end); interpDates  =interpDates';
 
 cd = h5read(frameName,'/Cumulative_Displacement',start,count);
 cdTSmooth = h5read(frameName,'/Cumulative_Displacement_TSmooth',start,count);
@@ -53,8 +53,8 @@ for ii = 1:size(outcd,3)
     
     cd_1D(:,ii)= this_cd(:);
 	cdTSmooth_1D(:,ii)= this_cdTSmooth(:);
-	cdAPS_1D(:,ii) = this_cdAPS_1D(:);
-    cdFilt_1D(:,ii) = this_cdAPS_1D(:);
+	cdAPS_1D(:,ii) = this_cdAPS(:);
+    cdFilt_1D(:,ii) = this_cdFilt(:);
 end	
 
 save stokeData_cdts2 lon2 lat2 cd_1D cdTSmooth_1D cdAPS_1D cdFilt_1D
