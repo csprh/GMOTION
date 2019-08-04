@@ -10,6 +10,9 @@ threshAC = 10;
 load stokeData_cdts2
 
 for ii = 1:size(cd_1D,1)
+    if rem(ii,10)==0
+        ii
+    end
     this_cd = cd_1D(ii,:);
 	this_cdTSmooth = cdTSmooth_1D(ii,:);
 	this_cdAPS = cdAPS_1D(ii,:);
