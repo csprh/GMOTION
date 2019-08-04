@@ -8,10 +8,10 @@ daysInYear = 365.25;
 lagAC = round(daysInYear/daysBetweenSamples);
 %dateAll = h5read(frameName,'/Date');
 
-threshAC0 = 0.2;
-threshAC1 = 0.15;
-threshAC2 = 0.1;
-threshAC3 = 0.05;
+threshAC0 = 0.5;
+threshAC1 = 0.4;
+threshAC2 = 0.3;
+threshAC3 = 0.25;
 load stokeData_cdts2
 
 %signal1D = cd_1D;
