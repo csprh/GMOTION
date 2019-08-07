@@ -59,11 +59,11 @@ out.outcdTSmooth =outcdTSmooth;
 out.outcdAPS =outcdAPS;
 out.outcdFilt =outcdFilt;
 
-function cdOrig = flattenData(cdOrig, lenD, nNaNInd)
+function cdOrig2 = flattenData(cdOrig, lenD, nNaNInd)
 for ii = 1:lenD
     cdOrigN = cdOrig(:,:,ii);
     cdOrigN = cdOrigN(nNaNInd);
-    cdOrig(:,ii) = cdOrigN(:);
+    cdOrig2(:,ii) = cdOrigN(:);
 end
 
 
