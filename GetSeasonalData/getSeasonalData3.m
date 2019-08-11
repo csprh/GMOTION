@@ -3,7 +3,7 @@ function getSeasonalData3
 clear; close all;
 
 frameName = '030A_03647_101313-vel.h5'; %Satsense data
-loadOut =1;
+loadOut =0;
 choosePos = 1; %Normanton coal fields
 gps0 = [53.706800, -1.391170]; %Normaton coal fields (the West Yorkshire coalfields)
 gps1 = [53.785766, -2.953747]; %New preston road fracking site
