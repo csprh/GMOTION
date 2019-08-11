@@ -23,45 +23,59 @@ frameName = '030A_03647_101313-vel.h5';
 loadOut =1;
 if loadOut == 0
     out = interpRegion(frameName, cubeLenL, Latitude0S, Longitude0S);
+    save out out;
 else
     load out;
 end
 
 signal1D= out.outcdAPS;
+signal1D_0= out.outcdFilt;
+signal1D_1= out.outcdTSmooth;
+signal1D_2= out.outcd;
 
+lat2 = out.lat2;
+lon2 = out.lon2;
+plot(lon2,lat2,'.','color',[0.6,1,0.6]);
 daysBetweenSamples = 6;
 daysInYear = 365.25;
 lagAC = round(daysInYear/daysBetweenSamples);
 
-threshAC0 = 0.45;threshAC1 = 0.4;
-threshAC2 = 0.35;threshAC3 = 0.3;
-
-
+threshAC0 = 0.45;
+threshAC1 = 0.5;
 for ii = 1:size(signal1D,1)
     if rem(ii,10)==0
         ii
+        save isSeasonal isSeasonal 
     end
     this_signal1D = signal1D(ii,:);
 
-    opol = 3;
-    t = 1:length(this_signal1D);
-    [p,s,mu] = polyfit(t,this_signal1D,opol);
-    f_y = polyval(p,t,[],mu);
+    csvwrite('in.csv',this_signal1D);
+    system('/usr/local/bin/r CMD BATCH nsdiffsM.r');
 
-    this_signal1D = this_signal1D - f_y;
-    ac = autocorr(this_signal1D,lagAC);
-    arrayAC(ii) =  abs(ac(lagAC));
+    dat = csvread('out.csv',1,1);
+    isSeasonal(ii) = dat;
+    
 end
 
 arrayACInd0 = arrayAC>threshAC0;
 arrayACInd1 = arrayAC>threshAC1;
-arrayACInd2 = arrayAC>threshAC2;
-arrayACInd3 = arrayAC>threshAC3;
-
-this_signal1DInd0 = signal1D(arrayACInd0,:);
 this_signal1DInd1 = signal1D(arrayACInd1,:);
-this_signal1DInd2 = signal1D(arrayACInd2,:);
-this_signal1DInd3 = signal1D(arrayACInd3,:);
+hold on;
+
+lat2 = lat2(arrayACInd0);
+lon2 = lon2(arrayACInd0);
+plot(lon2,lat2,'.r','MarkerSize',20);
+addpath('..');
+plot_google_map('MapScale', 1, 'APIKey','AIzaSyCwSe-kkMTqCkG7jXXhIEgpLv8F5xAZi7U');
+
+figure
+subplot(2,3,1);plot(this_signal1DInd1(1,:)); axis tight
+subplot(2,3,2);plot(this_signal1DInd1(2,:));axis tight
+subplot(2,3,3);plot(this_signal1DInd1(3,:));axis tight
+subplot(2,3,4);plot(this_signal1DInd1(4,:));axis tight
+subplot(2,3,5);plot(this_signal1DInd1(5,:));axis tight
+subplot(2,3,6);plot(this_signal1DInd1(6,:));axis tight
+
 
 
 

@@ -15,7 +15,7 @@ for ii = 1:169
     TempScaled = (thisZ - min(thisZZ(:)))/(max(thisZZ(:))-min(thisZZ(:)));
     TempScaled = (thisZ - min(thisZ(:)))/(max(thisZ(:))-min(thisZ(:)));
     %scatter(lon2,lat2,1, TempScaled);
-    %plot_google_map('MapScale', 1, 'APIKey','AIzaSyBQ5Px_1bwuiPH9Nz94jeaWncRtTYcB2m8');
+    %plot_google_map('MapScale', 1, 'APIKey','AIzaSyBQ5Px_1bwuiPH9Nz94jeaWncRtTYcB2m');
     %scatter3(lat2,lon2,p2(:,ii)-mean(p2(:,ii)),'.');
     scatter3(lat2,lon2,p2(:,ii),'.');
     set(gca,'ZLim',[-200 200]);

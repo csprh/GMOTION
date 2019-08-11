@@ -58,6 +58,7 @@ out.outcd = outcd;
 out.outcdTSmooth =outcdTSmooth;
 out.outcdAPS =outcdAPS;
 out.outcdFilt =outcdFilt;
+out.interpDates = interpDates;
 
 function cdOrig2 = flattenData(cdOrig, lenD, nNaNInd)
 for ii = 1:lenD

@@ -83,7 +83,7 @@ for ii = 1: size(gpsPos2,1);
   plot(lon3, lat3, '.b');
   hold on;
   plot(thisLon, thisLat, '.r', 'MarkerSize', 20);
-  plot_google_map('MapScale', 1, 'APIKey','AIzaSyBQ5Px_1bwuiPH9Nz94jeaWncRtTYcB2m8');
+  plot_google_map('MapScale', 1, 'APIKey','AIzaSyBQ5Px_1bwuiPH9Nz94jeaWncRtTYcB2m');
   title(labs{ii});
    
 end
