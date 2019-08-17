@@ -1,8 +1,8 @@
 function getAllCubes
 
 load  UKEQs2016-2018
-frameName = '../030A_03647_101313-vel.h5';
-frameName = '../030A_03647_101313-vel-rural.h5';
+%frameName = '../030A_03647_101313-vel.h5';
+
 
 DScale = 500000;
 Latitude0 = Latitude(ML==0); Longitude0 = Longitude(ML==0); thisDate0 = thisDate(ML==0);
@@ -17,7 +17,9 @@ confgData.distance1 = str2double(tmpStruct.confgData.distance1.Text);
 confgData.resolution = str2double(tmpStruct.confgData.resolution.Text);
 confgData.numberOfDaysInPast = str2double(tmpStruct.confgData.numberOfDaysInPast.Text);
 confgData.cubeLenL = str2double(tmpStruct.confgData.cubeLenL.Text);
+confgData.frameName = tmpStruct.confgData.frameName.Text;
 
+system(['rm ' confgData.outDir '*.h5']);
 
 for ii = 1:noOfEQs
     
@@ -38,7 +40,7 @@ for ii = 1:noOfEQs
     inStruc.thisML = ML(ii);
     
     addDataH5(inStruc, confgData);
-    out = interpRegion(frameName, confgData.cubeLenL, inStruc.thisLat, inStruc.thisLon);
+    out = interpRegion(confgData.frameName, confgData.cubeLenL, inStruc.thisLat, inStruc.thisLon);
     
     theseDates = out.interpDates;
     
