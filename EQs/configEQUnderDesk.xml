@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <confgData>
-   <frameName>/space/csprh/GMOTION/satsense/030A_03647_101313-vel-rural.h5</frameName>
+   <frameName>/space/csprh/GMOTION/satsense/030A_03647_101313-rural-vel.h5</frameName>
    <trainDir>/space/csprh/EQ/train/</trainDir>
    <trainImsDir>/space/csprh/EQ/CNNIms/train</trainImsDir>
    <resolution>2000</resolution>
