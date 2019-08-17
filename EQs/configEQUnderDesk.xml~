@@ -3,10 +3,10 @@
    <frameName>/space/csprh/GMOTION/satsense/030A_03647_101313-rural-vel.h5</frameName>
    <trainDir>/space/csprh/EQ/train/</trainDir>
    <trainImsDir>/space/csprh/EQ/CNNIms/train</trainImsDir>
-   <resolution>100</resolution>
-   <distance1>10000</distance1>
+   <resolution>0</resolution>
+   <distance1>000</distance1>
    <numberOfDaysInPast>60</numberOfDaysInPast>
-   <outputRes>100</outputRes>
+   <outputRes>20</outputRes>
    <cubeLenL>0.1</cubeLenL>
    <alphaSize>2</alphaSize>
    <preLoadMinMax>1</preLoadMinMax>
