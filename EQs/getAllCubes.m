@@ -1,8 +1,8 @@
 function getAllCubes
 
 load  UKEQs2016-2018
-frameName = '030A_03647_101313-vel.h5';
-frameName = '030A_03647_101313-vel-rural.h5';
+frameName = '../030A_03647_101313-vel.h5';
+frameName = '../030A_03647_101313-vel-rural.h5';
 
 DScale = 500000;
 Latitude0 = Latitude(ML==0); Longitude0 = Longitude(ML==0); thisDate0 = thisDate(ML==0);
