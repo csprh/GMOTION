@@ -78,7 +78,7 @@ for ii = 1:noOfEQs
     addToH5(inStruc.h5name, theseImages, theseDates, theseDeltaDates, thesePointsOutput, thesePointsProjOutput);
 end
 
-function addToH5(h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput, thesePointsOutputProj)
+function addToH5(h5name,  theseImages, theseDates, theseDeltaDates, thesePointsOutput, thesePointsOutputProj)
 %% add Ims, theseDates, theseDeltaDates and Points to output H5 file
 %
 % USAGE:
