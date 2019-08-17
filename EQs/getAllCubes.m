@@ -57,9 +57,9 @@ for ii = 1:noOfEQs
     thesePointsProjNew = cell(listLength,1);
     
     for iii = 1:listLength
-        thisDate = dateRange(iii);
-        thisDeltaDate = inStruc.dayEnd-thisDate;
-        theseDates{iii} = thisDate;
+        thisDateD = dateRange(iii);
+        thisDeltaDate = inStruc.dayEnd-thisDateD;
+        theseDates{iii} = thisDateD;
         theseDeltaDates{iii} = thisDeltaDate;
         [theseImages{iii}, thesePoints, thesePointsProj] = getData(out, datesIndNumsRange(iii), inStruc.thisLat, inStruc.thisLon, confgData.distance1, confgData.resolution, utmstruct);        %         thesePointsNew{iii} = [thesePoints ones(size(thesePoints,1),1)*theseDeltaDates{iii}];
         thesePointsNew{iii} = [thesePoints ones(size(thesePoints,1),1)*theseDeltaDates{iii}];
