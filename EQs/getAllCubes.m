@@ -76,6 +76,8 @@ for ii = 1:noOfEQs
     end
     
     addToH5(inStruc.h5name, theseImages, theseDates, theseDeltaDates, thesePointsOutput, thesePointsProjOutput);
+    gzip(inStruc.h5name);
+    system(['rm ' confgData.outDir '*.h5']);
 end
 
 function addToH5(h5name,  theseImages, theseDates, theseDeltaDates, thesePointsOutput, thesePointsOutputProj)
