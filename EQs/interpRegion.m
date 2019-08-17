@@ -84,7 +84,7 @@ out.outcdTSmooth =outcdTSmooth;
 out.outcdAPS = [];
 out.outcdFilt = [];
 out.interpDates = interpDates;
-out.outcd = outcd;
+%out.outcd = outcd;
 %out.outcdAPS =outcdAPS;
 %out.outcdFilt =outcdFilt;
 
