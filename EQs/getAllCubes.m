@@ -52,7 +52,7 @@ for ii = 1:noOfEQs
     listLength = length(dateRange);
     clear theseDates theseDeltaDates theseImages;
     thesePointsOutput = []; thesePointsProjOutput = [];
-    theseImages = cell(listLength,1);theseDates = cell(listLength,1);theseDeltaDates = cell(length(sortIndex),1);
+    theseImages = cell(listLength,1);theseDates = cell(listLength,1);theseDeltaDates = cell(listLength,1);
     thesePointsNew = cell(listLength,1);
     thesePointsProjNew = cell(listLength,1);
     
