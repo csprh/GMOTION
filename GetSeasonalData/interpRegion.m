@@ -1,4 +1,29 @@
 function out = interpRegion(frameName, cubeLenL, Latitude0S, Longitude0S)
+%% Function that 
+%% 1. locates satsense data surrounding a lat, lon location
+%% 2. interpolates this data (for missing data points)
+
+% USAGE:
+%   out = interpRegion(frameName, cubeLenL, Latitude0S, Longitude0S)
+% INPUT:
+%   frameName: Name of satsense frame
+%   cubeLenL: length of cube edge between lat and lon centres and edge of
+%   cube
+%   Latitude0S: Case study centre lat
+%   Longitude0S: Case study centre lon
+% OUTPUT:
+%   out: structure that contains 
+%       out.lon2            Longitude positions
+%       out.lat2            Latitude positions
+%       out.outcd           Satsense data (Raw)
+%       out.outcdTSmooth:   Satsense data (TSmooth)
+%       out.outcdAPS:       Satsense data (APS)
+%       out.outcdFilt:      Satsense data (Filt)
+%       out.interpDates:    Interpolation dates
+
+% THE UNIVERSITY OF BRISTOL: Digital Environment
+
+% Author Dr Paul Hill July 2019
 
 dateAll = h5read(frameName,'/Date');
 theseDates = datenum(num2str(dateAll),'yyyymmdd');

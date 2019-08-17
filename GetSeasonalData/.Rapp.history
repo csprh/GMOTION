@@ -1,0 +1,122 @@
+help ()
+help.start()
+nsdiffs
+install.packages('forecast', dependencies = TRUE)
+install.packages('forecast', dependencies = TRUE)
+nsdiffs
+install.packages('forecast', dependencies = FALSE)
+nsdiffs
+library(forecast)
+nsdiffs
+Chtest
+CHtest
+frequency
+p = [1 1 1 1 1 1 1]
+p = (1 1 1 1 1 )
+CHtest(x,m)
+require(forecast)
+wage <- structure(c(2.32, 2.35, 2.38, 2.4, 2.41, 2.44, 2.47, 2.5, 2.52, #
+2.55, 2.58, 2.61, 2.63, 2.66, 2.7, 2.73, 2.78, 2.82, 2.87, 2.92, #
+2.96, 3.02, 3.07, 3.12, 3.15, 3.2, 3.26, 3.3, 3.36, 3.43, 3.49, #
+3.53, 3.61, 3.66, 3.72, 3.79, 3.83, 3.9, 3.98, 4.05, 4.09, 4.18, #
+4.29, 4.39, 4.42, 4.48, 4.57, 4.66, 4.73, 4.8, 4.91, 5.01, 5.1, #
+5.19, 5.29, 5.4, 5.5, 5.63, 5.74, 5.89, 6, 6.07, 6.21, 6.34, #
+6.46, 6.57, 6.7, 6.9, 7.06, 7.17, 7.31, 7.44, 7.55, 7.62, 7.71, #
+7.81, 7.91, 7.96, 8.02, 8.15, 8.25, 8.29, 8.35, 8.43, 8.51, 8.54, #
+8.59, 8.68), .Tsp = c(1964, 1985.75, 4), class = "ts")
+wage
+x <- diff(log(wage))
+x
+frequency(x)
+nsdiffs(x, frequency(x), test = "ch")
+nsdiffs
+nsdiffs(x)
+nsdiffs(x, frequency(x))
+CHtest(x,m)
+pwd
+rawdat <- read.csv('in.csv',header=FALSE)
+dir
+dir *
+c
+dir
+pwd()
+getwd()
+setwd()
+setwd(/Users/csprh/Dlaptop/MATLAB/MYCODE/GMOTION/GetSeasonalData)
+setwd(''/Users/csprh/Dlaptop/MATLAB/MYCODE/GMOTION/GetSeasonalData')
+setwd(''/Users/csprh/Dlaptop/MATLAB/MYCODE/GMOTION/GetSeasonalData')
+setwd(""/Users/csprh/Dlaptop/MATLAB/MYCODE/GMOTION/GetSeasonalData")
+setwd
+qqui"
+setwd("/Users/csprh/Dlaptop/MATLAB/MYCODE/GMOTION/GetSeasonalData")
+getwd()
+rawdat <- read.csv('in.csv',header=FALSE)
+rawdat
+ms <- rawdat[,1]
+ms
+ms <- rawdat[:,1]
+ms <- rawdat[1,]
+ms
+ms1 <- ms[1,]
+ms1
+ms1 <- ms[,1]
+ms1
+ms <- rawdat[,1]
+ms
+ms <- rawdat[,2]
+rawdat[,2]
+rawdat[2]
+require(forecast)
+nsdiffs(rawdat,61)
+rawdat
+nsdiffs(rawdat)
+montreal=read.table("http://freakonometrics.free.fr/temp-montreal-monthly.txt")
+montreal
+M=as.matrix(montreal[,2:13])
+M
+X=as.numeric(t(M))
+X
+tsm=ts(X,start=1948,freq=12)
+tsm
+plot(tsm)
+nsdiff(tsm)
+nsdiffs(tsm)
+nnsdiffs(tsm, test="ch")
+nsdiffs(tsm, test="ch")
+nsdiffs(rawdat)
+nsdiffs(ts(rawdat),61)
+nsdiffs(ts(rawdat),61, test= "ch")
+ts(rawdat)
+X=as.numeric(t(rawdata))
+X=as.numeric(rawdata)
+X=as.numeric(rawdat)
+X
+nsdiffs(ts(X),61, test= "ch")
+nsdiffs(ts(X),61)
+ts(X)
+ts(X,61)
+ts(X,1,222,61)
+nsdiffs(ts(X,1,22,61),61)
+nsdiffs(ts(X,1,22,61))
+nsdiffs(ts(X,1,222,61))
+help ts
+man ts
+ts.help
+ts
+set.seed(123)#
+t <- seq(from = 1, to = 100, by = 1) + 10 + rnorm(100, sd = 7)
+t
+ts(X,frequency = 61)
+nsdiffs(ts(X,frequency = 61))
+nsdiffsM
+ls
+X
+XX <- X,X
+nsdiffs(ts(X,frequency = 61))
+nsdiffs(ts(X,frequency = 61))
+nsdiffs(ts(X,frequency = 61))
+nsdiffs(ts(X,frequency = 61))
+i <- 1
+cat(i)
+print(i
+)
