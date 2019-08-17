@@ -93,11 +93,11 @@ function addToH5(h5name,  theseImages, theseDates, theseDeltaDates, thesePointsO
 %   thesePointsOutputProj - 4D Array of projected points output
 % OUTPUT:
 %   -
-hdf5write(h5name,['/' thisMod  '/Ims'],theseImages, 'WriteMode','append');
-hdf5write(h5name,['/' thisMod  '/theseDates'],theseDates, 'WriteMode','append');
-hdf5write(h5name,['/' thisMod  '/theseDeltaDates'],theseDeltaDates, 'WriteMode','append');
-hdf5write(h5name,['/' thisMod  '/Points'],thesePointsOutput, 'WriteMode','append');
-hdf5write(h5name,['/' thisMod  '/PointsProj'],thesePointsOutputProj, 'WriteMode','append');
+hdf5write(h5name,'/Ims',theseImages, 'WriteMode','append');
+hdf5write(h5name,'/theseDates',theseDates, 'WriteMode','append');
+hdf5write(h5name,'/theseDeltaDates',theseDeltaDates, 'WriteMode','append');
+hdf5write(h5name,'/Points',thesePointsOutput, 'WriteMode','append');
+hdf5write(h5name,'/PointsProj',thesePointsOutputProj, 'WriteMode','append');
 
 function addDataH5(inStruc, confgData)
 %% addDataH5 creates a H5 file and stores ground truth data to it
