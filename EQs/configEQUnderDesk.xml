@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <confgData>
-   <trainDir>/home/cosc/csprh/linux/HABCODE/scratch/EQ/train/</trainDir>
-   <trainImsDir>/home/cosc/csprh/linux/HABCODE/scratch/EQ/CNNIms/train</trainImsDir>
+   <trainDir>/space/csprh/EQ/train/</trainDir>
+   <trainImsDir>/space/csprh/EQ/CNNIms/train</trainImsDir>
    <resolution>2000</resolution>
    <distance1>100000</distance1>
    <numberOfDaysInPast>60</numberOfDaysInPast>
