@@ -1,8 +1,8 @@
 function getAllCubes
 
 load  UKEQs2016-2018
-frameName = '030A_03647_101313-vel.h5';
-frameName = '030A_03647_101313-vel-rural.h5';
+%frameName = '../030A_03647_101313-vel.h5';
+
 
 DScale = 500000;
 Latitude0 = Latitude(ML==0); Longitude0 = Longitude(ML==0); thisDate0 = thisDate(ML==0);
@@ -17,8 +17,12 @@ confgData.distance1 = str2double(tmpStruct.confgData.distance1.Text);
 confgData.resolution = str2double(tmpStruct.confgData.resolution.Text);
 confgData.numberOfDaysInPast = str2double(tmpStruct.confgData.numberOfDaysInPast.Text);
 confgData.cubeLenL = str2double(tmpStruct.confgData.cubeLenL.Text);
+confgData.frameName = tmpStruct.confgData.frameName.Text;
 
+system(['rm ' confgData.outDir '*.h5']);
 
+cluster = parcluster('local'); nworkers = cluster.NumWorkers;
+parfor (iii = 1:listLength,nworkers)
 for ii = 1:noOfEQs
     
     fileName = ['Cube_' sprintf('%05d',ii) '_' sprintf('%05d',ii) '_' num2str(thisDate(ii)) '.h5'];
@@ -38,28 +42,30 @@ for ii = 1:noOfEQs
     inStruc.thisML = ML(ii);
     
     addDataH5(inStruc, confgData);
-    out = interpRegion(frameName, confgData.cubeLenL, inStruc.thisLat, inStruc.thisLon);
-    
+    out = interpRegion(confgData.frameName, confgData.cubeLenL, inStruc.thisLat, inStruc.thisLon);
+    if length(out.outcdTSmooth) == 0
+        continue
+    end
     theseDates = out.interpDates;
     
     datesInd = (theseDates<inStruc.dayEnd)&(theseDates>inStruc.dayStart);
     datesIndNums = 1:length(theseDates);
     dateRange = theseDates(datesInd);
-    datesInd = datesIndNums(datesInd);
+    datesIndNumsRange = datesIndNums(datesInd);
     
     listLength = length(dateRange);
     clear theseDates theseDeltaDates theseImages;
     thesePointsOutput = []; thesePointsProjOutput = [];
-    theseImages = cell(listLength,1);theseDates = cell(listLength,1);theseDeltaDates = cell(length(sortIndex),1);
+    theseImages = cell(listLength,1);theseDates = cell(listLength,1);theseDeltaDates = cell(listLength,1);
     thesePointsNew = cell(listLength,1);
     thesePointsProjNew = cell(listLength,1);
     
     for iii = 1:listLength
-        thisDate = dateRange(iii);
-        thisDeltaDate = inStruc.dayEnd-thisDate;
-        theseDates{iii} = thisDate;
+        thisDateD = dateRange(iii);
+        thisDeltaDate = inStruc.dayEnd-thisDateD;
+        theseDates{iii} = thisDateD;
         theseDeltaDates{iii} = thisDeltaDate;
-        [theseImages{iii}, thesePoints, thesePointsProj] = getData(out, datesInd3(iii), inStruc.thisLat, inStruc.thisLon, confgData.distance1, confgData.resolution, utmstruct);        %         thesePointsNew{iii} = [thesePoints ones(size(thesePoints,1),1)*theseDeltaDates{iii}];
+        [theseImages{iii}, thesePoints, thesePointsProj] = getData(out, datesIndNumsRange(iii), inStruc.thisLat, inStruc.thisLon, confgData.distance1, confgData.resolution, utmstruct);        %         thesePointsNew{iii} = [thesePoints ones(size(thesePoints,1),1)*theseDeltaDates{iii}];
         thesePointsNew{iii} = [thesePoints ones(size(thesePoints,1),1)*theseDeltaDates{iii}];
         thesePointsProjNew{iii} = [thesePointsProj ones(size(thesePointsProj,1),1)*theseDeltaDates{iii}];
     end
@@ -74,9 +80,11 @@ for ii = 1:noOfEQs
     end
     
     addToH5(inStruc.h5name, theseImages, theseDates, theseDeltaDates, thesePointsOutput, thesePointsProjOutput);
+    gzip(inStruc.h5name);
+    system(['rm ' confgData.outDir '*.h5']);
 end
 
-function addToH5(h5name, thisMod, theseImages, theseDates, theseDeltaDates, thesePointsOutput, thesePointsOutputProj)
+function addToH5(h5name,  theseImages, theseDates, theseDeltaDates, thesePointsOutput, thesePointsOutputProj)
 %% add Ims, theseDates, theseDeltaDates and Points to output H5 file
 %
 % USAGE:
@@ -91,11 +99,11 @@ function addToH5(h5name, thisMod, theseImages, theseDates, theseDeltaDates, thes
 %   thesePointsOutputProj - 4D Array of projected points output
 % OUTPUT:
 %   -
-hdf5write(h5name,['/' thisMod  '/Ims'],theseImages, 'WriteMode','append');
-hdf5write(h5name,['/' thisMod  '/theseDates'],theseDates, 'WriteMode','append');
-hdf5write(h5name,['/' thisMod  '/theseDeltaDates'],theseDeltaDates, 'WriteMode','append');
-hdf5write(h5name,['/' thisMod  '/Points'],thesePointsOutput, 'WriteMode','append');
-hdf5write(h5name,['/' thisMod  '/PointsProj'],thesePointsOutputProj, 'WriteMode','append');
+hdf5write(h5name,'/Ims',theseImages, 'WriteMode','append');
+hdf5write(h5name,'/theseDates',theseDates, 'WriteMode','append');
+hdf5write(h5name,'/theseDeltaDates',theseDeltaDates, 'WriteMode','append');
+hdf5write(h5name,'/Points',thesePointsOutput, 'WriteMode','append');
+hdf5write(h5name,'/PointsProj',thesePointsOutputProj, 'WriteMode','append');
 
 function addDataH5(inStruc, confgData)
 %% addDataH5 creates a H5 file and stores ground truth data to it

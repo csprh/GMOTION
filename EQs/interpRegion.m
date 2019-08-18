@@ -66,7 +66,9 @@ cdTSmooth = flattenData(cdTSmooth, lenD, ~thisInd2);
 %cdAPS = flattenData(cdAPS,lenD, ~thisInd2);
 %cdFilt = flattenData(cdFilt, lenD, ~thisInd2);
 outcdTSmooth = [];
-for ii = 1:length(cdTSmooth)
+cluster = parcluster('local'); nworkers = cluster.NumWorkers;
+parfor (ii = 1:length(cdTSmooth),nworkers)
+%for ii = 1:length(cdTSmooth)
         %thisTScd = cdOrig(ii,:); thisTScd = thisTScd(:);
         thisTScdTSmooth = cdTSmooth(ii,:); thisTScdTSmooth = thisTScdTSmooth(:);
         %thisTScdAPS = cdAPS(ii,:); thisTScdAPS = thisTScdAPS(:);

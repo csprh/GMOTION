@@ -21,7 +21,8 @@ confgData.frameName = tmpStruct.confgData.frameName.Text;
 
 system(['rm ' confgData.outDir '*.h5']);
 
-for ii = 11:noOfEQs
+
+for ii = 1:noOfEQs
     
     fileName = ['Cube_' sprintf('%05d',ii) '_' sprintf('%05d',ii) '_' num2str(thisDate(ii)) '.h5'];
     
@@ -41,7 +42,9 @@ for ii = 11:noOfEQs
     
     addDataH5(inStruc, confgData);
     out = interpRegion(confgData.frameName, confgData.cubeLenL, inStruc.thisLat, inStruc.thisLon);
-    
+    if length(out.outcdTSmooth) == 0
+        continue
+    end
     theseDates = out.interpDates;
     
     datesInd = (theseDates<inStruc.dayEnd)&(theseDates>inStruc.dayStart);

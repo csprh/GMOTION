@@ -23,11 +23,8 @@ function [outputIm, tripleOut, tripleOutProj] = getData(out, dateInd, outLat, ou
 
 lonDD = out.lon2;
 latDD = out.lat2;
-try
-    inVar = out.outcdTSmooth(:,dateInd);
-catch
-    inVar
-end
+inVar = out.outcdTSmooth(:,dateInd);
+
 %       out.outcdTSmooth:   Satsense data (TSmooth)
 %       out.outcdAPS:       Satsense data (APS)
 %       out.outcdFilt:      Satsense data (Filt)
