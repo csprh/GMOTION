@@ -1,4 +1,4 @@
-function outputImagesFromDataCube(baseDirectory,   groupMinMax,  h5name)
+function outputImagesFromDataCube(baseDirectory,   groupMinMax,  h5name, noOfIms)
 %% This code generates quantised images for an input H5 datacube
 %% It loops through all modalities within the given H5 file (h5name) and generates
 %% A directory of images in a folder for ingress into Machine Learning
@@ -24,10 +24,14 @@ function outputImagesFromDataCube(baseDirectory,   groupMinMax,  h5name)
 addpath('Inpaint_nans');
 
 thisBaseDirectory = [baseDirectory '/'];
-mkdir(thisBaseDirectory);
+
 
 Ims = h5read(h5name, '/Ims');
 
+if size(Ims,3) ~= noOfIms
+    return;
+end
+mkdir(thisBaseDirectory);
 %%Loop through days, quantise them, sum, clip and output
 for thisDay  = 1:size(Ims,3)
     try
