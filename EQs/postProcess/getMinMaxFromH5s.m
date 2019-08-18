@@ -35,10 +35,9 @@ for ii = 1: numberOfH5s
             thisMax = ones(numberOfH5s)*NaN;
             thisMin = ones(numberOfH5s)*NaN;
         end
-        PointsProj = h5read(h5name, '/PointsProj');
-        theseVals = PointsProj(:,3);
-        thisMax(ii) = max(theseVals);
-        thisMin(ii) = min(theseVals);
+        theseIms = h5read(h5name, '/Ims');
+        thisMax(ii) = max(theseIms(:));
+        thisMin(ii) = min(theseIms(:));
         
     catch
     end
