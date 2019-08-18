@@ -23,7 +23,7 @@ confgData.frameName = tmpStruct.confgData.frameName.Text;
 system(['rm ' confgData.outDir '*.h5']);
 
 
-for ii = 62:noOfEQs
+for ii = 1:noOfEQs
     
     fileName = ['Cube_' sprintf('%05d',ii) '_' sprintf('%05d',ii) '_' num2str(thisDate(ii)) '.h5'];
     
