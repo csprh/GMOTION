@@ -32,7 +32,7 @@ distance1 = str2num(tmpStruct.confgData.distance1.Text);
 outputRes = str2num(tmpStruct.confgData.outputRes.Text);
 preLoadMinMax = str2num(tmpStruct.confgData.preLoadMinMax.Text);
 numberOfDaysInPast  = str2num(tmpStruct.confgData.numberOfDaysInPast.Text);
-threshBytes = str2num(tmpStruct.confgData.threshBytes.Text);
+threshBytes = 
 
 
 %The input range is usually 50 by 50 samples (in projected space)
@@ -79,7 +79,7 @@ for ii = 1: numberOfH5s
         if dirOut.bytes < threshBytes
             totalDiscount= totalDiscount+1;
             totalDiscount
-            continue;
+            %continue;
         end
         
         %Split output into train/test, HAB Class directory, Ground truth line

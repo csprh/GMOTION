@@ -4,7 +4,6 @@ load  UKEQs2016-2018
 thisDate= round(thisDate);
 %frameName = '../030A_03647_101313-vel.h5';
 
-
 DScale = 500000;
 Latitude0 = Latitude(ML==0); Longitude0 = Longitude(ML==0); thisDate0 = thisDate(ML==0);
 Latitude1 = Latitude(ML~=0); Longitude1 = Longitude(ML~=0); thisDate1 = thisDate(ML~=0);
@@ -23,7 +22,7 @@ confgData.frameName = tmpStruct.confgData.frameName.Text;
 system(['rm ' confgData.outDir '*.h5']);
 
 
-for ii = 1:noOfEQs
+for ii = 581:noOfEQs
     
     fileName = ['Cube_' sprintf('%05d',ii) '_' sprintf('%05d',ii) '_' num2str(thisDate(ii)) '.h5'];
     
@@ -41,7 +40,7 @@ for ii = 1:noOfEQs
     inStruc.dayStart = inStruc.dayEnd-confgData.numberOfDaysInPast;
     inStruc.thisML = ML(ii);
     
-    addDataH5(inStruc, confgData);
+
     try
         out = interpRegion(confgData.frameName, confgData.cubeLenL, inStruc.thisLat, inStruc.thisLon);
     catch
@@ -50,6 +49,7 @@ for ii = 1:noOfEQs
     if length(out.outcdTSmooth) == 0
         continue
     end
+    addDataH5(inStruc, confgData);
     theseDates = out.interpDates;
     
     datesInd = (theseDates<inStruc.dayEnd)&(theseDates>inStruc.dayStart);
@@ -103,11 +103,14 @@ function addToH5(h5name,  theseImages, theseDates, theseDeltaDates, thesePointsO
 %   thesePointsOutputProj - 4D Array of projected points output
 % OUTPUT:
 %   -
-hdf5write(h5name,'/Ims',theseImages, 'WriteMode','append');
-hdf5write(h5name,'/theseDates',theseDates, 'WriteMode','append');
-hdf5write(h5name,'/theseDeltaDates',theseDeltaDates, 'WriteMode','append');
-hdf5write(h5name,'/Points',thesePointsOutput, 'WriteMode','append');
-hdf5write(h5name,'/PointsProj',thesePointsOutputProj, 'WriteMode','append');
+try
+    hdf5write(h5name,'/Ims',theseImages, 'WriteMode','append');
+    hdf5write(h5name,'/theseDates',theseDates, 'WriteMode','append');
+    hdf5write(h5name,'/theseDeltaDates',theseDeltaDates, 'WriteMode','append');
+    hdf5write(h5name,'/Points',thesePointsOutput, 'WriteMode','append');
+    hdf5write(h5name,'/PointsProj',thesePointsOutputProj, 'WriteMode','append');
+catch
+end
 
 function addDataH5(inStruc, confgData)
 %% addDataH5 creates a H5 file and stores ground truth data to it

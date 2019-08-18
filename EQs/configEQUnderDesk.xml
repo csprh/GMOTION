@@ -9,6 +9,9 @@
    <outputRes>100</outputRes>
    <cubeLenL>0.1</cubeLenL>
    <alphaSize>2</alphaSize>
-   <preLoadMinMax>1</preLoadMinMax>
+   <preLoadMinMax>0</preLoadMinMax>
+   <threshBytes>10000</threshBytes>
+   
 </confgData>
+
 

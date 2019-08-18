@@ -29,29 +29,19 @@ for ii = 1: numberOfH5s
         gzh5name = [filenameBase h5files(ii).name];
         gunzip(gzh5name);
         h5name = gzh5name(1:end-3);
-        modNames = h5read(h5name, '/Modnames');
-        modNo = size(modNames,1);
-
+        
         if ii == 1
             % Initalise
-            thisMax = ones(modNo, numberOfH5s)*NaN;
-            thisMin = ones(modNo, numberOfH5s)*NaN;
+            thisMax = ones(numberOfH5s)*NaN;
+            thisMin = ones(numberOfH5s)*NaN;
         end
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%Loop through all modalities              %%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        for thisGroupIndex = 1: modNo
-            thisModName = strtrim(modNames{thisGroupIndex}); %Remove whitespaces
-            thisModName(thisModName==0) = ' ';
-            thisModName = strtrim(thisModName);
-
-            PointsProj = h5read(h5name, ['/' thisModName '/PointsProj']);
-            theseVals = PointsProj(:,3);
-            thisMax(thisGroupIndex, ii) = max(theseVals);
-            thisMin(thisGroupIndex, ii) = min(theseVals);
-        end
-    catch
+        PointsProj = h5read(h5name, '/PointsProj');
+        theseVals = PointsProj(:,3);
+        thisMax(ii) = max(theseVals);
+        thisMin(ii) = min(theseVals);
     end
+    catch
+end
 end
 
 
