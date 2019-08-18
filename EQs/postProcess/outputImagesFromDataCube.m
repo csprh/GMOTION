@@ -29,7 +29,7 @@ mkdir(thisBaseDirectory);
 Ims = h5read(h5name, '/Ims');
 
 %%Loop through days, quantise them, sum, clip and output
-for thisDay  = 1:size(Ims,4)
+for thisDay  = 1:size(Ims,3)
     try
         outputImage = Ims(:,:,thisDay);
         outputImage(outputImage==0) = NaN;
