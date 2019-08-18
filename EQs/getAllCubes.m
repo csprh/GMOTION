@@ -1,6 +1,7 @@
 function getAllCubes
 
 load  UKEQs2016-2018
+thisDate= round(thisDate);
 %frameName = '../030A_03647_101313-vel.h5';
 
 
