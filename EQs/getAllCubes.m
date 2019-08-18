@@ -22,7 +22,7 @@ confgData.frameName = tmpStruct.confgData.frameName.Text;
 system(['rm ' confgData.outDir '*.h5']);
 
 
-for ii = 1:noOfEQs
+for ii = 62:noOfEQs
     
     fileName = ['Cube_' sprintf('%05d',ii) '_' sprintf('%05d',ii) '_' num2str(thisDate(ii)) '.h5'];
     
@@ -41,7 +41,11 @@ for ii = 1:noOfEQs
     inStruc.thisML = ML(ii);
     
     addDataH5(inStruc, confgData);
-    out = interpRegion(confgData.frameName, confgData.cubeLenL, inStruc.thisLat, inStruc.thisLon);
+    try
+        out = interpRegion(confgData.frameName, confgData.cubeLenL, inStruc.thisLat, inStruc.thisLon);
+    catch
+        continue;
+    end
     if length(out.outcdTSmooth) == 0
         continue
     end
