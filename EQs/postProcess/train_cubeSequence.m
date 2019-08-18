@@ -24,24 +24,11 @@ clear; close all;
 addpath('..');
 tmpStruct = xml2struct('configEQUnderDesk.xml');
 
-
 cubesDir = tmpStruct.confgData.trainDir.Text;
 imsDir = tmpStruct.confgData.trainImsDir.Text;
-resolution = str2num(tmpStruct.confgData.resolution.Text);
-distance1 = str2num(tmpStruct.confgData.distance1.Text);
-outputRes = str2num(tmpStruct.confgData.outputRes.Text);
+
 preLoadMinMax = str2num(tmpStruct.confgData.preLoadMinMax.Text);
-numberOfDaysInPast  = str2num(tmpStruct.confgData.numberOfDaysInPast.Text);
 threshBytes = str2num(tmpStruct.confgData.threshBytes.Text);
-
-
-%The input range is usually 50 by 50 samples (in projected space)
-%The output resolution is 1000m (1km).  This results in 100x100 pixels images
-%AlphaSize controls the interpolation projected points to output image
-
-inputRangeX = [0 distance1/resolution];
-inputRangeY = [0 distance1/resolution];
-
 
 h5files=dir([cubesDir '*.h5.gz']);
 numberOfH5s=size(h5files,1);
@@ -71,9 +58,6 @@ for ii = 1: numberOfH5s
         
         [ 'thisML = ' num2str(thisML) ];
         isEQ  = thisML > 0;
-
-        
-        dirOut = dir(gzh5name);
         
         % Discount this line in the Ground Truth
         if dirOut.bytes < threshBytes
@@ -84,9 +68,9 @@ for ii = 1: numberOfH5s
         
         %Split output into train/test, HAB Class directory, Ground truth line
         %number, Group Index
-        baseDirectory = [ imsDir filesep num2str(isEQ) '/' num2str(ii)] ;
+        baseDirectory = [ imsDir filesep num2str(isEQ) filesep num2str(ii)] ;
         
-        outputImagesFromDataCube(baseDirectory,  numberOfDaysInPast, groupMinMax, inputRangeX, inputRangeY, alphaSize, outputRes, h5name);
+        outputImagesFromDataCube(baseDirectory,   groupMinMax,  h5name);
         
         clear totNumberCP zNumberCP quotCP totNumber zNumber quot
     catch

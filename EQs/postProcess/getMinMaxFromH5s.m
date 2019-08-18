@@ -39,9 +39,9 @@ for ii = 1: numberOfH5s
         theseVals = PointsProj(:,3);
         thisMax(ii) = max(theseVals);
         thisMin(ii) = min(theseVals);
-    end
+        
     catch
-end
+    end
 end
 
 
