@@ -112,7 +112,7 @@ class DataSet():
         test = []
 
         inde = 0
-        data_len = len(self.data)
+        data_len = len(self.dataLowest)
         np.random.seed(0)
         rc = np.random.choice([0, 1], size=(data_len,), p=[1-prop, prop])
         for item in self.dataLowest:

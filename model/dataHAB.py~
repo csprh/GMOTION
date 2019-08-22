@@ -212,16 +212,11 @@ class DataSet():
            modalities loading the output bottleneck features.  It concatentates
            these features """
         thisreturn = []
-        for i in range(1, self.modNumber+1):
 
-            thispath = filename + '/' + str(i) + '/' + self.seqName + '.npy'
-            thisfeats = np.load(thispath)
+        thispath = filename + '/' + self.seqName + '.npy'
+        thisfeats = np.load(thispath)
 
-            if i == 1:
-                thisreturn = thisfeats
-            else:
-                thisreturn = np.concatenate((thisreturn, thisfeats), axis=1)
-        return thisreturn
+        return thisfeats
 
     def get_extracted_sequence(self,  filename):
         """Get a single image from the eighth modality."""
