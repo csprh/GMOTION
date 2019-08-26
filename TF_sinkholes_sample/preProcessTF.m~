@@ -29,8 +29,9 @@ for ii= 1: Slen;
     xx = S(ii).Lon;
     
 
-    [tmpLat,tmpLon]= os2llPRH( xx, yy);
-
+    [tmpLat,tmpLon]= os2ll( xx, yy);
+    tmpLat = tmpLat +0.00024;
+    tmpLon = tmpLon-0.0015;
     %[tmpLat,tmpLon]= minvtran(utmstruct,  xx, yy);
     %[tmpLon,tmpLat] = projinv(proj,X,Y);
     tmpDate = datenum(S(ii).Date,'yyyymmdd');
@@ -54,16 +55,13 @@ for ii= 1: Slen;
     thisXY(ind,1) = S(ii).Lon;
     thisXY(ind,2) = S(ii).Lat;
     thisLat(ind) = tmpLat;
-    thisLon(ind) = tmpLon;
+    thisLon(ind) = tmpLon-0.0015;
     thisDate(ind) = tmpDate;
     thisURL{ind} = S(ii).Image_URL;
     ind = ind + 1;
 end
 
 load SinkHolesLL
-
-thisLat = Lat';
-thisLon = Lon';
 
 numOfPos = length(thisWidth);
 

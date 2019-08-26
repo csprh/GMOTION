@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<confgData>
+   <frameName>/space/csprh/GMOTION/satsense/030A_03647_101313-vel.h5</frameName>
+   <trainDir>/space/csprh/SH/train/</trainDir>
+   <trainImsDir>/space/csprh/EQ/CNNIms/train</trainImsDir>
+   <resolution>10</resolution>
+   <distance1>1000</distance1>
+   <numberOfDaysInPast>60</numberOfDaysInPast>
+   <outputRes>100</outputRes>
+   <cubeLenL>0.1</cubeLenL>
+   <alphaSize>2</alphaSize>
+   <preLoadMinMax>1</preLoadMinMax>
+   <threshBytes>10000</threshBytes>
+   <noOfIms>10</noOfIms>
+</confgData>
+
+
