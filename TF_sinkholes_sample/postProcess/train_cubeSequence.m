@@ -56,10 +56,10 @@ for ii = 1: numberOfH5s
         dirOut = dir(gzh5name);
         gunzip(gzh5name);
         h5name = gzh5name(1:end-3);
-        thisWidth = h5readatt(h5name,'/GroundTruth/','thisWidth');
+        thisDepth = h5readatt(h5name,'/GroundTruth/','thisDepth');
         
-        [ 'thisWidth = ' num2str(thisWidth) ];
-        isSH  = thisWidth > 0;
+        [ 'thisWidth = ' num2str(thisDepth) ];
+        isSH  = thisDepth > 0;
         
         % Discount this line in the Ground Truth
         if dirOut.bytes < threshBytes
