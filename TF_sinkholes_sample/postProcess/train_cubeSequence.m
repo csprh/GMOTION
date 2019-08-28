@@ -25,7 +25,7 @@ addpath('..');
 tmpStruct = xml2struct('configSHUnderDesk.xml');
 
 cubesDir = tmpStruct.confgData.trainDir.Text;
-imsDir = tmpStruct.onfgData.trainImsDir.Text;
+imsDir = tmpStruct.confgData.trainImsDir.Text;
 
 preLoadMinMax = str2num(tmpStruct.confgData.preLoadMinMax.Text);
 threshBytes = str2num(tmpStruct.confgData.threshBytes.Text);
