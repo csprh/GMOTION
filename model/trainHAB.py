@@ -161,7 +161,7 @@ def train(inDir, dataDir, seqName, seq_length, model,
                 X_train,
                 Y_train,
                 batch_size=batch_size,
-                validation_split=0.1,
+                validation_split=0.3,
                 verbose=1,
                 callbacks=[tb, early_stopper, csv_logger, checkpoint],
                 epochs=nb_epoch)
