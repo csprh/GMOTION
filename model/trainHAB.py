@@ -145,7 +145,7 @@ def train(inDir, dataDir, seqName, seq_length, model,
         tb = TensorBoard(log_dir=os.path.join(dataDir, 'logs', model))
 
         # Helper: Stop when we stop learning.
-        early_stopper = EarlyStopping(monitor='val_acc', patience=10,  mode='auto')
+        early_stopper = EarlyStopping(monitor='val_loss', patience=200,  mode='auto')
 
         # Helper: Save results.
         timestamp = time.time()
@@ -156,7 +156,7 @@ def train(inDir, dataDir, seqName, seq_length, model,
         rm = ResearchModels(model, seq_length, None,features_length=featureLength)
 
         filepath=dataDir + "weightsbest.hdf5"
-        checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
+        checkpoint = ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=True, mode='min')
         rm.model.fit(
                 X_train,
                 Y_train,
