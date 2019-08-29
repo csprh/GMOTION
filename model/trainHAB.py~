@@ -242,6 +242,8 @@ def trainCV(inDir, dataDir, seqName, seq_length, model,
         print("%s: %.2f%%" % (rm.model.metrics_names[1], scores[1]*100))
 
         cvscores2.append(scores[1] * 100)
+
+
 """Main Thread"""
 def main(argv):
     """Settings Loaded from Xml Configuration"""

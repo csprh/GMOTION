@@ -177,6 +177,7 @@ def train(inDir, dataDir, seqName, seq_length, model,
 def trainCV(inDir, dataDir, seqName, seq_length, model,
           batch_size, nb_epoch, featureLength, SVDFeatLen):
 
+    seed = 7
     modelNameInt = dataDir + seqName + '_' + model
     data = DataSet(seqName, seq_length,  inDir, dataDir, SVDFeatLen)
 
