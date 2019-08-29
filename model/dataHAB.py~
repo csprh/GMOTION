@@ -1,5 +1,5 @@
 """
-Class for managing HAB input data (and bottle neck features).
+Class for managing input data (and bottle neck features).
 """
 import numpy as np
 import os.path
@@ -106,13 +106,14 @@ class DataSet():
         return output
 
 
+
     def split_train_test_prop(self, prop):
         """Split the data into train and test groups (and return them and all)."""
         train = []
         test = []
 
         inde = 0
-        data_len = len(self.data)
+        data_len = len(self.dataLowest)
         np.random.seed(0)
         rc = np.random.choice([0, 1], size=(data_len,), p=[1-prop, prop])
         for item in self.dataLowest:
@@ -166,7 +167,22 @@ class DataSet():
 
         return np.array(X1), np.array(Y1), np.array(X2), np.array(Y2)
 
-    def get_all_sequences_in_memory_svd(self,  prop):
+
+def get_all_sequences_in_memory(self):
+        """
+        Load all the sequences into memory (in proportion) for speed (train, test)
+        """
+        X1, Y1 = [], []
+        for sample in self.dataLowest:
+
+            sequence = self.get_extracted_sequenceAllMods(sample)
+
+            X1.append(sequence)
+            Y1.append(self.get_class_one_hot(sample))
+
+        return np.array(X1), np.array(Y1)
+
+def get_all_sequences_in_memory_svd(self,  prop):
         """
         Load all the sequences into memory (in proportion) for speed (train, test)
         """

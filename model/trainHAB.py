@@ -173,6 +173,77 @@ def train(inDir, dataDir, seqName, seq_length, model,
         scores = rm.model.evaluate(X_test, Y_test, verbose=1)
         print("%s: %.2f%%" % (rm.model.metrics_names[1], scores[1]*100))
 
+
+def trainCV(inDir, dataDir, seqName, seq_length, model,
+          batch_size, nb_epoch, featureLength, SVDFeatLen):
+
+    modelNameInt = dataDir + seqName + '_' + model
+    data = DataSet(seqName, seq_length,  inDir, dataDir, SVDFeatLen)
+
+
+    X, Y = data.get_all_sequences_in_memory()
+
+    kfold = StratifiedKFold(n_splits=5, shuffle=True, random_state=seed)
+    cvscores1 = []
+    cvscores2 = []
+
+    """Loop through Train and Test CV Datasets"""
+    for train, test in kfold.split(X, Y[:,1]):
+
+        X_train =     X[train]
+        X_test =      X[test]
+
+        Y_train  =    Y[train]
+        Y_test  =     Y[test]
+
+        modelName = modelNameInt + '.h5'
+        modelNameBest = modelNameInt + '_best.h5'
+
+        checkpointer = ModelCheckpoint(
+        filepath=os.path.join(dataDir, 'checkpoints', model + \
+            '.{epoch:03d}-{val_loss:.3f}.hdf5'), verbose=1, save_best_only=True)
+        # Helper: TensorBoard
+        tb = TensorBoard(log_dir=os.path.join(dataDir, 'logs', model))
+
+        # Helper: Stop when we stop learning.
+        early_stopper = EarlyStopping(monitor='val_loss', patience=200,  mode='auto')
+
+        # Helper: Save results.
+        timestamp = time.time()
+        csv_logger = CSVLogger(os.path.join(dataDir, 'logs', model + '-' + 'training-' + \
+            str(timestamp) + '.log'))
+
+        # Get the model.
+        rm = ResearchModels(model, seq_length, None,features_length=featureLength)
+
+        filepath=dataDir + "weightsbest.hdf5"
+        checkpoint = ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=True, mode='min')
+        rm.model.fit(
+                X_train,
+                Y_train,
+                batch_size=batch_size,
+                validation_split=0.3,
+                verbose=1,
+                callbacks=[tb, early_stopper, csv_logger, checkpoint],
+                epochs=nb_epoch)
+
+        rm.model.save(modelName)
+        rm.model.load_weights(filepath)
+        rm.model.save(modelNameBest)
+
+        scores = rm.model.evaluate(X_test, Y_test, verbose=1)
+        print("%s: %.2f%%" % (rm.model.metrics_names[1], scores[1]*100))
+
+        cvscores1.append(scores[1] * 100)
+
+        rm.model.load_weights(modelName)
+
+        scores = rm.model.evaluate(X_test, Y_test, verbose=1)
+        print("%s: %.2f%%" % (rm.model.metrics_names[1], scores[1]*100))
+
+        cvscores2.append(scores[1] * 100)
+
+
 """Main Thread"""
 def main(argv):
     """Settings Loaded from Xml Configuration"""
@@ -185,7 +256,7 @@ def main(argv):
         xmlName = argv[0]
 
     cnfg = inputXMLConfig(xmlName)
-    train(cnfg.inDir, cnfg.dataDir, cnfg.seqName, cnfg.seqLength, cnfg.model,
+    trainCV(cnfg.inDir, cnfg.dataDir, cnfg.seqName, cnfg.seqLength, cnfg.model,
           cnfg.batchSize, cnfg.epochNumber, cnfg.featureLength, cnfg.SVDFeatLen)
 
 if __name__ == '__main__':
