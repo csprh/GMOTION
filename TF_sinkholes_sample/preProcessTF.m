@@ -33,6 +33,7 @@ for ii= 1: Slen;
 
     %[tmpLat,tmpLon]= minvtran(utmstruct,  xx, yy);
     %[tmpLon,tmpLat] = projinv(proj,X,Y);
+    S(ii).Date
     tmpDate = datenum(S(ii).Date,'yyyymmdd');
 
     try

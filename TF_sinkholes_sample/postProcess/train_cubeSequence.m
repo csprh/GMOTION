@@ -22,6 +22,7 @@ function train_cubeSequence
 % Author Dr Paul Hill July 2019
 clear; close all;
 addpath('..');
+datLims = [datenum('11-May-2015') datenum('27-Dec-2018')];
 tmpStruct = xml2struct('configSHUnderDesk.xml');
 
 cubesDir = tmpStruct.confgData.trainDir.Text;
@@ -58,12 +59,13 @@ for ii = 1: numberOfH5s
         gunzip(gzh5name);
         h5name = gzh5name(1:end-3);
         thisDepth = h5readatt(h5name,'/GroundTruth/','thisDepth');
+        thisDate = h5readatt(h5name,'/GroundTruth/','dayEnd');
         
         [ 'thisWidth = ' num2str(thisDepth) ];
         isSH  = thisDepth > 0;
         
         % Discount this line in the Ground Truth
-        if dirOut.bytes < threshBytes
+        if (dirOut.bytes < threshBytes) | (thisDate < datLims(1) ) | ((thisDate > datLims(2))
             totalDiscount= totalDiscount+1;
             totalDiscount
             continue;
