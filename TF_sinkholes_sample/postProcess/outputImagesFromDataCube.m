@@ -1,4 +1,4 @@
-function outputImagesFromDataCube(baseDirectory,   groupMinMax,  h5name, noOfIms)
+function outputImagesFromDataCube(baseDirectory,   groupMinMax,  h5name, noOfIms, rotflip)
 %% This code generates quantised images for an input H5 datacube
 %% It loops through all modalities within the given H5 file (h5name) and generates
 %% A directory of images in a folder for ingress into Machine Learning
@@ -16,6 +16,7 @@ function outputImagesFromDataCube(baseDirectory,   groupMinMax,  h5name, noOfIms
 %   alphaSize: Control of resampling
 %   outputRes: Resolution (in metres) of quantise bins output
 %   h5name: Name of the input H5 file
+%   rotFlip: 1,2,3,4 rotation, flip, none or both
 % OUTPUT:
 %   -
 % THE UNIVERSITY OF BRISTOL: 
@@ -44,7 +45,16 @@ for thisDay  = 1:size(Ims,3)
         outputImage = round(255.*(outputImage./(thisMax-thisMin)));
         outputImage(outputImage < 0) = 0; outputImage(outputImage > 255) = 255;
         
-        imwrite(uint8(outputImage),[thisBaseDirectory  sprintf('%02d',thisDay),'.png']);
+        if rotflip == 1
+            imwrite(uint8(outputImage),[thisBaseDirectory  sprintf('%02d',thisDay),'.png']);
+        elseif rotflip == 2
+            imwrite(uint8(fliplr(outputImage)),[thisBaseDirectory  sprintf('%02d',thisDay),'.png']);
+        elseif rotflip ==3
+            imwrite(uint8(flipud(outputImage)),[thisBaseDirectory  sprintf('%02d',thisDay),'.png']);
+        elseif rotflip == 4
+            imwrite(uint8(rot90(outputImage,2)),[thisBaseDirectory  sprintf('%02d',thisDay),'.png']);
+        end
+        
     catch
         outputImage = ones(size(output.xq))*NaN;
         imwrite(uint8(outputImage),[thisBaseDirectory  sprintf('%02d',thisDay),'.png']);

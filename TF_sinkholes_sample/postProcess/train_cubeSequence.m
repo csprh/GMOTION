@@ -45,6 +45,7 @@ else
     load groupMaxAndMin %load the max and minima of the mods
 end
 
+thisInd = 1;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Loop through all the ground truth entries%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -70,9 +71,18 @@ for ii = 1: numberOfH5s
         
         %Split output into train/test, HAB Class directory, Ground truth line
         %number, Group Index
-        baseDirectory = [ imsDir filesep num2str(isSH) filesep num2str(ii)] ;
-     
-        outputImagesFromDataCube(baseDirectory,   groupMinMax,  h5name, noOfIms);
+        
+        if isSH == 1
+            for rotflip = 1:4  
+                baseDirectory = [ imsDir filesep num2str(isSH) filesep num2str(thisInd)] ;
+                outputImagesFromDataCube(baseDirectory,   groupMinMax,  h5name, noOfIms, rotflip);
+                thisInd = thisInd + 1;
+            end
+        else
+                baseDirectory = [ imsDir filesep num2str(isSH) filesep num2str(thisInd)] ;
+                outputImagesFromDataCube(baseDirectory,   groupMinMax,  h5name, noOfIms, 1);
+                thisInd = thisInd + 1;  
+        end
         
         clear totNumberCP zNumberCP quotCP totNumber zNumber quot
     catch

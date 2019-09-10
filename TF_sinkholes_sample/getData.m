@@ -1,25 +1,5 @@
 function [outputIm, tripleOut, tripleOutProj] = getData(out, dateInd, outLat, outLon, distance1, resolution, utmstruct)
-% Extract binned image and value triplet array from netCDF input file
-%
-% USAGE:
-%   [outputIm, tripleOut, tripleOutProj] = getData(file,  outLat, outLon, distance1, resolution, thisVar, utmstruct)
-% INPUT:
-%   file - H5 file containing granule
-%   outLat - latitude centre of the HAB
-%   outLon - longitude centre of the HAB
-%   distance1 - Distance (in meters from the left to the right edge...and up and
-%   down)
-%   resolution - Bin size (in meters) of the outputIm contained in the output
-%   datacube
-%   thisVar - character string name of the variable to be output (from H5)
-%   utmstruct - UTM structure for projection
-% OUTPUT:
-%   outputIm - Binned output image
-%   tripleOut - Array of tiplets (lat, lon, value)
-%   tripleOutProj - Array of tiplets in projected space(lat, lon, value)
-%
-% THE UNIVERSITY OF BRISTOL: HAB PROJECT
-% Author Dr Paul Hill 26th June 2018
+
 
 lonDD = out.lon2;
 latDD = out.lat2;
