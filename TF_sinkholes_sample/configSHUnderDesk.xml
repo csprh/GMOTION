@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <confgData>
    <frameName>/space/csprh/GMOTION/satsense/030A_03647_101313-vel.h5</frameName>
-   <trainDir>/space/csprh/SH/train2/</trainDir>
-   <trainImsDir>/space/csprh/SH/CNNIms/train</trainImsDir>
+   <trainDir>/space/csprh/SH/train/</trainDir>
+   <trainImsDir>/space/csprh/SH/CNNIms/train2</trainImsDir>
    <resolution>10</resolution>
    <distance1>1000</distance1>
    <numberOfDaysInPast>60</numberOfDaysInPast>
