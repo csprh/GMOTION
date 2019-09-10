@@ -65,7 +65,7 @@ for ii = 1: numberOfH5s
         isSH  = thisDepth > 0;
         
         % Discount this line in the Ground Truth
-        if (dirOut.bytes < threshBytes) | (thisDate < datLims(1) ) | ((thisDate > datLims(2))
+        if (dirOut.bytes < threshBytes) || (thisDate < datLims(1) ) || (thisDate > datLims(2))
             totalDiscount= totalDiscount+1;
             totalDiscount
             continue;
