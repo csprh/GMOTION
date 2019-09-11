@@ -75,7 +75,7 @@ for ii = 1: numberOfH5s
         %number, Group Index
         
         if isSH == 1
-            for rotflip = 1:4  
+            for rotflip = 1:1  
                 baseDirectory = [ imsDir filesep num2str(isSH) filesep num2str(thisInd)] ;
                 outputImagesFromDataCube(baseDirectory,   groupMinMax,  h5name, noOfIms, rotflip);
                 thisInd = thisInd + 1;
