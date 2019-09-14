@@ -78,6 +78,7 @@ for ii = 1:noOfSHs
     stats.NoOfNonZerosInIm(stats.NoOfIms) = sum(theseImages~=0);
     stats.NoOfPoints(stats.NoOfIms) = size(thesePoints,1);
     stats.NoOfPointsProj(stats.NoOfIms) = size(thesePointsProj,1);
+    save stats stats
 end
 
 save stats stats
