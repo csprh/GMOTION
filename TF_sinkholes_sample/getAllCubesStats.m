@@ -73,6 +73,7 @@ for ii = 1:noOfSHs
     stats.SizeOfImsW = size(theseImages,1);
     stats.SizeOfImsH = size(theseImages,2);
     theseImages = theseImages(:);
+    stats.Depth(stats.NoOfIms) = inStruc.thisDepth;
     stats.NoOfZerosInIm(stats.NoOfIms) = sum(theseImages==0);
     stats.NoOfNonZerosInIm(stats.NoOfIms) = sum(theseImages~=0);
     stats.NoOfPoints(stats.NoOfIms) = size(thesePoints,1);
