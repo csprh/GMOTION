@@ -1,16 +1,30 @@
-function getAllCubes
+function getAllCubes(dataType)
 
-load  UKTFSH2016-2018
+if dataType == 1
+    load  UKTFSH2016-2018-RAND
+    tmpStruct = xml2struct('configSHUnderDeskR_U.xml');
+elseif dataType ==2
+    load  UKTFSH2016-2018-TIGHT1
+    tmpStruct = xml2struct('configSHUnderDeskT1_U.xml');
+elseif dataType == 3
+    load  UKTFSH2016-2018-TIGHT2
+    tmpStruct = xml2struct('configSHUnderDeskT2_U.xml');
+elseif dataType == 4
+    load  UKTFSH2016-2018-RAND
+    tmpStruct = xml2struct('configSHUnderDeskR_R.xml');
+elseif dataType == 5
+    load  UKTFSH2016-2018-TIGHT1
+    tmpStruct = xml2struct('configSHUnderDeskT1_R.xml');
+elseif dataType == 6
+    load  UKTFSH2016-2018-TIGHT2
+    tmpStruct = xml2struct('configSHUnderDeskT2_R.xml');
+end
+
 thisDate= round(thisDate);
-%frameName = '../030A_03647_101313-vel.h5';
-
-DScale = 500000;
-Latitude0 = thisLat(thisDepth==0); Longitude0 = thisLon(thisDepth==0); thisDate0 = thisDate(thisDepth==0);
-Latitude1 = thisLat(thisDepth~=0); Longitude1 = thisLon(thisDepth~=0); thisDate1 = thisDate(thisDepth~=0);
 
 noOfSHs = length(thisLon);
 
-tmpStruct = xml2struct('configSHUnderDesk.xml');
+
 
 confgData.outDir = tmpStruct.confgData.trainDir.Text;
 confgData.distance1 = str2double(tmpStruct.confgData.distance1.Text);
@@ -55,6 +69,9 @@ for ii = 1:noOfSHs
     datesInd = (theseDates<inStruc.dayEnd)&(theseDates>inStruc.dayStart);
     datesIndNums = 1:length(theseDates);
     dateRange = theseDates(datesInd);
+    if length(dateRange) == 0
+        continue
+    end
     datesIndNumsRange = datesIndNums(datesInd);
     
     listLength = length(dateRange);
