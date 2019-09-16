@@ -33,12 +33,15 @@ for ii= 1: Slen;
 
     %[tmpLat,tmpLon]= minvtran(utmstruct,  xx, yy);
     %[tmpLon,tmpLat] = projinv(proj,X,Y);
-    S(ii).Date
+    S(ii).Date;
     tmpDate = datenum(S(ii).Date,'yyyymmdd');
 
+    if tmpDate < (datLims(1) + 60) | tmpDate > datLims(2)
+        continue
+    end
     try
         dpthTmp = str2num(S(ii).Depth_m);
-        if dpthTmp < 1
+        if dpthTmp < 0.5
             continue
         end
         thisDepth(ind) = dpthTmp;
@@ -61,34 +64,31 @@ for ii= 1: Slen;
     ind = ind + 1;
 end
 
-load SinkHolesLL
+%load SinkHolesLL
 
-thisLat = Lat';
-thisLon = Lon';
+%thisLat = Lat';
+%thisLon = Lon';
 
 numOfPos = length(thisWidth);
 
-numOfNeg = numOfPos*4;
+numOfNeg = numOfPos;
 
 lon1D = ncread(gebcoFilename, '/lon'); 
 lat1D = ncread(gebcoFilename, '/lat');
 distThresh = 50;
-datThresh = 50;
+datThresh = 70;
 ii = 0;
 while ii < numOfNeg
   % generate random position
   % 
-    ranLon = rand(1,1)*(lonLims(2)-lonLims(1)) + lonLims(1);
-    ranLat = rand(1,1)*(latLims(2)-latLims(1)) + latLims(1);
-    ranDat = rand(1,1)*(datLims(2)-datLims(1)) + datLims(1);
-
+    ii
+    ranLon =  thisLon(ii+1);
+    ranLat =  thisLat(ii+1);
+    ranDat = rand(1,1)*((datLims(2))-datLims(1)+60) +60+ datLims(1);
     
-    [arclen,az] = distance(ranLat,ranLon,thisLat,thisLon);
-    distkm = distdim(arclen,'deg','km');
-    [thisMinDist ,thisMinIndx] = min(distkm);
-    thisMinDat = abs(thisDate(thisMinIndx)-ranDat);
+    thisMinDat = abs(thisDate(ii+1)-ranDat);
     
-    if (thisMinDist< distThresh) && (thisMinDat < datThresh);
+    if (thisMinDat < datThresh);
         continue;
     end
     
@@ -102,7 +102,7 @@ while ii < numOfNeg
     ii = ii+1;
     thisLon(ii+numOfPos) = ranLon;
     thisLat(ii+numOfPos) = ranLat;
-    thisDate(ii+numOfPos) = ranDat;
+    thisDate(ii+numOfPos) = round(ranDat);
     thisWidth(ii+numOfPos) = 0;
     thisDepth(ii+numOfPos) = 0;
 end
@@ -112,7 +112,7 @@ for ii = 1: length(thisDepth)
     outLon = thisLon(ii);
     outLat = thisLat(ii);
     if thisWidth(ii) == 0
-        %plotm(outLat,outLon,'+r');
+        plotm(outLat,outLon,'+r');
     else
         plotm(outLat,outLon,'+b');
     end
@@ -120,5 +120,5 @@ for ii = 1: length(thisDepth)
 end
 
 
-save UKTFSH2016-2018 thisLon thisLat thisDate thisDepth thisWidth
+save UKTFSH2016-2018-TIGHT1 thisLon thisLat thisDate thisDepth thisWidth
 

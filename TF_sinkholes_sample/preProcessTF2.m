@@ -36,9 +36,12 @@ for ii= 1: Slen;
     S(ii).Date
     tmpDate = datenum(S(ii).Date,'yyyymmdd');
 
+    if tmpDate < (datLims(1) + 60) | tmpDate > datLims(2)
+        continue
+    end
     try
         dpthTmp = str2num(S(ii).Depth_m);
-        if dpthTmp < 1
+        if dpthTmp < 0.5
             continue
         end
         thisDepth(ind) = dpthTmp;
@@ -61,14 +64,14 @@ for ii= 1: Slen;
     ind = ind + 1;
 end
 
-load SinkHolesLL
+%load SinkHolesLL
 
-thisLat = Lat';
-thisLon = Lon';
+%thisLat = Lat';
+%thisLon = Lon';
 
 numOfPos = length(thisWidth);
 
-numOfNeg = numOfPos*4;
+numOfNeg = numOfPos;
 
 lon1D = ncread(gebcoFilename, '/lon'); 
 lat1D = ncread(gebcoFilename, '/lat');
@@ -112,7 +115,7 @@ for ii = 1: length(thisDepth)
     outLon = thisLon(ii);
     outLat = thisLat(ii);
     if thisWidth(ii) == 0
-        %plotm(outLat,outLon,'+r');
+        plotm(outLat,outLon,'+r');
     else
         plotm(outLat,outLon,'+b');
     end
@@ -120,5 +123,5 @@ for ii = 1: length(thisDepth)
 end
 
 
-save UKTFSH2016-2018 thisLon thisLat thisDate thisDepth thisWidth
+save UKTFSH2016-2018-RAND thisLon thisLat thisDate thisDepth thisWidth
 
