@@ -17,7 +17,7 @@ function getSeasonalData
 
 clear; close all;
 
-frameName = '030A_03647_101313-vel.h5'; %Satsense data
+frameName = '../030A_03647_101313-vel.h5'; %Satsense data
 loadInterpLocation = 0;
 thisGPS  = [53.706800, -1.391170]; %Normaton coal fields (the West Yorkshire coalfields)
 
