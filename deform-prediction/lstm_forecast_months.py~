@@ -1,0 +1,300 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed July 24 16:38:10 2019
+
+University of Bristol: Digital Environment and Dept. of Computer Science
+
+@author: Dr. Víctor Ponce-López
+"""
+
+import pandas, math, pickle
+import matplotlib
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
+import numpy as np
+import tensorflow as tf
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.layers import LSTM
+from keras.layers import Dropout
+from keras import backend as be
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.metrics import mean_squared_error
+#from sklearn.metrics import explained_variance_score
+#from sklearn.metrics import max_error
+#from sklearn.metrics import mean_absolute_error
+#from sklearn.metrics import median_absolute_error
+#from sklearn.metrics import r2_score
+from series_to_supervised import series_to_supervised
+from visualiseForecast import visualiseForecast
+from plotConfidentInt import plot_mean_and_CI, plotConfidentInt
+from reset_keras import reset_keras
+
+def plotTrainWindows(v, n_obs, t=4, nplots=5):
+    plt.close()
+    plt.figure(figsize=(6,8))
+    plt.title('Training windows at different timesteps')
+    for i in range(nplots):
+        ax = plt.subplot(nplots, 1, i+1)
+        plt.title('t'+str(i*t-n_obs), y=0.7, loc='right')
+        x = np.arange(i*t+1, n_obs+i*t+1)
+        plt.plot(x, v[i*t:n_obs+i*t])
+        plt.xticks(x)
+        for label in ax.get_xaxis().get_ticklabels()[::2]:
+            label.set_visible(False)
+    plt.xlabel('Datapoints over time')
+    plt.ylabel('Cumulative Displacements (mm)')
+    ax.yaxis.set_label_coords(-0.1,3.02)
+    plt.show()
+
+def calcErr(yhat, test_y, scaler):
+    inv_yhat = scaler.inverse_transform(yhat)[0,:]
+    # invert scaling for actual
+    inv_y = scaler.inverse_transform(test_y.reshape(1,len(test_y)))[0,:]
+
+    # Calculate regression scores for all metrics and future observations
+    rmse.append(math.sqrt(mean_squared_error(inv_y, inv_yhat)))
+    #var.append(explained_variance_score(inv_y, inv_yhat))
+    #mae.append(mean_absolute_error(inv_y, inv_yhat))
+    #mdae.append(median_absolute_error(inv_y, inv_yhat))
+    #mre.append(max_error(inv_y, inv_yhat))
+    #r2.append(r2_score(inv_y, inv_yhat))
+    return rmse, inv_yhat, inv_y
+
+def plotPredictions(seq, s, n, yhat, inv_y):
+    # plot forecasting
+    plt.close()
+    plt.plot(np.arange(1,len(seq)+1), seq, label='Real Sequence', color='blue')
+    plt.plot(np.arange(s+1,s+len(yhat)+1), yhat, label='Forecast-'+n, color='green')
+    plt.xlabel('Day')                          # use for the averaged CDs
+    plt.ylabel('Cumulative Displacement')
+    plt.legend(bbox_to_anchor=(0.9, 1))
+    plt.show()
+
+    plt.close()
+    plt.plot(np.arange(1,len(inv_y)+1), inv_y, label='Real Sequence')
+    plt.plot(np.arange(1,len(yhat)+1), yhat, label='Forecast-'+str(month))
+    plt.legend(loc='best')
+    plt.show()
+
+def normbygroup(dataset, ndates, values, nfeatures):
+    # split data into groups of locations given the dates and total size of the considered dataset
+    groups = range(0, int(len(dataset)/ndates))
+    values = np.delete(values, range(len(groups)*ndates,len(values)), 0)      # delete end locations
+    values = np.transpose(np.array(values, ndmin=2)) if useGps else np.array(values, ndmin=2)
+    print(values.shape)
+    # ensure all data is float
+    values = values.astype('float32')
+
+    # normalize Cumulative Displacements by location group
+    scaled = np.zeros(shape=(values.shape[0], nfeatures))
+    scalerCD = MinMaxScaler(feature_range=(0, 1))
+    for group in groups:
+        scaled[group*ndates:(group+1)*ndates,0] = np.transpose(np.array(scalerCD.fit_transform(values[group*ndates:(group+1)*ndates]), ndmin=2))
+    #scaled = np.transpose(scaled)
+    return values, scaled, scalerCD
+
+useGps = False
+if useGps:
+    ################# LOAD GPS data #############################
+    datafiles = ['LEED_east', 'LEED_LOS', 'LEED_vert', 'LEED_north']
+    #datafiles = ['HOOB_east', 'HOOB_LOS', 'HOOB_vert', 'HOOB_north']
+    signals = ['east', 'LOS', 'vert', 'north'];    s = 1;
+    datafile = datafiles[s]
+    dataset = pandas.read_csv(datafile, header=None, usecols=[0,1], delim_whitespace=True, engine='python')   # select date,y(m)
+else:
+    ################# LOAD InSAR data #############################
+    #datafiles = ['DARE_interp_may15-dec18_unfiltered.txt', 'DARE_interp_may15-dec18_Filt.txt', 'DARE_interp_may15-dec18_APS.txt', 'DARE_interp_may15-dec18_TSmooth.txt'];
+    datafiles = ['Normanton_interp1day_may15-dec18_unfiltered.txt', 'Normanton_interp1day_may15-dec18_Filt.txt', 'Normanton_interp1day_may15-dec18_APS.txt', 'Normanton_interp1day_may15-dec18_TSmooth.txt'];
+    #datafiles = ['Normanton_interp6day_may15-dec18_unfiltered.txt', 'Normanton_interp6day_may15-dec18_Filt.txt', 'Normanton_interp6day_may15-dec18_APS.txt', 'Normanton_interp6day_may15-dec18_TSmooth.txt'];
+    #datafiles = ['Normanton_orig_may15-dec18_unfiltered.txt', 'Normanton_orig_may15-dec18_Filt.txt', 'Normanton_orig_may15-dec18_APS.txt', 'Normanton_orig_may15-dec18_TSmooth.txt'];
+    ##datafiles = ['Leeds_interp1day_may15-dec18_unfiltered.txt', 'Leeds_interp1day_may15-dec18_Filt.txt', 'Leeds_interp1day_may15-dec18_APS.txt', 'Leeds_interp1day_may15-dec18_TSmooth.txt'];
+    filterlevels = ['unfiltered', 'Filt', 'APS', 'TSmooth'];     fl = 3
+    datafile = datafiles[fl]
+    ## locations with highest seasonality: 4062,4058 for Normanton; 12994 for Leeds
+    dataset = pandas.read_csv(datafile, header=None, usecols=[4062], engine='python')
+
+#### show data
+dataset, datafile
+
+# set displacement values to milimeters
+values = dataset.values[:,1]*1000 if useGps else dataset.values
+print(values.shape)
+values = values[0::6]
+
+
+# plot displacement values in milimeters
+plt.plot(values)
+ndates = len(values)
+plt.xlabel('Time blocks of %i dates per location' % (ndates))
+plt.ylabel('Displacement (mm)')
+plt.title('Deformation MAY\'15 - DEC\'18')
+#plt.show()
+
+# select range of dates for years between MAY 2015 and DEC 2018
+ndates = len(values)
+earlySeason = False; plotFit = False; maxPredDays = 1
+daysObs = 4#30          # set to 30 or 4 with or without interpolation, respectively
+test_size = 85#365      # set to 365 or 60 with or without interpolation, respectively
+nMonths = int(ndates/daysObs)+1   # number of total months in the data
+print("%i total months" % (nMonths))
+months = 9          # number of previous months to learn from
+predMonths = 9       # number of months to forecast
+seed = 4             # number of random seeds
+nfeatures = 1       # number of different type of features (1: displacements only)
+
+# specify columns (locations) to consider and to plot
+groups = range(1)
+# plot each location
+plt.figure()
+for group in groups:
+    plt.subplot(len(groups), 1, group+1)
+    plt.plot(values[group*ndates:(group+1)*ndates])
+    plt.title('Displacements for location '+str(groups.index(group)+1))
+#plt.show()
+
+values, scaled, scalerCD = normbygroup(dataset[0::6], ndates, values, nfeatures)
+print(scaled.shape)
+np.min(scaled[:,0]),np.max(scaled[:,0])   # check data is normalised within range [0,1]
+
+tr = values[:-test_size].reshape(1,ndates-test_size)[0,:]
+y_te = values[-test_size:].reshape(1,test_size)[0,:]
+for pred in range(5, predMonths+1):
+    # define temporal windows of past and future observations
+
+    look_forward = daysObs*pred; n_futObs = look_forward * nfeatures
+
+    test = scaled[-test_size:, 0]
+    test_y = test[:n_futObs]
+
+    errs, preds = [], []
+    for seed in range(4,7):
+        plt.close()
+
+        # run experiments - learning and test for each month
+        np.random.seed(seed)
+
+        # Initialise Scores
+        rmse, var, mae, mdae, mre, r2 = [], [], [], [], [], []
+        trainPredict, testPredict = [], []
+        multistep = True;
+        for month in range(months,months+1):    # maximum period of 3 years observed
+            print("Learning from previous %i months and %i monthly observations with random seed %i ..." % (month, pred, seed))
+
+            # define number of training samples
+            look_back = (month)*daysObs ; n_obs = look_back * nfeatures
+            # frame as multivar supervised learning for each location
+            train = series_to_supervised(scaled[:-test_size], ndates-test_size, nfeatures, look_back, look_forward)
+            print(train.head())
+            print(train.shape, test.shape)
+
+            # Set values into train and test sets
+            train = train.values   # scaled[:-test_size]
+
+            # Multiple Lag Timesteps
+            ############################################################################################################################################
+            ########################## https://machinelearningmastery.com/multivariate-time-series-forecasting-lstms-keras/ ############################
+            ############################################################################################################################################
+            # This will modify the LSTM' input and output shapes in [samples, observations, features times future observations]
+            if multistep:
+                test_X = scaled[-test_size-n_obs:-test_size]
+                train_X = train[:, :n_obs]                                # training set consists of the last samples and chosen number of observations
+                train_X = train_X.reshape((train_X.shape[0], n_obs, nfeatures))
+                train_y = train[:, -n_futObs:]                            # training sequence for testing consists of the last observation from the first training sample
+            print(train_X.shape, train_y.shape, test_X.shape)
+
+            config = tf.ConfigProto()
+            config.gpu_options.allow_growth = True
+            config.gpu_options.per_process_gpu_memory_fraction = 0.5
+            be.tensorflow_backend.set_session(tf.Session(config=config))
+
+
+            # Maybe try a network like this
+            # PRH PRH PRH PRH PRH
+            #
+            #model.add(LSTM(256, input_shape=(train_X.shape[1], train_X.shape[2]), return_sequences=True))
+            #model.add(Dropout(0.25))
+            #model.add(LSTM(128, return_sequences=False))
+            #model.add(Dropout(0.25))
+            #model.add(Dense(128))
+            #model.add(Dropout(0.25))
+            #model.add(Dense(train_y.shape[1]))
+            # PRH PRH PRH PRH PRH
+            # Also, maybe a bit of cross validation and early stopping would be
+            # good
+
+            # design network
+            model = Sequential()
+            #model.add(LSTM(50, input_shape=(train_X.shape[1], train_X.shape[2])))
+            #model.add(LSTM(50, input_shape=(train_X.shape[1], train_X.shape[2]), return_sequences=True))    # 50 neurons, n_obs and nfeatures timesteps as inputs
+            model.add(LSTM(128, input_shape=(train_X.shape[1], train_X.shape[2]), return_sequences=False))
+            #model.add(Dropout(0.5))
+            model.add(Dense(train_y.shape[1]))                             # n_futObs timesteps as outputs
+            model.compile(loss='mse', optimizer='adam')
+            # fit network
+            history = model.fit(train_X, train_y, epochs=n_obs*40, batch_size=40, verbose=1, shuffle=False)
+
+            # show learning process
+            #plt.close()
+            #plt.plot(history.history['loss'], label='train')
+            #plt.plot(history.history['val_loss'], label='test')
+            #plt.xlabel('Epoch')
+            #plt.ylabel('Loss')
+            #plt.legend()
+            #plt.show()
+
+            # Make prediction and invert scaling for forecast
+            rmse, inv_yhat, inv_y = calcErr(model.predict(test_X.reshape((1, n_obs, nfeatures))), test_y, scalerCD)
+            plotPredictions(values, ndates-test_size, str(pred), inv_yhat, inv_y)
+
+            # save training predictions
+            #trainPredict.append(scalerCD.inverse_transform(model.predict(train_X))[:,0])
+
+            del model, history
+            be.clear_session(); reset_keras()   # Reset Keras Session
+
+            print('Test RMSE: %.3f' % rmse[month-months])
+
+        #visualiseForecast(plotFit, earlySeason, test_size, values, ndates, months, daysObs, n_futObs, trainPredict, testPredict, rmse)
+
+        # generate 3 sets of random means and confidence intervals to plot
+        errs.append(rmse); preds.append(inv_yhat)
+
+    pickle.dump(errs, open('errs'+str(pred)+'.pkl', 'wb'))
+    pickle.dump(preds, open('preds'+str(pred)+'.pkl', 'wb'))
+
+## Forecast different periods of y
+#months = 9; nx = 'Nx'+str(months); e,p = [],[]
+#for pred in range(1,predMonths+1):
+#    p.append(pickle.load(open(nx+'/preds'+str(pred)+'.pkl', 'rb')))
+#nx = []
+#
+## Forecast a fixed period y with different observed periods x
+#nx = ['Nx1', 'Nx6', 'Nx9', 'Nx12']; p,e = [],[]
+#for m in range(0,len(nx)):
+#    e.append(pickle.load(open(nx[m]+'/errs'+str(preds)+'.pkl', 'rb')))
+#    p.append(pickle.load(open(nx[m]+'/preds'+str(preds)+'.pkl', 'rb')))
+#
+#
+#e,p = [],[]
+#for x in nx:
+#    errs = np.empty(shape=(preds, 3))
+#    for i in range(1,predMonths+1):
+#        errs[i-1,:] = np.array(pickle.load(open(x+'/errs'+str(i)+'.pkl', 'rb')))[:,0]
+#    e.append(np.transpose(errs))
+#
+##np.argmin(errs[0]),np.argmin(errs[1]),np.argmin(errs[2])
+##idx = 0
+###start = ndates-test_size-daysObs*(idx+1)-n_obs-n_futObs
+#x_tr = values[:n_obs+n_futObs].reshape(1,n_obs+n_futObs)[0,:]
+##minErrs = [errs[0][idx],errs[1][idx],errs[2][idx]]
+#
+#meanOnly = False
+#plotConfidentInt(e, p, inv_y, [], tr, [], daysObs, months, nx, 'all', meanOnly)
+#plotConfidentInt(e, p, inv_y, [], [], [], daysObs, months, nx, 'superzoom', meanOnly)
+#plotConfidentInt(e, p, inv_y, [], [], [], daysObs, months, nx, 'nothing', meanOnly)
+##plotConfidentInt(e, p, inv_y, y_te, tr, x_tr, daysObs, months, nx, 'all', meanOnly)
+##np.mean(minErrs),np.std(minErrs)
+
+#plotTrainWindows(values, n_obs, t=4, nplots=5)

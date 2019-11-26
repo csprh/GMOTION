@@ -436,7 +436,7 @@ else
     styleStr = '';
 end
 
-url = [preamble location zoomStr sizeStr maptypeStr format markers languageStr sensor keyStr styleStr];
+url = [preamble location zoomStr sizeStr maptypeStr format markers languageStr sensor keyStr styleStr ];
 
 % Get the image
 if useTemp
@@ -444,7 +444,7 @@ if useTemp
 else
     filepath = filename;
 end
-
+ 
 try
     urlwrite(url,filepath);
 catch % error downloading map
