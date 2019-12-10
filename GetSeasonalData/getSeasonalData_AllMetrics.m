@@ -81,8 +81,8 @@ for ii = 1:size(signal1D_3,1)
 end
 
 for ii = 1: 10
-    outBounds(ii)  = bounds;
     [~,~,bounds] = autocorr(this_signal1D,lagAC,[],ii);
+    outBounds(ii)  = bounds;
 end
 
 interpLocation.arrayAC = arrayAC;
