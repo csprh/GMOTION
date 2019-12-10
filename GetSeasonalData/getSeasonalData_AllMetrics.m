@@ -16,7 +16,7 @@ function getSeasonalData_AllMetrics
 
 clear; close all;
 
-loadInterpLocation = 1; normanton = 1; doPlot = 0;
+loadInterpLocation = 0; normanton = 0; doPlot = 0;
 
 frameName = '../030A_03647_101313-vel.h5'; %Satsense data
 
