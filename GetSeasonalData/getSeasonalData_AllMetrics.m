@@ -57,14 +57,14 @@ lagAC = round(daysInYear/daysBetweenSamples);
 
 for ii = 1:size(signal1D_3,1)
     this_signal1D = signal1D_3(ii,:);
-    plot(this_signal1D,'r');hold on;
+    %plot(this_signal1D,'r');hold on;
     % Remove 3rd degree polynomial trend
     opol = 3;
     t = 1:length(this_signal1D);
     [p,s,mu] = polyfit(t,this_signal1D,opol);
     f_y = polyval(p,t,[],mu);
     this_signal1D = this_signal1D - f_y;
-    plot(this_signal1D,'b');
+    %plot(this_signal1D,'b');
     
     % Remove bit of the time series that makes it a full number of years
     fullLength = length(this_signal1D);
@@ -77,7 +77,6 @@ for ii = 1:size(signal1D_3,1)
     [ccoef1, ccoef2] = fitSinusoidMetric(this_signal1D);
     arraySin(ii) = ccoef1;
     [' AC12='  num2str(arrayAC(ii)) ' ccoef2=' num2str(ccoef2)]
-    
 end
 
 for ii = 1: 10
