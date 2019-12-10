@@ -18,7 +18,7 @@ clear; close all;
 
 loadInterpLocation = 1; normanton = 1; doPlot = 0;
 
-frameName = '030A_03647_101313-vel.h5'; %Satsense data
+frameName = '../030A_03647_101313-vel.h5'; %Satsense data
 
 
 thisGPS = [53.706800, -1.391170]; %Normaton coal fields (the West Yorkshire coalfields)
