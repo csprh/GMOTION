@@ -31,69 +31,19 @@ from visualiseForecast import visualiseForecast
 from plotConfidentInt import plot_mean_and_CI, plotConfidentInt
 from reset_keras import reset_keras
 
-def plotTrainWindows(v, n_obs, t=4, nplots=5):
-    plt.close()
-    plt.figure(figsize=(6,8))
-    plt.title('Training windows at different timesteps')
-    for i in range(nplots):
-        ax = plt.subplot(nplots, 1, i+1)
-        plt.title('t'+str(i*t-n_obs), y=0.7, loc='right')
-        x = np.arange(i*t+1, n_obs+i*t+1)
-        plt.plot(x, v[i*t:n_obs+i*t])
-        plt.xticks(x)
-        for label in ax.get_xaxis().get_ticklabels()[::2]:
-            label.set_visible(False)
-    plt.xlabel('Datapoints over time')
-    plt.ylabel('Cumulative Displacements (mm)')
-    ax.yaxis.set_label_coords(-0.1,3.02)
-    plt.show()
+from statsmodels.tsa.seasonal import seasonal_decompose
+import scipy.io as sio
 
-def calcErr(yhat, test_y, scaler):
-    inv_yhat = scaler.inverse_transform(yhat)[0,:]
-    # invert scaling for actual
-    inv_y = scaler.inverse_transform(test_y.reshape(1,len(test_y)))[0,:]
+mat_contents = sio.loadmat('octave_a.mat')
 
-    # Calculate regression scores for all metrics and future observations
-    rmse.append(math.sqrt(mean_squared_error(inv_y, inv_yhat)))
-    #var.append(explained_variance_score(inv_y, inv_yhat))
-    #mae.append(mean_absolute_error(inv_y, inv_yhat))
-    #mdae.append(median_absolute_error(inv_y, inv_yhat))
-    #mre.append(max_error(inv_y, inv_yhat))
-    #r2.append(r2_score(inv_y, inv_yhat))
-    return rmse, inv_yhat, inv_y
+series = ...
+result = seasonal_decompose(series, model='additive')
+print(result.trend)
+print(result.seasonal)
+print(result.resid)
+print(result.observed)
 
-def plotPredictions(seq, s, n, yhat, inv_y):
-    # plot forecasting
-    plt.close()
-    plt.plot(np.arange(1,len(seq)+1), seq, label='Real Sequence', color='blue')
-    plt.plot(np.arange(s+1,s+len(yhat)+1), yhat, label='Forecast-'+n, color='green')
-    plt.xlabel('Day')                          # use for the averaged CDs
-    plt.ylabel('Cumulative Displacement')
-    plt.legend(bbox_to_anchor=(0.9, 1))
-    plt.show()
 
-    plt.close()
-    plt.plot(np.arange(1,len(inv_y)+1), inv_y, label='Real Sequence')
-    plt.plot(np.arange(1,len(yhat)+1), yhat, label='Forecast-'+str(month))
-    plt.legend(loc='best')
-    plt.show()
-
-def normbygroup(dataset, ndates, values, nfeatures):
-    # split data into groups of locations given the dates and total size of the considered dataset
-    groups = range(0, int(len(dataset)/ndates))
-    values = np.delete(values, range(len(groups)*ndates,len(values)), 0)      # delete end locations
-    values = np.transpose(np.array(values, ndmin=2)) if useGps else np.array(values, ndmin=2)
-    print(values.shape)
-    # ensure all data is float
-    values = values.astype('float32')
-
-    # normalize Cumulative Displacements by location group
-    scaled = np.zeros(shape=(values.shape[0], nfeatures))
-    scalerCD = MinMaxScaler(feature_range=(0, 1))
-    for group in groups:
-        scaled[group*ndates:(group+1)*ndates,0] = np.transpose(np.array(scalerCD.fit_transform(values[group*ndates:(group+1)*ndates]), ndmin=2))
-    #scaled = np.transpose(scaled)
-    return values, scaled, scalerCD
 
 useGps = False
 if useGps:
@@ -112,6 +62,7 @@ else:
     ##datafiles = ['Leeds_interp1day_may15-dec18_unfiltered.txt', 'Leeds_interp1day_may15-dec18_Filt.txt', 'Leeds_interp1day_may15-dec18_APS.txt', 'Leeds_interp1day_may15-dec18_TSmooth.txt'];
     filterlevels = ['unfiltered', 'Filt', 'APS', 'TSmooth'];     fl = 3
     datafile = datafiles[fl]
+    datafile = 'NTSmooth.txt'
     ## locations with highest seasonality: 4062,4058 for Normanton; 12994 for Leeds
     dataset = pandas.read_csv(datafile, header=None, usecols=[4062], engine='python')
 
