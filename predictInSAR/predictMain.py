@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import statsmodels.api as sm
+#import statsmodels.api as sm
 import pandas
 import pickle
 import matplotlib
@@ -22,7 +22,7 @@ from pyramid.arima import auto_arima
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error
 
-def getSarimaPred(train, yearInSamples, predSamples):
+def getSarimaPred(train, yearInSamples, predSamples, scaler):
 
    thissarima =  auto_arima(train, start_p=1, start_q=1,
                       test='adf',       # use adftest to find optimal 'd'
@@ -35,6 +35,7 @@ def getSarimaPred(train, yearInSamples, predSamples):
                       suppress_warnings=True)
 
    y_hat, confint = thissarima.predict(n_periods=predSamples, return_conf_int=True)
+   y_hat = scaler.inverse_transform(y_hat)[0,:]
    return y_hat
 
 def getModel(x1,x2,y1):
@@ -138,7 +139,7 @@ yearInSamples = int(365.25/sampleTime)
 nfeatures = 1
 predInDays = 265        # 9 months
 predInSamples = int(predInDays/sampleTime)
-epochs = 20
+epochs = 100
 
 for ii in range(0,6):
     chooseSeq = theseInds[-(ii+1)]
@@ -153,7 +154,6 @@ for ii in range(0,6):
 
     # define training period of n past observations
 
-
     singleTrain = scaled
     singleTrain = singleTrain[..., np.newaxis]
     singleTrain = singleTrain.transpose()
@@ -162,13 +162,10 @@ for ii in range(0,6):
     train_y6, train_X6  = genTrain(scaledCD[theseInds[-6:], :],predInSamples)
     train_y5p, train_X5p = genTrain(scaledCD[theseInds[-nPoints5p:], :],predInSamples)
 
-    y_hatLSTM1 =  getLSTMPred(train_y1, train_X1,  test_X, scaler, epochs)
-    y_hatLSTM6 =  y_hatLSTM1+1
-    y_hatLSTM5p =  y_hatLSTM1-1
-    y_hatSarima =  y_hatLSTM1+2
-    #y_hatLSTM6 =  getLSTMPred(train_y6, train_X6, test_X, cscaler,20)
-    #y_hatLSTM10 = getLSTMPred(train_y5p, train_X5p, test_X, scaler,20)
-    #y_hatSariam = getSarimaPred(train, yearInSamples, predInSamples, scaler)
+    #y_hatLSTM1 =  getLSTMPred(train_y1, train_X1,  test_X, scaler, epochs)
+    #y_hatLSTM6 =  getLSTMPred(train_y6, train_X6, test_X, scaler,epochs)
+    #y_hatLSTM10 = getLSTMPred(train_y5p, train_X5p, test_X, scaler,epochs)
+    y_hatSariam = getSarimaPred(scaled, yearInSamples, predInSamples, scaler)
 
     rmseLSTM1 = calcErr(y_hatLSTM1, test_y)
     rmseLSTM6 = calcErr(y_hatLSTM6, test_y)
