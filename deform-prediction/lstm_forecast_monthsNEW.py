@@ -9,6 +9,8 @@ University of Bristol: Digital Environment and Dept. of Computer Science
 """
 
 import pandas
+import matplotlib
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
@@ -61,6 +63,7 @@ dataset, datafile
     #values = dataset[k].values[:,1]*1000 if useGps else dataset[k].values
 
 values = dataset.values[:,1]*1000 if useGps else dataset.values
+values = values[0::6]
 print(values.shape)
 
 # plot displacement values in milimeters

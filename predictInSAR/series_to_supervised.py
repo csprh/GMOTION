@@ -16,22 +16,23 @@ import numpy as np
 
 # Inputs:
 #   data: original data as 1D signal
-#   ndates: total number of samples (dates). (default: 1327 days)
 #   nf: number of features (default: 1 (location only))
 #   n_in: number of input features (past observations)
 #   n_out: number of output features (future observations to be predicted)
 #   dropnan: flag which indicates whether or not to drop rows with NaN values
-def series_to_supervised(data, ndates, nf=1, n_in=1, n_out=1, dropnan=True):
-    if ndates:
-        groups = int(len(data)/ndates)
+def series_to_supervised(data, nf=1, n_in=1, n_out=1, dropnan=True):
+    if nf > 1:
+        #groups = int(len(data)/data.shape[0])
+        groups = data.shape[1]
         n_vars = groups*nf
-        new_data = np.zeros(shape=(ndates,nf*groups))
+        new_data = np.zeros(shape=(data.shape[0],nf*groups))
         for i in range(0, groups):   # groups
-            new_data[:,i*nf:(i*nf)+nf] = data[i*ndates:(i+1)*ndates,0:nf]
+            #new_data[:,i*nf:i*nf+nf] = data[i*data.shape[0]:(i+1)*data.shape[0],0:nf]
+            new_data[:,i*nf:(i*nf)+nf] = data[:,i,:].reshape(data.shape[0],nf)
         df = pandas.DataFrame(new_data)
     else:
         n_vars = 1 if type(data) is list else data.shape[1]
-        df = pandas.DataFrame(data)
+        df = pandas.DataFrame(data.reshape(data.shape[0],n_vars))
     cols, names = list(), list()
     # input sequence (t-n, ... t-1)
     for i in range(n_in, 0, -1):
