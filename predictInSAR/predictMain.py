@@ -185,7 +185,6 @@ for ii in range(0,6):
     y_hatLSTM5p = predInv(model, test_X, scaler)
 
     y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
-    y_hatSarima = y_hatLSTM6
     rmseLSTM1 = calcErr(y_hatLSTM1, test_y)
     rmseLSTM6 = calcErr(y_hatLSTM6, test_y)
     rmseLSTM5p = calcErr(y_hatLSTM5p, test_y)
