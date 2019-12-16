@@ -65,7 +65,7 @@ def plotPredictions(seq, s, n, yhat, thisColor, plotSignal):
     plt.ylabel('Cumulative Displacement')
 
 
-def trainModel(train_y, train_X, epochsIn, earlyStoppin):
+def trainModel(train_y, train_X, epochsIn, earlyStopping):
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
     config.gpu_options.per_process_gpu_memory_fraction = 0.5
@@ -177,7 +177,7 @@ for ii in range(0,6):
 
     y_hatLSTM1 =  getLSTMPred(train_y1, train_X1,  test_X, scaler, epochs,0)
 
-    y_hatLSTM6 = predInv(model_y6, test_X, scaler)
+    y_hatLSTM6 =  predInv(model_y6, test_X, scaler)
     y_hatLSTM5p = predInv(model_y5p, test_X, scaler)
 
     #y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
