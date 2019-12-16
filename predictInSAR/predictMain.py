@@ -85,7 +85,7 @@ def predInv(model, test_X, scaler):
 def getLSTMPred(train_y, train_X, test_X, scaler, epochsIn, earlyStopping):
     model = trainModel(train_y, train_X, epochsIn, earlyStopping)
     y_hat = predInv(model, test_X, scaler)
-    return y_hat
+    return y_hat, model
 
 def calcErr(yhat, inv_y):
     rmse = math.sqrt(mean_squared_error(yhat, inv_y))
@@ -154,7 +154,9 @@ config.gpu_options.allow_growth = True
 config.gpu_options.per_process_gpu_memory_fraction = 0.5
 be.tensorflow_backend.set_session(tf.Session(config=config))
 model_y6 =  trainModel(train_y6, train_X6, epochs, 0)
+model_y6.save_weights(filepath  = 'y6.h5')
 model_y5p =  trainModel(train_y5p, train_X5p, epochs, 0)
+model_y5p.save_weights(filepath  = 'y5p.h5')
 
 for ii in range(0,6):
     chooseSeq = theseInds[-(ii+1)]
@@ -175,11 +177,12 @@ for ii in range(0,6):
 
     train_y1, train_X1  = genTrain(singleTrain,predInSamples)
 
-    y_hatLSTM1 =  getLSTMPred(train_y1, train_X1,  test_X, scaler, epochs,0)
+    y_hatLSTM1, model =  getLSTMPred(train_y1, train_X1,  test_X, scaler, epochs,0)
 
-    y_hatLSTM6 =  predInv(model_y6, test_X, scaler)
-
-    y_hatLSTM5p = predInv(model_y5p, test_X, scaler)
+    model.load_weights('y6.h5')
+    y_hatLSTM6 =  predInv(model, test_X, scaler)
+    model.load_weights('y5p.h5')
+    y_hatLSTM5p = predInv(model, test_X, scaler)
 
     #y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
     y_hatSarima = y_hatLSTM6
