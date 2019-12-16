@@ -65,8 +65,7 @@ def plotPredictions(seq, s, n, yhat, thisColor, plotSignal):
     plt.ylabel('Cumulative Displacement')
 
 
-
-def getLSTMPred(train_y, train_X, test_X, scaler, epochsIn, earlyStopping):
+def trainModel(train_y, train_X, epochsIn, earlyStoppin):
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
     config.gpu_options.per_process_gpu_memory_fraction = 0.5
@@ -80,8 +79,16 @@ def getLSTMPred(train_y, train_X, test_X, scaler, epochsIn, earlyStopping):
         history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False, validation_split=0.3, callbacks=[es])
     else:
         history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False)
+    return model
+
+def predInv(model, test_X, scaler):
     y_hat = model.predict(test_X)
     y_hat = scaler.inverse_transform(y_hat)[0,:]
+    return y_hat
+
+def getLSTMPred(train_y, train_X, test_X, scaler, epochsIn, earlyStopping):
+    model = trainModel(train_y, train_X, epochsIn, earlyStoppin)
+    y_hat = predInv(model, test_X, scaler)
     return y_hat
 
 def calcErr(yhat, inv_y):
@@ -143,6 +150,12 @@ predInDays = 265        # 9 months
 predInSamples = int(predInDays/sampleTime)
 epochs = 2000
 
+train_y6, train_X6  = genTrain(scaledCD[theseInds[-6:], :],predInSamples)
+train_y5p, train_X5p = genTrain(scaledCD[theseInds[-nPoints5p:], :],predInSamples)
+
+model_y6 =  trainModel(train_y6, train_X6, epochs, 0)
+model_y5p =  trainModel(train_y5p, train_X5p, epochs, 0)
+
 for ii in range(0,6):
     chooseSeq = theseInds[-(ii+1)]
 
@@ -161,14 +174,14 @@ for ii in range(0,6):
     singleTrain = singleTrain.transpose()
 
     train_y1, train_X1  = genTrain(singleTrain,predInSamples)
-    train_y6, train_X6  = genTrain(scaledCD[theseInds[-6:], :],predInSamples)
-    train_y5p, train_X5p = genTrain(scaledCD[theseInds[-nPoints5p:], :],predInSamples)
 
     y_hatLSTM1 =  getLSTMPred(train_y1, train_X1,  test_X, scaler, epochs,0)
-    y_hatLSTM6 =  getLSTMPred(train_y6, train_X6, test_X, scaler,epochs,0)
-    y_hatLSTM5p = getLSTMPred(train_y5p, train_X5p, test_X, scaler,epochs,0)
-    y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
 
+    y_hatLSTM6 = predInv(model_y6, test_X, scaler)
+    y_hatLSTM5p = predInv(model_y5p, test_X, scaler)
+
+    #y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
+    y_hatSarima = y_hatLSTM6
     rmseLSTM1 = calcErr(y_hatLSTM1, test_y)
     rmseLSTM6 = calcErr(y_hatLSTM6, test_y)
     rmseLSTM5p = calcErr(y_hatLSTM5p, test_y)
