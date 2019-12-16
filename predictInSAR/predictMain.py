@@ -176,8 +176,15 @@ for ii in range(0,6):
     train_y1, train_X1  = genTrain(singleTrain,predInSamples)
 
     y_hatLSTM1 =  getLSTMPred(train_y1, train_X1,  test_X, scaler, epochs,0)
-
+    config = tf.ConfigProto()
+    config.gpu_options.allow_growth = True
+    config.gpu_options.per_process_gpu_memory_fraction = 0.5
+    be.tensorflow_backend.set_session(tf.Session(config=config))
     y_hatLSTM6 =  predInv(model_y6, test_X, scaler)
+    config = tf.ConfigProto()
+    config.gpu_options.allow_growth = True
+    config.gpu_options.per_process_gpu_memory_fraction = 0.5
+    be.tensorflow_backend.set_session(tf.Session(config=config))
     y_hatLSTM5p = predInv(model_y5p, test_X, scaler)
 
     #y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
