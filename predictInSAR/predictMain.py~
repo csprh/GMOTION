@@ -85,7 +85,7 @@ def predInv(model, test_X, scaler):
 def getLSTMPred(train_y, train_X, test_X, scaler, epochsIn, earlyStopping):
     model = trainModel(train_y, train_X, epochsIn, earlyStopping)
     y_hat = predInv(model, test_X, scaler)
-    return y_hat
+    return y_hat, model
 
 def calcErr(yhat, inv_y):
     rmse = math.sqrt(mean_squared_error(yhat, inv_y))
@@ -184,7 +184,7 @@ for ii in range(0,6):
     model.load_weights('y5p.h5')
     y_hatLSTM5p = predInv(model, test_X, scaler)
 
-    #y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
+    y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
     y_hatSarima = y_hatLSTM6
     rmseLSTM1 = calcErr(y_hatLSTM1, test_y)
     rmseLSTM6 = calcErr(y_hatLSTM6, test_y)
