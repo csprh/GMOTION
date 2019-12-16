@@ -141,7 +141,7 @@ yearInSamples = int(365.25/sampleTime)
 nfeatures = 1
 predInDays = 265        # 9 months
 predInSamples = int(predInDays/sampleTime)
-epochs = 1000
+epochs = 10
 
 for ii in range(0,6):
     chooseSeq = theseInds[-(ii+1)]
@@ -166,7 +166,7 @@ for ii in range(0,6):
 
     y_hatLSTM1 =  getLSTMPred(train_y1, train_X1,  test_X, scaler, epochs,0)
     y_hatLSTM6 =  getLSTMPred(train_y6, train_X6, test_X, scaler,epochs,0)
-    y_hatLSTM5p = getLSTMPred(train_y6, train_X6, test_X, scaler,epochs,0)
+    y_hatLSTM5p = getLSTMPred(train_y5p, train_X5p, test_X, scaler,epochs,0)
     y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
 
     rmseLSTM1 = calcErr(y_hatLSTM1, test_y)

@@ -141,7 +141,7 @@ yearInSamples = int(365.25/sampleTime)
 nfeatures = 1
 predInDays = 265        # 9 months
 predInSamples = int(predInDays/sampleTime)
-epochs = 10
+epochs = 2000
 
 for ii in range(0,6):
     chooseSeq = theseInds[-(ii+1)]
