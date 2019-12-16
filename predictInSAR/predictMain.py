@@ -66,10 +66,6 @@ def plotPredictions(seq, s, n, yhat, thisColor, plotSignal):
 
 
 def trainModel(train_y, train_X, epochsIn, earlyStopping):
-    config = tf.ConfigProto()
-    config.gpu_options.allow_growth = True
-    config.gpu_options.per_process_gpu_memory_fraction = 0.5
-    be.tensorflow_backend.set_session(tf.Session(config=config))
 
     model = getModel(train_X.shape[1], train_X.shape[2], train_y.shape[1])
 
@@ -153,6 +149,10 @@ epochs = 5
 train_y6, train_X6  = genTrain(scaledCD[theseInds[-6:], :],predInSamples)
 train_y5p, train_X5p = genTrain(scaledCD[theseInds[-nPoints5p:], :],predInSamples)
 
+config = tf.ConfigProto()
+config.gpu_options.allow_growth = True
+config.gpu_options.per_process_gpu_memory_fraction = 0.5
+be.tensorflow_backend.set_session(tf.Session(config=config))
 model_y6 =  trainModel(train_y6, train_X6, epochs, 0)
 model_y5p =  trainModel(train_y5p, train_X5p, epochs, 0)
 
@@ -176,15 +176,9 @@ for ii in range(0,6):
     train_y1, train_X1  = genTrain(singleTrain,predInSamples)
 
     y_hatLSTM1 =  getLSTMPred(train_y1, train_X1,  test_X, scaler, epochs,0)
-    config = tf.ConfigProto()
-    config.gpu_options.allow_growth = True
-    config.gpu_options.per_process_gpu_memory_fraction = 0.5
-    be.tensorflow_backend.set_session(tf.Session(config=config))
+
     y_hatLSTM6 =  predInv(model_y6, test_X, scaler)
-    config = tf.ConfigProto()
-    config.gpu_options.allow_growth = True
-    config.gpu_options.per_process_gpu_memory_fraction = 0.5
-    be.tensorflow_backend.set_session(tf.Session(config=config))
+
     y_hatLSTM5p = predInv(model_y5p, test_X, scaler)
 
     #y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
