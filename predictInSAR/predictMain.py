@@ -87,7 +87,7 @@ def predInv(model, test_X, scaler):
     return y_hat
 
 def getLSTMPred(train_y, train_X, test_X, scaler, epochsIn, earlyStopping):
-    model = trainModel(train_y, train_X, epochsIn, earlyStoppin)
+    model = trainModel(train_y, train_X, epochsIn, earlyStopping)
     y_hat = predInv(model, test_X, scaler)
     return y_hat
 
