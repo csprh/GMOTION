@@ -2,10 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import pickle
-import matplotlib
-matplotlib.use('TkAgg')
 import tensorflow as tf
-import matplotlib.pyplot as plt
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM
@@ -13,7 +10,6 @@ from keras.layers import Dropout
 from keras import backend as be
 import numpy as np
 import math
-from utils import calcErr,plotPredictions,normbygroup,getMethodPreds
 import scipy.io as sio
 from series_to_supervised import series_to_supervised
 from pyramid.arima import auto_arima
@@ -50,19 +46,6 @@ def getModel(x1,x2,y1):
    model.compile(loss='mse', optimizer='adam')
 
    return model
-
-def plotPredictions(seq, s, n, yhat, thisColor, plotSignal):
-    # plot forecasting
-
-    endValue = seq[s-1]
-    yhat = np.concatenate([np.array([endValue]),yhat])
-    if plotSignal==1:
-        plt.plot(np.arange(1,len(seq)+1), seq, label='Real Sequence', color="black")
-    plt.plot(np.arange(s,s+len(yhat)), yhat, label='Forecast-'+n, color=thisColor)
-
-    plt.xlabel('Samples (every 6 days)')                          # use for the averaged CDs
-    plt.ylabel('Cumulative Displacement')
-
 
 
 def getLSTMPred(train_y, train_X, test_X, scaler, epochsIn):
@@ -136,7 +119,7 @@ yearInSamples = int(365.25/sampleTime)
 nfeatures = 1
 predInDays = 265        # 9 months
 predInSamples = int(predInDays/sampleTime)
-epochs = 100
+epochs = 2000
 
 for ii in range(0,6):
     chooseSeq = theseInds[-(ii+1)]
@@ -171,16 +154,11 @@ for ii in range(0,6):
 
     s = ndates - predInSamples
 
-    plt.close()
-    thisfig = plt.figure(figsize=(12,8))
     plotPredictions(values, s, "LSTM1: RMSE = " + str(rmseLSTM1), y_hatLSTM1, "green", 1)
     plotPredictions(values, s, "LSTM2: RMSE = "+  str(rmseLSTM6), y_hatLSTM6, "blue", 0)
     plotPredictions(values, s, "LSTM3: RMSE = "+  str(rmseLSTM5p), y_hatLSTM5p, "pink", 0)
     plotPredictions(values, s, "Sarima: RMSE = " +str(rmseSarima), y_hatSarima, "red", 1)
-    plt.legend(loc='best')
-    #plt.show()
     thisfig.savefig("Pred-"+str(chooseSeq)+".pdf", bbox_inches='tight')
-    plt.close(); print('\n')
 
     print('100%% done of position '+str(chooseSeq))
 

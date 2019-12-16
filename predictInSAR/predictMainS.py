@@ -159,30 +159,33 @@ for ii in range(0,6):
     train_y6, train_X6  = genTrain(scaledCD[theseInds[-6:], :],predInSamples)
     train_y5p, train_X5p = genTrain(scaledCD[theseInds[-nPoints5p:], :],predInSamples)
 
-    y_hatLSTM1 =  getLSTMPred(train_y1, train_X1,  test_X, scaler, epochs)
-    y_hatLSTM6 =  getLSTMPred(train_y6, train_X6, test_X, scaler,epochs)
-    y_hatLSTM10 = getLSTMPred(train_y5p, train_X5p, test_X, scaler,epochs)
-    y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
+    #y_hatLSTM1 =  getLSTMPred(train_y1, train_X1,  test_X, scaler, epochs)
+    #y_hatLSTM6 =  getLSTMPred(train_y6, train_X6, test_X, scaler,epochs)
+    #y_hatLSTM10 = getLSTMPred(train_y5p, train_X5p, test_X, scaler,epochs)
+    y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples*4)
 
-    rmseLSTM1 = calcErr(y_hatLSTM1, test_y)
-    rmseLSTM6 = calcErr(y_hatLSTM6, test_y)
-    rmseLSTM5p = calcErr(y_hatLSTM5p, test_y)
-    rmseSarima = calcErr(y_hatSarima, test_y)
+    #rmseLSTM1 = calcErr(y_hatLSTM1, test_y)
+    #rmseLSTM6 = calcErr(y_hatLSTM6, test_y)
+    #rmseLSTM5p = calcErr(y_hatLSTM5p, test_y)
+    #rmseSarima = calcErr(y_hatSarima, test_y)
 
     s = ndates - predInSamples
 
     plt.close()
     thisfig = plt.figure(figsize=(12,8))
-    plotPredictions(values, s, "LSTM1: RMSE = " + str(rmseLSTM1), y_hatLSTM1, "green", 1)
-    plotPredictions(values, s, "LSTM2: RMSE = "+  str(rmseLSTM6), y_hatLSTM6, "blue", 0)
-    plotPredictions(values, s, "LSTM3: RMSE = "+  str(rmseLSTM5p), y_hatLSTM5p, "pink", 0)
-    plotPredictions(values, s, "Sarima: RMSE = " +str(rmseSarima), y_hatSarima, "red", 1)
+    #plotPredictions(values, s, "LSTM1: RMSE = " + str(rmseLSTM1), y_hatLSTM1, "green", 1)
+    #plotPredictions(values, s, "LSTM2: RMSE = "+  str(rmseLSTM6), y_hatLSTM6, "blue", 0)
+    #plotPredictions(values, s, "LSTM3: RMSE = "+  str(rmseLSTM5p), y_hatLSTM5p, "pink", 0)
+    plotPredictions(values, s, "Sarima", y_hatSarima, "red", 1)
     plt.legend(loc='best')
     #plt.show()
-    thisfig.savefig("Pred-"+str(chooseSeq)+".pdf", bbox_inches='tight')
+    thisfig.savefig("Pred-S-"+str(chooseSeq)+".pdf", bbox_inches='tight')
     plt.close(); print('\n')
 
     print('100%% done of position '+str(chooseSeq))
-
-
-
+#3995 Fit ARIMA: order=(3, 0, 2) seasonal_order=(1, 1, 0, 60); AIC=200.721, BIC=222.886, Fit time=227.015 seconds
+#3744 Fit ARIMA: order=(2, 0, 3) seasonal_order=(1, 1, 0, 60); AIC=216.476, BIC=238.642, Fit time=261.776 seconds
+#2793 Fit ARIMA: order=(3, 0, 3) seasonal_order=(1, 1, 0, 60); AIC=220.868, BIC=245.804, Fit time=191.585 seconds
+#3096 Fit ARIMA: order=(3, 0, 3) seasonal_order=(1, 1, 0, 60); AIC=137.052, BIC=161.988, Fit time=148.918 seconds
+#3743 Fit ARIMA: order=(3, 0, 2) seasonal_order=(1, 1, 0, 60); AIC=222.435, BIC=244.600, Fit time=105.383 seconds
+#9242 Fit ARIMA: order=(3, 0, 2) seasonal_order=(1, 1, 0, 60); AIC=171.782, BIC=193.947, Fit time=63.902 seconds
