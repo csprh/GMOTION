@@ -11,7 +11,6 @@ from keras import backend as be
 from keras.models import load_model
 import numpy as np
 import math
-from utils import calcErr,plotPredictions,normbygroup,getMethodPreds
 import scipy.io as sio
 from pyramid.arima import auto_arima
 from sklearn.preprocessing import MinMaxScaler
