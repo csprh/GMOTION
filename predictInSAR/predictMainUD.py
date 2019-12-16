@@ -50,7 +50,7 @@ def getLSTMPred(train_y, train_X, test_X, scaler, epochsIn, LSTM, saveData, save
         else:
             train_y = np.load('LSTM2_train_y.npy')
             train_X = np.load('LSTM2_train_X.npy')
-        if saveModel == 0 :
+        if saveModel == 1 :
             # fit model
             history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False)
             model.save("LSTM2.h5")
@@ -64,7 +64,7 @@ def getLSTMPred(train_y, train_X, test_X, scaler, epochsIn, LSTM, saveData, save
         else:
             train_y = np.load('LSTM3_train_y.npy')
             train_X = np.load('LSTM3_train_X.npy')
-        if saveModel == 0 :
+        if saveModel == 1 :
             # fit model
             history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False)
             model.save("LSTM3.h5")
