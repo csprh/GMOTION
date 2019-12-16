@@ -133,8 +133,8 @@ for ii in range(0,6):
         saveModel = 0
 
 
-    y_hatLSTM6 =  getLSTMPred(train_y6, train_X6, test_X, scaler,epochs,2, saveData,saveModel)
-    y_hatLSTM5p = getLSTMPred(train_y5p, train_X5p, test_X, scaler,epochs,3, saveData,saveModel)
+    y_hatLSTM6 =  getLSTMPred(0, 0, test_X, scaler,epochs,2, saveData,saveModel)
+    y_hatLSTM5p = getLSTMPred(0, 0, test_X, scaler,epochs,3, saveData,saveModel)
 
 
 
