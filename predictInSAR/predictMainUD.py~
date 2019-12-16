@@ -153,6 +153,29 @@ for ii in range(0,6):
     y_hatLSTM5p = getLSTMPred(train_y5p, train_X5p, test_X, scaler,epochs,3, saveData,saveModel)
 
 
+    if saveData == 0:
+        y_hatLSTM1 =  getLSTMPred(train_y1, train_X1,  test_X, scaler, epochs,1, 0,0)
+        y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
+        rmseLSTM1 = calcErr(y_hatLSTM1, test_y)
+        rmseLSTM6 = calcErr(y_hatLSTM6, test_y)
+        rmseLSTM5p = calcErr(y_hatLSTM5p, test_y)
+        rmseSarima = calcErr(y_hatSarima, test_y)
+
+        s = ndates - predInSamples
+
+        plt.close()
+        thisfig = plt.figure(figsize=(12,8))
+        plotPredictions(values, s, "LSTM1: RMSE = " + str(rmseLSTM1), y_hatLSTM1, "green", 1)
+        plotPredictions(values, s, "LSTM2: RMSE = "+  str(rmseLSTM6), y_hatLSTM6, "blue", 0)
+        plotPredictions(values, s, "LSTM3: RMSE = "+  str(rmseLSTM5p), y_hatLSTM5p, "pink", 0)
+        plotPredictions(values, s, "Sarima: RMSE = " +str(rmseSarima), y_hatSarima, "red", 0)
+        plt.legend(loc='best')
+        #plt.show()
+        thisfig.savefig("Pred-"+str(chooseSeq)+".pdf", bbox_inches='tight')
+        plt.close(); print('\n')
+
+        print('100%% done of position '+str(chooseSeq))
+
 
 # Sing to god
 # Day is gone
