@@ -11,7 +11,6 @@ from keras.layers import Dense
 from keras.layers import LSTM
 from keras.layers import Dropout
 from keras import backend as be
-from keras.models import load_model
 import numpy as np
 import math
 from utils import calcErr,plotPredictions,normbygroup,getMethodPreds
@@ -67,7 +66,7 @@ def plotPredictions(seq, s, n, yhat, thisColor, plotSignal):
 
 
 
-def getLSTMPred(train_y, train_X, test_X, scaler, epochsIn, LSTM, saveData, saveModel):
+def getLSTMPred(train_y, train_X, test_X, scaler, epochsIn, earlyStopping):
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
     config.gpu_options.per_process_gpu_memory_fraction = 0.5
@@ -75,40 +74,15 @@ def getLSTMPred(train_y, train_X, test_X, scaler, epochsIn, LSTM, saveData, save
 
     model = getModel(train_X.shape[1], train_X.shape[2], train_y.shape[1])
 
-    if LSTM == 1 :
+    if earlyStopping == 1:
+        es = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=2000)
+        # fit model
+        history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False, validation_split=0.3, callbacks=[es])
+    else:
         history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False)
-    if LSTM == 2 :
-        if saveData == 1 :
-            np.save('LSTM2_train_y.npy', train_y)
-            np.save('LSTM2_train_X.npy', train_X)
-            return 0
-        else:
-            train_y = np.load('LSTM2_train_y.npy')
-            train_X = np.load('LSTM2_train_X.npy')
-        if saveModel == 0 :
-            # fit model
-            history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False)
-            model.save("LSTM2.h5")
-        else:
-            model = load_model("LSTM2.h5")
-    if LSTM == 3 :
-        if saveData == 1 :
-            np.save('LSTM3_train_y.npy', train_y)
-            np.save('LSTM3_train_X.npy', train_X)
-            return 0
-        else:
-            train_y = np.load('LSTM3_train_y.npy')
-            train_X = np.load('LSTM3_train_X.npy')
-        if saveModel == 0 :
-            # fit model
-            history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False)
-            model.save("LSTM3.h5")
-        else:
-            model = load_model("LSTM3.h5")
     y_hat = model.predict(test_X)
     y_hat = scaler.inverse_transform(y_hat)[0,:]
     return y_hat
-
 
 def calcErr(yhat, inv_y):
     rmse = math.sqrt(mean_squared_error(yhat, inv_y))
@@ -167,9 +141,8 @@ yearInSamples = int(365.25/sampleTime)
 nfeatures = 1
 predInDays = 265        # 9 months
 predInSamples = int(predInDays/sampleTime)
-epochs = 2000
+epochs = 1000
 
-saveData = 0
 for ii in range(0,6):
     chooseSeq = theseInds[-(ii+1)]
 
@@ -191,46 +164,30 @@ for ii in range(0,6):
     train_y6, train_X6  = genTrain(scaledCD[theseInds[-6:], :],predInSamples)
     train_y5p, train_X5p = genTrain(scaledCD[theseInds[-nPoints5p:], :],predInSamples)
 
-    if ii == 0 :
-        saveModel = 1
-    else :
-        saveModel = 0
+    y_hatLSTM1 =  getLSTMPred(train_y1, train_X1,  test_X, scaler, epochs,0)
+    y_hatLSTM6 =  getLSTMPred(train_y6, train_X6, test_X, scaler,epochs,0)
+    y_hatLSTM5p = getLSTMPred(train_y6, train_X6, test_X, scaler,epochs,0)
+    y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
+
+    rmseLSTM1 = calcErr(y_hatLSTM1, test_y)
+    rmseLSTM6 = calcErr(y_hatLSTM6, test_y)
+    rmseLSTM5p = calcErr(y_hatLSTM5p, test_y)
+    rmseSarima = calcErr(y_hatSarima, test_y)
+
+    s = ndates - predInSamples
+
+    plt.close()
+    thisfig = plt.figure(figsize=(12,8))
+    plotPredictions(values, s, "LSTM1: RMSE = " + str(rmseLSTM1), y_hatLSTM1, "green", 1)
+    plotPredictions(values, s, "LSTM2: RMSE = "+  str(rmseLSTM6), y_hatLSTM6, "blue", 0)
+    plotPredictions(values, s, "LSTM3: RMSE = "+  str(rmseLSTM5p), y_hatLSTM5p, "pink", 0)
+    plotPredictions(values, s, "Sarima: RMSE = " +str(rmseSarima), y_hatSarima, "red", 1)
+    plt.legend(loc='best')
+    #plt.show()
+    thisfig.savefig("Pred-"+str(chooseSeq)+".pdf", bbox_inches='tight')
+    plt.close(); print('\n')
+
+    print('100%% done of position '+str(chooseSeq))
 
 
-    y_hatLSTM6 =  getLSTMPred(train_y6, train_X6, test_X, scaler,epochs,2, saveData,saveModel)
-    y_hatLSTM5p = getLSTMPred(train_y5p, train_X5p, test_X, scaler,epochs,3, saveData,saveModel)
 
-
-    if saveData == 0:
-        y_hatLSTM1 =  getLSTMPred(train_y1, train_X1,  test_X, scaler, epochs,1, 0,0)
-        y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
-        rmseLSTM1 = calcErr(y_hatLSTM1, test_y)
-        rmseLSTM6 = calcErr(y_hatLSTM6, test_y)
-        rmseLSTM5p = calcErr(y_hatLSTM5p, test_y)
-        rmseSarima = calcErr(y_hatSarima, test_y)
-
-        s = ndates - predInSamples
-
-        plt.close()
-        thisfig = plt.figure(figsize=(12,8))
-        plotPredictions(values, s, "LSTM1: RMSE = " + str(rmseLSTM1), y_hatLSTM1, "green", 1)
-        plotPredictions(values, s, "LSTM2: RMSE = "+  str(rmseLSTM6), y_hatLSTM6, "blue", 0)
-        plotPredictions(values, s, "LSTM3: RMSE = "+  str(rmseLSTM5p), y_hatLSTM5p, "pink", 0)
-        plotPredictions(values, s, "Sarima: RMSE = " +str(rmseSarima), y_hatSarima, "red", 0)
-        plt.legend(loc='best')
-        #plt.show()
-        thisfig.savefig("Pred-"+str(chooseSeq)+".pdf", bbox_inches='tight')
-        plt.close(); print('\n')
-
-        print('100%% done of position '+str(chooseSeq))
-
-
-# Sing to god
-# Day is gone
-# Du hast
-# Bastille
-# Merry christmas
-# Passion
-# God is a DJ
-# Walk right in
-# Electro tracks *2
