@@ -12,25 +12,10 @@ from keras.models import load_model
 import numpy as np
 import math
 import scipy.io as sio
-from pyramid.arima import auto_arima
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error
 from keras.callbacks import EarlyStopping
 
-def getSarimaPred(train, yearInSamples, predSamples):
-
-   thissarima =  auto_arima(train, start_p=1, start_q=1,
-                      test='adf',       # use adftest to find optimal 'd'
-                      max_p= 3, max_q= 3, max_d = 3,
-                      m=yearInSamples,
-                      start_P=0,
-                      max_D=2, max_Q= 2, max_P = 2,
-                      trace=True,
-                      error_action='ignore',
-                      suppress_warnings=True)
-
-   y_hat, confint = thissarima.predict(n_periods=predSamples, return_conf_int=True)
-   return y_hat
 
 def getModel(x1,x2,y1):
 
