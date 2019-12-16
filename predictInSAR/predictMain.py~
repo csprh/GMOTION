@@ -166,7 +166,7 @@ for ii in range(0,6):
 
     y_hatLSTM1 =  getLSTMPred(train_y1, train_X1,  test_X, scaler, epochs,0)
     y_hatLSTM6 =  getLSTMPred(train_y6, train_X6, test_X, scaler,epochs,0)
-    y_hatLSTM5p = getLSTMPred(train_y6, train_X5p, test_X, scaler,epochs,0)
+    y_hatLSTM5p = getLSTMPred(train_y6, train_X6, test_X, scaler,epochs,0)
     y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
 
     rmseLSTM1 = calcErr(y_hatLSTM1, test_y)
@@ -181,7 +181,7 @@ for ii in range(0,6):
     plotPredictions(values, s, "LSTM1: RMSE = " + str(rmseLSTM1), y_hatLSTM1, "green", 1)
     plotPredictions(values, s, "LSTM2: RMSE = "+  str(rmseLSTM6), y_hatLSTM6, "blue", 0)
     plotPredictions(values, s, "LSTM3: RMSE = "+  str(rmseLSTM5p), y_hatLSTM5p, "pink", 0)
-    plotPredictions(values, s, "Sarima: RMSE = " +str(rmseSarima), y_hatSarima, "red", 1)
+    plotPredictions(values, s, "Sarima: RMSE = " +str(rmseSarima), y_hatSarima, "red", 0)
     plt.legend(loc='best')
     #plt.show()
     thisfig.savefig("Pred-"+str(chooseSeq)+".pdf", bbox_inches='tight')
