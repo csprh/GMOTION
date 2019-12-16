@@ -202,7 +202,7 @@ for ii in range(0,6):
 
 
     if saveData == 0:
-        y_hatLSTM1 =  getLSTMPred(train_y1, train_X1,  test_X, scaler, epochs,0,0)
+        y_hatLSTM1 =  getLSTMPred(train_y1, train_X1,  test_X, scaler, epochs,1, 0,0)
         y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
         rmseLSTM1 = calcErr(y_hatLSTM1, test_y)
         rmseLSTM6 = calcErr(y_hatLSTM6, test_y)

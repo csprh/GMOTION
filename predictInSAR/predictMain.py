@@ -169,7 +169,7 @@ predInDays = 265        # 9 months
 predInSamples = int(predInDays/sampleTime)
 epochs = 2000
 
-saveData = 1
+saveData = 0
 for ii in range(0,6):
     chooseSeq = theseInds[-(ii+1)]
 
