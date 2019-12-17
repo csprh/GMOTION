@@ -131,7 +131,7 @@ arraySin = interpLocationStruct['arraySin'][0,0][0,:]
 theseInds = np.argsort(arrayAC)
 sh = np.shape(cdTSmooth)
 nPoints = sh[0]
-nPoints5p = int(nPoints/20)
+nPoints5p = int(nPoints/100)
 
 scaler = MinMaxScaler(feature_range=(0, 1))
 
@@ -144,7 +144,7 @@ yearInSamples = int(365.25/sampleTime)
 nfeatures = 1
 predInDays = 265        # 9 months
 predInSamples = int(predInDays/sampleTime)
-epochs = 5
+epochs = 2
 
 train_y6, train_X6  = genTrain(scaledCD[theseInds[-6:], :],predInSamples)
 train_y5p, train_X5p = genTrain(scaledCD[theseInds[-nPoints5p:], :],predInSamples)
@@ -158,10 +158,10 @@ model_y6.save_weights(filepath  = 'y6.h5')
 model_y5p =  trainModel(train_y5p, train_X5p, epochs, 0)
 model_y5p.save_weights(filepath  = 'y5p2.h5')
 
-rmseLSTM1Array = []
-rmseLSTM6Array = []
-rmseLSTM5pArray = []
-rmseSarimaArray = []
+rmseLSTM1Array = np.array([])
+rmseLSTM6Array = np.array([])
+rmseLSTM5pArray = np.array([])
+rmseSarimaArray = np.array([])
 
 for ii in range(0,1000):
     chooseSeq = theseInds[-(ii+1)]
@@ -188,8 +188,8 @@ for ii in range(0,1000):
     y_hatLSTM6 =  predInv(model, test_X, scaler)
     model.load_weights('y5p2.h5')
     y_hatLSTM5p = predInv(model, test_X, scaler)
-
-    y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
+    y_hatSarima = y_hatLSTM5p
+    #y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
     rmseLSTM1 = calcErr(y_hatLSTM1, test_y)
     rmseLSTM6 = calcErr(y_hatLSTM6, test_y)
     rmseLSTM5p = calcErr(y_hatLSTM5p, test_y)
@@ -213,6 +213,7 @@ for ii in range(0,1000):
     np.save('LSTM6.npy', rmseLSTM6Array)
     np.save('LSTM5p.npy', rmseLSTM5pArray)
     np.save('Sarima.npy', rmseSarimaArray)
+
     plt.legend(loc='best')
     plt.xticks(np.arange(len(dates)), dates, rotation=30)
     #plt.show()
