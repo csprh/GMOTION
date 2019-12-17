@@ -131,7 +131,7 @@ arraySin = interpLocationStruct['arraySin'][0,0][0,:]
 theseInds = np.argsort(arrayAC)
 sh = np.shape(cdTSmooth)
 nPoints = sh[0]
-nPoints5p = int(nPoints/50)
+nPoints5p = int(nPoints/100)
 
 scaler = MinMaxScaler(feature_range=(0, 1))
 
@@ -144,7 +144,7 @@ yearInSamples = int(365.25/sampleTime)
 nfeatures = 1
 predInDays = 265        # 9 months
 predInSamples = int(predInDays/sampleTime)
-epochs = 2
+epochs = 2000
 
 train_y6, train_X6  = genTrain(scaledCD[theseInds[-6:], :],predInSamples)
 train_y5p, train_X5p = genTrain(scaledCD[theseInds[-nPoints5p:], :],predInSamples)
@@ -188,8 +188,9 @@ for ii in range(0,1000):
     y_hatLSTM6 =  predInv(model, test_X, scaler)
     model.load_weights('y5p2.h5')
     y_hatLSTM5p = predInv(model, test_X, scaler)
-    y_hatSarima = y_hatLSTM5p
-    #y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
+
+    y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
+
     rmseLSTM1 = calcErr(y_hatLSTM1, test_y)
     rmseLSTM6 = calcErr(y_hatLSTM6, test_y)
     rmseLSTM5p = calcErr(y_hatLSTM5p, test_y)
@@ -215,7 +216,6 @@ for ii in range(0,1000):
     np.save('Sarima.npy', rmseSarimaArray)
 
     plt.legend(loc='best')
-    plt.xticks(np.arange(len(dates)), dates, rotation=30)
     #plt.show()
     thisfig.savefig("Pred-"+str(chooseSeq)+".pdf", bbox_inches='tight')
     plt.close(); print('\n')
