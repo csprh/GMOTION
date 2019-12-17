@@ -153,12 +153,12 @@ config = tf.ConfigProto()
 config.gpu_options.allow_growth = True
 config.gpu_options.per_process_gpu_memory_fraction = 0.5
 be.tensorflow_backend.set_session(tf.Session(config=config))
-model_y6 =  trainModel(train_y6, train_X6, epochs, 0)
-model_y6.save_weights(filepath  = 'y6.h5')
-model_y5p =  trainModel(train_y5p, train_X5p, epochs, 0)
-model_y5p.save_weights(filepath  = 'y5p.h5')
+#model_y6 =  trainModel(train_y6, train_X6, epochs, 0)
+#model_y6.save_weights(filepath  = 'y6.h5')
+#model_y5p =  trainModel(train_y5p, train_X5p, epochs, 0)
+#model_y5p.save_weights(filepath  = 'y5p.h5')
 
-for ii in range(0,6):
+for ii in range(6,10):
     chooseSeq = theseInds[-(ii+1)]
 
     values = cdTSmooth[chooseSeq, :]
