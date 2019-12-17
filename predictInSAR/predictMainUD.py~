@@ -40,7 +40,7 @@ def getLSTMPred(train_y, train_X, test_X, scaler, epochsIn, LSTM, saveData, save
     config.gpu_options.per_process_gpu_memory_fraction = 0.5
     be.tensorflow_backend.set_session(tf.Session(config=config))
 
-    model = getModel(44, 1, 1)
+    model = getModel(44, 1, 44)
     if LSTM == 1 :
         history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False)
     if LSTM == 2 :

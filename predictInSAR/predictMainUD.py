@@ -135,15 +135,14 @@ for ii in range(0,6):
     y_hatLSTM6 =  getLSTMPred(0, 0, test_X, scaler,epochs,2, saveData,saveModel)
     y_hatLSTM5p = getLSTMPred(0, 0, test_X, scaler,epochs,3, saveData,saveModel)
 
-
-
-# Sing to god
-# Day is gone
 # Du hast
+# Merry christmas (Shaky)
 # Bastille
-# Merry christmas
-# Passion
+# Day is gone
+# Sing to god
+# Christmas wrapping
 # God is a DJ
 # Walk right in
-# Electro tracks *2
+# Passion
+# Electro track
 
