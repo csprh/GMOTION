@@ -1,0 +1,53 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import pickle
+import matplotlib
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
+
+import numpy as np
+import math
+import scipy.io as sio
+
+import seaborn as sns
+import pandas as pd
+
+l1 = np.load('LSTM1.npy')
+l2 = np.load('LSTM6.npy')
+l3 = np.load('LSTM5p.npy')
+l4 = np.load('Sarima.npy')
+
+
+rmses = [l1, l2, l3, l4]
+
+dataset = pd.DataFrame({'LSTM1': l1, 'LSTM2': l2, 'LSTM3': l3, 'Sarima': l4})
+
+thisfig = plt.figure(figsize=(12,8))
+
+sns.set(style="whitegrid")
+
+
+ax = sns.boxplot(data=dataset, showfliers = False)
+#ax = sns.swarmplot(data=dataset, color=".25")
+
+ast = np.argsort(rmses, axis=0)
+col1 = ast[0,:]
+lenCol = len(ast)
+lstm0 = np.mean(col1==0)
+lstm1 = np.mean(col1==1)
+lstm2 = np.mean(col1==2)
+lstm3 = np.mean(col1==3)
+
+print "lstm0= ",lstm0,"lstm1= ",lstm1,"lstm2= ",lstm2,"lstm3= ",lstm3
+thisfig.savefig("RMSEs1.pdf", bbox_inches='tight')
+
+plt.show()
+
+#plt.plot(np.arange(1,len(seq)+1), seq, label='Real Sequence', color="black")
+#plt.plot(np.arange(s,s+len(yhat)), yhat, label='Forecast-'+n, color=thisColor)
+
+#plt.xlabel('Samples (every 6 days)')                          # use for the averaged CDs
+#plt.ylabel('Cumulative Displacement')
+
+
