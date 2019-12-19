@@ -206,7 +206,7 @@ for ii in range(43,1000):
     y_hatLSTM6 =  predInv(model, test_X, scaler)
     model.load_weights('y5p2.h5')
     y_hatLSTM5p = predInv(model, test_X, scaler)
-    y_hatSin    = getFittedSinPred(values[:-predInSamples], yearInSamples, predSamples):
+    y_hatSin    = getFittedSinPred(values[:-predInSamples], yearInSamples, predSamples)
     y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
 
     rmseLSTM1  = calcErr(y_hatLSTM1, test_y)
@@ -222,7 +222,7 @@ for ii in range(43,1000):
     plotPredictions(values, s, "LSTM2: RMSE = "+  str(rmseLSTM6), y_hatLSTM6, "blue", 0)
     plotPredictions(values, s, "LSTM3: RMSE = "+  str(rmseLSTM5p), y_hatLSTM5p, "pink", 0)
     plotPredictions(values, s, "Sarima: RMSE = " +str(rmseSarima), y_hatSarima, "red", 0)
-    plotPredictions(values, s, "Sinusoid: RMSE = " +str(rmseSarima), y_hatSarima, "yellow", 0)
+    plotPredictions(values, s, "Sinusoid: RMSE = " +str(rmseSin), y_hatSin, "yellow", 0)
 
     rmseLSTM1Array = np.append(rmseLSTM1Array, rmseLSTM1)
     rmseLSTM6Array = np.append(rmseLSTM6Array, rmseLSTM6)
