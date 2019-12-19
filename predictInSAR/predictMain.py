@@ -26,7 +26,7 @@ from scipy import optimize
 
 def sinFunc(x, a, b, c):
     thisFreq = int(365.25/6)
-    return a*x + b * np.sin((2*pi*x/thisFreq) + c)
+    return a*x + b * np.sin((2*math.pi*x/thisFreq) + c)
 
 def getFittedSinPred(y_data, yearInSamples, predSamples):
 
