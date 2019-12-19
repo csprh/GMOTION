@@ -235,7 +235,7 @@ for ii in range(0,1000):
     np.save('LSTM6.npy', rmseLSTM6Array)
     np.save('LSTM5p.npy', rmseLSTM5pArray)
     np.save('Sarima.npy', rmseSarimaArray)
-    np.save('Sinu.npy', rmseSinusoidArray)
+    np.save('Sinu.npy', rmseSinArray)
 
     plt.legend(loc='best')
     #plt.show()
