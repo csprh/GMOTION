@@ -228,7 +228,7 @@ for ii in range(43,1000):
     rmseLSTM6Array = np.append(rmseLSTM6Array, rmseLSTM6)
     rmseLSTM5pArray = np.append(rmseLSTM5pArray, rmseLSTM5p)
     rmseSarimaArray = np.append(rmseSarimaArray, rmseSarima)
-    rmseSinusoidArray = np.append(rmseSinArray, rmseSin)
+    rmseSinArray = np.append(rmseSinArray, rmseSin)
 
     np.save('LSTM1.npy', rmseLSTM1Array)
     np.save('LSTM6.npy', rmseLSTM6Array)
