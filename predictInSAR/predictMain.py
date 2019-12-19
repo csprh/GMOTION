@@ -162,7 +162,7 @@ yearInSamples = int(365.25/sampleTime)
 nfeatures = 1
 predInDays = 265        # 9 months
 predInSamples = int(predInDays/sampleTime)
-epochs = 2000
+epochs = 20
 
 train_y6, train_X6  = genTrain(scaledCD[theseInds[-6:], :],predInSamples)
 train_y5p, train_X5p = genTrain(scaledCD[theseInds[-nPoints5p:], :],predInSamples)
@@ -182,7 +182,7 @@ rmseLSTM5pArray = np.array([])
 rmseSarimaArray = np.array([])
 rmseSinArray = np.array([])
 
-for ii in range(43,1000):
+for ii in range(0,1000):
     chooseSeq = theseInds[-(ii+1)]
 
     values = cdTSmooth[chooseSeq, :]
@@ -207,9 +207,9 @@ for ii in range(43,1000):
     y_hatLSTM6 =  predInv(model, test_X, scaler)
     model.load_weights('y5p2.h5')
     y_hatLSTM5p = predInv(model, test_X, scaler)
-    y_hatSin    = getFittedSinPred(values[:-predInSamples], yearInSamples, predSamples)
-    y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
-
+    y_hatSin    = getFittedSinPred(values[:-predInSamples], yearInSamples, predInSamples)
+    #y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
+    y_hatSarima = y_hatSin
     rmseLSTM1  = calcErr(y_hatLSTM1, test_y)
     rmseLSTM6  = calcErr(y_hatLSTM6, test_y)
     rmseLSTM5p = calcErr(y_hatLSTM5p, test_y)
@@ -235,7 +235,7 @@ for ii in range(43,1000):
     np.save('LSTM6.npy', rmseLSTM6Array)
     np.save('LSTM5p.npy', rmseLSTM5pArray)
     np.save('Sarima.npy', rmseSarimaArray)
-    np.save('Sinusoid.npy', rmseSinusoidArray)
+    np.save('Sinu.npy', rmseSinusoidArray)
 
     plt.legend(loc='best')
     #plt.show()
