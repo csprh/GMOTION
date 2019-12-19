@@ -162,7 +162,7 @@ yearInSamples = int(365.25/sampleTime)
 nfeatures = 1
 predInDays = 265        # 9 months
 predInSamples = int(predInDays/sampleTime)
-epochs = 20
+epochs = 2000
 
 train_y6, train_X6  = genTrain(scaledCD[theseInds[-6:], :],predInSamples)
 train_y5p, train_X5p = genTrain(scaledCD[theseInds[-nPoints5p:], :],predInSamples)
@@ -208,8 +208,8 @@ for ii in range(0,1000):
     model.load_weights('y5p2.h5')
     y_hatLSTM5p = predInv(model, test_X, scaler)
     y_hatSin    = getFittedSinPred(values[:-predInSamples], yearInSamples, predInSamples)
-    #y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
-    y_hatSarima = y_hatSin
+    y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
+    #y_hatSarima = y_hatSin
     rmseLSTM1  = calcErr(y_hatLSTM1, test_y)
     rmseLSTM6  = calcErr(y_hatLSTM6, test_y)
     rmseLSTM5p = calcErr(y_hatLSTM5p, test_y)
