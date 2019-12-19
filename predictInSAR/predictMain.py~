@@ -32,7 +32,7 @@ def getFittedSinPred(y_data, yearInSamples, predSamples):
 
     x_data  = range(0,len(y_data))
     x_pred = range(len(y_data),len(y_data)+predSamples)
-    params, params_covariance = optimize.curve_fit(test_func, x_data, y_data,
+    params, params_covariance = optimize.curve_fit(sinFunc, x_data, y_data,
                                                p0=[0, 2, 0])
     y_hat = sinFunc(x_pred, params[0], params[1], params[2])
     return y_hat
