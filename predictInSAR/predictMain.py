@@ -166,7 +166,7 @@ yearInSamples = int(365.25/sampleTime)
 nfeatures = 1
 predInDays = 265        # 9 months
 predInSamples = int(predInDays/sampleTime)
-epochs = 10
+epochs = 2000
 
 train_y6, train_X6  = genTrain(scaledCD[theseInds[-6:], :],predInSamples)
 train_y5p, train_X5p = genTrain(scaledCD[theseInds[-nPoints5p:], :],predInSamples)
@@ -175,10 +175,10 @@ config = tf.ConfigProto()
 config.gpu_options.allow_growth = True
 config.gpu_options.per_process_gpu_memory_fraction = 0.5
 be.tensorflow_backend.set_session(tf.Session(config=config))
-#model_y6 =  trainModel(train_y6, train_X6, epochs, 0)
-#model_y6.save_weights(filepath  = 'y6.h5')
-#model_y5p =  trainModel(train_y5p, train_X5p, epochs, 0)
-#model_y5p.save_weights(filepath  = 'y5p2.h5')
+model_y6 =  trainModel(train_y6, train_X6, epochs, 0)
+model_y6.save_weights(filepath  = 'y6.h5')
+model_y5p =  trainModel(train_y5p, train_X5p, epochs, 0)
+model_y5p.save_weights(filepath  = 'y5p2.h5')
 
 rmseLSTM1Array = np.array([])
 rmseLSTM6Array = np.array([])

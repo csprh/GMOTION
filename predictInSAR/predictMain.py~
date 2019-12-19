@@ -77,7 +77,6 @@ def plotPredictions(seq, s, n, yhat, thisColor, plotSignal):
     if plotSignal==1:
         plt.plot(np.arange(1,len(seq)+1), seq, label='Real Sequence', color="black")
     plt.plot(np.arange(s,s+len(yhat)), yhat, label='Forecast-'+n, color=thisColor)
-    plt.xlabel('Samples (every 6 days)')                          # use for the averaged CDs
     plt.ylabel('Cumulative Displacement')
 
 
