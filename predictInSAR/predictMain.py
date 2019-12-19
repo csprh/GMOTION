@@ -21,6 +21,20 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error
 from keras.callbacks import EarlyStopping
 from datetime import date
+from scipy import optimize
+
+def sinFunc(x, a, b, c):
+    thisFreq = int(365.25/6)
+    return a*x + b * np.sin(thisFreq * x + c)
+
+def getFittedSinPred(y_data, yearInSamples, predSamples):
+
+    x_data  = range(0,len(y_data))
+    x_pred = range(len(y_data),len(y_data)+predSamples)
+    params, params_covariance = optimize.curve_fit(test_func, x_data, y_data,
+                                               p0=[0, 2, 0])
+    y_hat = sinFunc(x_pred, params[0], params[1], params[2])
+    return y_hat
 
 def getSarimaPred(train, yearInSamples, predSamples):
 
@@ -75,7 +89,10 @@ def trainModel(train_y, train_X, epochsIn, earlyStopping):
         # fit model
         history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False, validation_split=0.3, callbacks=[es])
     else:
-        history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False)
+        checkpoint = ModelCheckpoint('tmp.h5', monitor='val_loss', verbose=1, save_best_only=True, mode='max')
+        callbacks_list = [checkpoint]
+        history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False, validation_split=0.1, callbacks=callbacks_list)
+        model.load_weights('tmp.h5')
     return model
 
 def predInv(model, test_X, scaler):
@@ -162,6 +179,7 @@ rmseLSTM1Array = np.array([])
 rmseLSTM6Array = np.array([])
 rmseLSTM5pArray = np.array([])
 rmseSarimaArray = np.array([])
+rmseSinArray = np.array([])
 
 for ii in range(43,1000):
     chooseSeq = theseInds[-(ii+1)]
@@ -188,14 +206,14 @@ for ii in range(43,1000):
     y_hatLSTM6 =  predInv(model, test_X, scaler)
     model.load_weights('y5p2.h5')
     y_hatLSTM5p = predInv(model, test_X, scaler)
-
+    y_hatSin    = getFittedSinPred(values[:-predInSamples], yearInSamples, predSamples):
     y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
 
-    rmseLSTM1 = calcErr(y_hatLSTM1, test_y)
-    rmseLSTM6 = calcErr(y_hatLSTM6, test_y)
+    rmseLSTM1  = calcErr(y_hatLSTM1, test_y)
+    rmseLSTM6  = calcErr(y_hatLSTM6, test_y)
     rmseLSTM5p = calcErr(y_hatLSTM5p, test_y)
     rmseSarima = calcErr(y_hatSarima, test_y)
-
+    rmseSin    = calcErr(y_hatSin, test_y)
     s = ndates - predInSamples
 
     plt.close()
@@ -204,16 +222,19 @@ for ii in range(43,1000):
     plotPredictions(values, s, "LSTM2: RMSE = "+  str(rmseLSTM6), y_hatLSTM6, "blue", 0)
     plotPredictions(values, s, "LSTM3: RMSE = "+  str(rmseLSTM5p), y_hatLSTM5p, "pink", 0)
     plotPredictions(values, s, "Sarima: RMSE = " +str(rmseSarima), y_hatSarima, "red", 0)
+    plotPredictions(values, s, "Sinusoid: RMSE = " +str(rmseSarima), y_hatSarima, "yellow", 0)
 
     rmseLSTM1Array = np.append(rmseLSTM1Array, rmseLSTM1)
     rmseLSTM6Array = np.append(rmseLSTM6Array, rmseLSTM6)
     rmseLSTM5pArray = np.append(rmseLSTM5pArray, rmseLSTM5p)
     rmseSarimaArray = np.append(rmseSarimaArray, rmseSarima)
+    rmseSinArray = np.append(rmseSinArray, rmseSin)
 
     np.save('LSTM1.npy', rmseLSTM1Array)
     np.save('LSTM6.npy', rmseLSTM6Array)
     np.save('LSTM5p.npy', rmseLSTM5pArray)
     np.save('Sarima.npy', rmseSarimaArray)
+    np.save('Sinusoid.npy', rmseSinusoidArray)
 
     plt.legend(loc='best')
     #plt.show()

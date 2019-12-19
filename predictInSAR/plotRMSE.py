@@ -39,7 +39,7 @@ lstm1 = np.mean(col1==1)
 lstm2 = np.mean(col1==2)
 lstm3 = np.mean(col1==3)
 
-print "lstm0= ",lstm0,"lstm1= ",lstm1,"lstm2= ",lstm2,"lstm3= ",lstm3
+print ("lstm0= ",lstm0,"lstm1= ",lstm1,"lstm2= ",lstm2,"lstm3= ",lstm3)
 thisfig.savefig("RMSEs1.pdf", bbox_inches='tight')
 
 plt.show()
