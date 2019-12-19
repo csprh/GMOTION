@@ -90,7 +90,7 @@ def trainModel(train_y, train_X, epochsIn, earlyStopping):
         # fit model
         history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False, validation_split=0.3, callbacks=[es])
     else:
-        checkpoint = ModelCheckpoint('tmp.h5', monitor='val_loss', verbose=1, save_best_only=True, mode='max')
+        checkpoint = ModelCheckpoint('tmp.h5', monitor='val_loss', verbose=1, save_best_only=True, mode='min')
         callbacks_list = [checkpoint]
         history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False, validation_split=0.1, callbacks=callbacks_list)
         model.load_weights('tmp.h5')

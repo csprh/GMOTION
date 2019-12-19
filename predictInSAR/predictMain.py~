@@ -21,6 +21,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error
 from keras.callbacks import EarlyStopping
 from datetime import date
+from keras.callbacks import ModelCheckpoint
 from scipy import optimize
 
 def sinFunc(x, a, b, c):
