@@ -77,7 +77,6 @@ def plotPredictions(seq, s, n, yhat, thisColor, plotSignal):
     if plotSignal==1:
         plt.plot(np.arange(1,len(seq)+1), seq, label='Real Sequence', color="black")
     plt.plot(np.arange(s,s+len(yhat)), yhat, label='Forecast-'+n, color=thisColor)
-    plt.xlabel('Samples (every 6 days)')                          # use for the averaged CDs
     plt.ylabel('Cumulative Displacement')
 
 
@@ -229,7 +228,7 @@ for ii in range(0,1000):
     plotPredictions(values, s, "LSTM3: RMSE = "+  str(rmseLSTM5p), y_hatLSTM5p, "pink", 0)
     plotPredictions(values, s, "Sarima: RMSE = " +str(rmseSarima), y_hatSarima, "red", 0)
     plotPredictions(values, s, "Sinusoid: RMSE = " +str(rmseSin), y_hatSin, "yellow", 0)
-    plt.xticks(x, dates, rotation=30)
+    plt.xticks(xInds, dates, rotation=30)
 
     rmseLSTM1Array = np.append(rmseLSTM1Array, rmseLSTM1)
     rmseLSTM6Array = np.append(rmseLSTM6Array, rmseLSTM6)
