@@ -35,6 +35,15 @@ def getSarimaPred(train, yearInSamples, predSamples):
    y_hat, confint = thissarima.predict(n_periods=predSamples, return_conf_int=True)
    return y_hat
 
+def getFittedSinPred(y_data, yearInSamples, predSamples):
+
+    x_data  = np.array(range(0,len(y_data)))
+    x_pred =  np.array(range(len(y_data),len(y_data)+predSamples))
+    params, params_covariance = optimize.curve_fit(sinFunc, x_data, y_data,
+                                               p0=[0, 5, 0])
+    y_hat = sinFunc(x_pred, params[0], params[1], params[2])
+    return y_hat
+
 def getModel(x1,x2,y1):
 
    model = Sequential()
@@ -110,6 +119,11 @@ def genTrain(scaledCD, predInSamples):
     #train_y = train_y.reshape((train_y.shape[0], look_back, 1))
     return train_y, train_X
 
+matlab_datenum = [736095,736329,736569,736809,737049, 737289]
+dates = []; offset_days = 366
+for d in matlab_datenum:
+    dates.append(date.fromordinal(int(d-offset_days)).strftime("%d %B %Y"))
+xInds = [1, 40, 80, 120, 160, 200]
 
 mat_contents = sio.loadmat('interpLocationNorm.mat')
 interpLocationStruct = mat_contents['interpLocation']
@@ -163,7 +177,7 @@ for ii in range(0,6):
     #y_hatLSTM6 =  getLSTMPred(train_y6, train_X6, test_X, scaler,epochs)
     #y_hatLSTM10 = getLSTMPred(train_y5p, train_X5p, test_X, scaler,epochs)
     y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples*4)
-
+    y_hatSin = getFittedSinPred(values[:-predInSamples], yearInSamples, predInSamples*4)
     #rmseLSTM1 = calcErr(y_hatLSTM1, test_y)
     #rmseLSTM6 = calcErr(y_hatLSTM6, test_y)
     #rmseLSTM5p = calcErr(y_hatLSTM5p, test_y)
@@ -177,9 +191,10 @@ for ii in range(0,6):
     #plotPredictions(values, s, "LSTM2: RMSE = "+  str(rmseLSTM6), y_hatLSTM6, "blue", 0)
     #plotPredictions(values, s, "LSTM3: RMSE = "+  str(rmseLSTM5p), y_hatLSTM5p, "pink", 0)
     plotPredictions(values, s, "Sarima", y_hatSarima, "red", 1)
+    plotPredictions(values, s, "Sinusoid", y_hatSin, "yellow", 1)
     plt.legend(loc='best')
     #plt.show()
-    thisfig.savefig("Pred-S-"+str(chooseSeq)+".pdf", bbox_inches='tight')
+    thisfig.savefig("Pred-S2-"+str(chooseSeq)+".pdf", bbox_inches='tight')
     plt.close(); print('\n')
 
     print('100%% done of position '+str(chooseSeq))
