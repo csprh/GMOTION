@@ -89,10 +89,12 @@ def trainModel(train_y, train_X, epochsIn, earlyStopping):
         # fit model
         history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False, validation_split=0.3, callbacks=[es])
     else:
-        checkpoint = ModelCheckpoint('tmp.h5', monitor='val_loss', verbose=1, save_best_only=True, mode='min')
-        callbacks_list = [checkpoint]
-        history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False, validation_split=0.1, callbacks=callbacks_list)
-        model.load_weights('tmp.h5')
+        #checkpoint = ModelCheckpoint('tmp.h5', monitor='val_loss', verbose=1, save_best_only=True, mode='min')
+        #callbacks_list = [checkpoint]
+        #history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False, validation_split=0.1, callbacks=callbacks_list)
+        history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=True)
+
+        #model.load_weights('tmp.h5')
     return model
 
 def predInv(model, test_X, scaler):
@@ -175,10 +177,10 @@ config = tf.ConfigProto()
 config.gpu_options.allow_growth = True
 config.gpu_options.per_process_gpu_memory_fraction = 0.5
 be.tensorflow_backend.set_session(tf.Session(config=config))
-model_y6 =  trainModel(train_y6, train_X6, epochs, 0)
-model_y6.save_weights(filepath  = 'y6.h5')
-model_y5p =  trainModel(train_y5p, train_X5p, epochs, 0)
-model_y5p.save_weights(filepath  = 'y5p2.h5')
+#model_y6 =  trainModel(train_y6, train_X6, epochs, 0)
+#model_y6.save_weights(filepath  = 'y6.h5')
+#model_y5p =  trainModel(train_y5p, train_X5p, epochs, 0)
+#model_y5p.save_weights(filepath  = 'y5p2.h5')
 
 rmseLSTM1Array = np.array([])
 rmseLSTM6Array = np.array([])
@@ -212,8 +214,8 @@ for ii in range(0,1000):
     model.load_weights('y5p2.h5')
     y_hatLSTM5p = predInv(model, test_X, scaler)
     y_hatSin    = getFittedSinPred(values[:-predInSamples], yearInSamples, predInSamples)
-    #y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
-    y_hatSarima = y_hatSin
+    y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
+    #y_hatSarima = y_hatSin
     rmseLSTM1  = calcErr(y_hatLSTM1, test_y)
     rmseLSTM6  = calcErr(y_hatLSTM6, test_y)
     rmseLSTM5p = calcErr(y_hatLSTM5p, test_y)
