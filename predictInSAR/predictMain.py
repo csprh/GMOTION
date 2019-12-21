@@ -182,13 +182,14 @@ be.tensorflow_backend.set_session(tf.Session(config=config))
 #model_y5p =  trainModel(train_y5p, train_X5p, epochs, 0)
 #model_y5p.save_weights(filepath  = 'y5p2.h5')
 
+
 rmseLSTM1Array = np.array([])
 rmseLSTM6Array = np.array([])
 rmseLSTM5pArray = np.array([])
 rmseSarimaArray = np.array([])
 rmseSinArray = np.array([])
 
-for ii in range(0,1000):
+for ii in range(0,2000):
     chooseSeq = theseInds[-(ii+1)]
 
     values = cdTSmooth[chooseSeq, :]
@@ -215,12 +216,23 @@ for ii in range(0,1000):
     y_hatLSTM5p = predInv(model, test_X, scaler)
     y_hatSin    = getFittedSinPred(values[:-predInSamples], yearInSamples, predInSamples)
     y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
-    #y_hatSarima = y_hatSin
-    rmseLSTM1  = calcErr(y_hatLSTM1, test_y)
-    rmseLSTM6  = calcErr(y_hatLSTM6, test_y)
-    rmseLSTM5p = calcErr(y_hatLSTM5p, test_y)
-    rmseSarima = calcErr(y_hatSarima, test_y)
-    rmseSin    = calcErr(y_hatSin, test_y)
+
+    rmseLSTM1 = np.zeros(9)
+    rmseLSTM6 = np.zeros(9)
+    rmseLSTM5p = np.zeros(9)
+    rmseSarima = np.zeros(9)
+    rmseSin = np.zeros(9)
+    for ind in range(1,9):
+        rmseLSTM1[ind-1]  = calcErr(y_hatLSTM1[0:ind*5], test_y[0:ind*5])
+        rmseLSTM6[ind-1]  = calcErr(y_hatLSTM6[0:ind*5], test_y[0:ind*5])
+        rmseLSTM5p[ind-1] = calcErr(y_hatLSTM5p[0:ind*5], test_y[0:ind*5])
+        rmseSarima[ind-1] = calcErr(y_hatSarima[0:ind*5], test_y[0:ind*5])
+        rmseSin[ind-1]    = calcErr(y_hatSin[0:ind*5], test_y[0:ind*5])
+    rmseLSTM1[8]  = calcErr(y_hatLSTM1, test_y)
+    rmseLSTM6[8]  = calcErr(y_hatLSTM6,  test_y)
+    rmseLSTM5p[8] = calcErr(y_hatLSTM5p,  test_y)
+    rmseSarima[8] = calcErr(y_hatSarima,  test_y)
+    rmseSin[8]    = calcErr(y_hatSin,  test_y)
     s = ndates - predInSamples
 
     plt.close()
@@ -232,11 +244,18 @@ for ii in range(0,1000):
     plotPredictions(values, s, "Sinusoid: RMSE = " +str(rmseSin), y_hatSin, "yellow", 0)
     plt.xticks(xInds, dates, rotation=30)
 
-    rmseLSTM1Array = np.append(rmseLSTM1Array, rmseLSTM1)
-    rmseLSTM6Array = np.append(rmseLSTM6Array, rmseLSTM6)
-    rmseLSTM5pArray = np.append(rmseLSTM5pArray, rmseLSTM5p)
-    rmseSarimaArray = np.append(rmseSarimaArray, rmseSarima)
-    rmseSinArray = np.append(rmseSinArray, rmseSin)
+    if ii == 0:
+        rmseLSTM1Array  = rmseLSTM1
+        rmseLSTM6Array  = rmseLSTM6
+        rmseLSTM5pArray = rmseLSTM5p
+        rmseSarimaArray = rmseSarima
+        rmseSinArray = rmseSin
+    else:
+        rmseLSTM1Array  = np.vstack((rmseLSTM1Array, rmseLSTM1))
+        rmseLSTM6Array  = np.vstack((rmseLSTM6Array, rmseLSTM6))
+        rmseLSTM5pArray = np.vstack((rmseLSTM5pArray, rmseLSTM5p))
+        rmseSarimaArray = np.vstack((rmseSarimaArray, rmseSarima))
+        rmseSinArray = np.vstack((rmseSinArray, rmseSin))
 
     np.save('LSTM1.npy', rmseLSTM1Array)
     np.save('LSTM6.npy', rmseLSTM6Array)

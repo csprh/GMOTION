@@ -19,6 +19,12 @@ from series_to_supervised import series_to_supervised
 from pyramid.arima import auto_arima
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error
+from datetime import date
+from scipy import optimize
+
+def sinFunc(x, a, b, c):
+    thisFreq = int(365.25/6)
+    return a*x + b * np.sin((2*math.pi*x/thisFreq) + c)
 
 def getSarimaPred(train, yearInSamples, predSamples):
 
@@ -191,7 +197,7 @@ for ii in range(0,6):
     #plotPredictions(values, s, "LSTM2: RMSE = "+  str(rmseLSTM6), y_hatLSTM6, "blue", 0)
     #plotPredictions(values, s, "LSTM3: RMSE = "+  str(rmseLSTM5p), y_hatLSTM5p, "pink", 0)
     plotPredictions(values, s, "Sarima", y_hatSarima, "red", 1)
-    plotPredictions(values, s, "Sinusoid", y_hatSin, "yellow", 1)
+    plotPredictions(values, s, "Sinusoid", y_hatSin, "yellow", 0)
     plt.legend(loc='best')
     #plt.show()
     thisfig.savefig("Pred-S2-"+str(chooseSeq)+".pdf", bbox_inches='tight')

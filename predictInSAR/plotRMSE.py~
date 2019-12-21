@@ -17,11 +17,12 @@ l1 = np.load('LSTM1.npy')
 l2 = np.load('LSTM6.npy')
 l3 = np.load('LSTM5p.npy')
 l4 = np.load('Sarima.npy')
+l5 = np.load('Sinu.npy')
 
 
-rmses = [l1, l2, l3, l4]
+rmses = [l1, l2, l3, l4, l5]
 
-dataset = pd.DataFrame({'LSTM1': l1, 'LSTM2': l2, 'LSTM3': l3, 'Sarima': l4})
+dataset = pd.DataFrame({'LSTM1': l1, 'LSTM2': l2, 'LSTM3': l3, 'Sarima': l4, 'Sinu': l4})
 
 thisfig = plt.figure(figsize=(12,8))
 
@@ -38,9 +39,10 @@ lstm0 = np.mean(col1==0)
 lstm1 = np.mean(col1==1)
 lstm2 = np.mean(col1==2)
 lstm3 = np.mean(col1==3)
+lstm4 = np.mean(col1==4)
 
-print "lstm0= ",lstm0,"lstm1= ",lstm1,"lstm2= ",lstm2,"lstm3= ",lstm3
-thisfig.savefig("RMSEs1.pdf", bbox_inches='tight')
+print ("lstm0= ",lstm0,"lstm1= ",lstm1,"lstm2= ",lstm2,"lstm3= ",lstm3,"lstm4= ",lstm4)
+thisfig.savefig("RMSEs2.pdf", bbox_inches='tight')
 
 plt.show()
 
