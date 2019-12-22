@@ -23,6 +23,7 @@ from keras.callbacks import EarlyStopping
 from datetime import date
 from keras.callbacks import ModelCheckpoint
 from scipy import optimize
+from reset_keras import reset_keras
 
 
 def sinFunc(x, a, b, c):
@@ -189,7 +190,7 @@ rmseLSTM5pArray = np.array([])
 rmseSarimaArray = np.array([])
 rmseSinArray = np.array([])
 
-for ii in range(0,1000):
+for ii in range(0,2000):
     chooseSeq = theseInds[-(ii+1)]
 
     values = cdTSmooth[chooseSeq, :]

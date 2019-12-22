@@ -23,6 +23,7 @@ from keras.callbacks import EarlyStopping
 from datetime import date
 from keras.callbacks import ModelCheckpoint
 from scipy import optimize
+from reset_keras import reset_keras
 
 
 def sinFunc(x, a, b, c):
@@ -267,7 +268,7 @@ for ii in range(0,2000):
     #plt.show()
     thisfig.savefig("Pred-"+str(chooseSeq)+".pdf", bbox_inches='tight')
     plt.close(); print('\n')
-
+    be.clear_session(); reset_keras()
     print('100%% done of position '+str(chooseSeq))
 
 
