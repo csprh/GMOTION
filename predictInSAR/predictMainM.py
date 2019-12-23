@@ -206,8 +206,8 @@ yearInSamples = int(365.25/sampleTime)
 nfeatures = 1
 predInDays = 265        # 9 months
 predInSamples = int(predInDays/sampleTime)
-epochs = 20
-noMSamples = 2000
+epochs = 2000
+noMSamples = 10
 
 train_y6, train_X6  = genTrain(scaledCD[theseInds[-6:], :],predInSamples)
 train_y5p, train_X5p = genTrain(scaledCD[theseInds[-nPoints5p:], :],predInSamples)
@@ -289,7 +289,7 @@ for ii in range(0,2000):
     plotPredictions(values, s, "LSTM3: RMSE = "+  str(rmseLSTM5p), y_hatLSTM5p, "pink", 0)
     plotPredictions(values, s, "Sarima: RMSE = " +str(rmseSarima), y_hatSarima, "red", 0)
     plotPredictions(values, s, "Sinusoid: RMSE = " +str(rmseSin), y_hatSin, "yellow", 0)
-    plotPredictions(values, s, "LSTM_M: RMSE = " +str(rmseLSTMM), y_hatLSTMM, "cyan", 0)
+    plotPredictions(values, s, "LSTM_M: RMSE = " +str(rmseLSTMM), y_hatLSTM_M, "cyan", 0)
     plt.xticks(xInds, dates, rotation=30)
 
     if ii == 0:

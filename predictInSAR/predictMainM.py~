@@ -206,8 +206,8 @@ yearInSamples = int(365.25/sampleTime)
 nfeatures = 1
 predInDays = 265        # 9 months
 predInSamples = int(predInDays/sampleTime)
-epochs = 20
-noMSamples = 2000
+epochs = 2000
+noMSamples = 10
 
 train_y6, train_X6  = genTrain(scaledCD[theseInds[-6:], :],predInSamples)
 train_y5p, train_X5p = genTrain(scaledCD[theseInds[-nPoints5p:], :],predInSamples)
@@ -307,12 +307,12 @@ for ii in range(0,2000):
         rmseSarimaArray = np.vstack((rmseSarimaArray, rmseSarima))
         rmseSinArray = np.vstack((rmseSinArray, rmseSin))
 
-    np.save('LSTMM.npy', rmseLSTMMArray)
-    np.save('LSTM1.npy', rmseLSTM1Array)
-    np.save('LSTM6.npy', rmseLSTM6Array)
-    np.save('LSTM5p.npy', rmseLSTM5pArray)
-    np.save('Sarima.npy', rmseSarimaArray)
-    np.save('Sinu.npy', rmseSinArray)
+    np.save('M-LSTMM.npy', rmseLSTMMArray)
+    np.save('M-LSTM1.npy', rmseLSTM1Array)
+    np.save('M-LSTM6.npy', rmseLSTM6Array)
+    np.save('M-LSTM5p.npy', rmseLSTM5pArray)
+    np.save('M-Sarima.npy', rmseSarimaArray)
+    np.save('M-Sinu.npy', rmseSinArray)
 
     plt.legend(loc='best')
     #plt.show()
