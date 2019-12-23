@@ -60,11 +60,11 @@ def getModel(x1,x2,y1):
 
    # 1D_1D architecture -- values empirically tested in several signals
    model.add(LSTM(256, input_shape=(x1, x2), return_sequences=True))
-   model.add(Dropout(0.1))
+   model.add(Dropout(0.5))
    model.add(LSTM(128, return_sequences=False))
-   model.add(Dropout(0.2))
+   model.add(Dropout(0.5))
    model.add(Dense(128))
-   model.add(Dropout(0.25))
+   model.add(Dropout(0.5))
    model.add(Dense(y1))
    model.compile(loss='mse', optimizer='adam')
    return model
@@ -82,7 +82,7 @@ def plotPredictions(seq, s, n, yhat, thisColor, plotSignal):
 
 def trainModel(train_y, train_X, epochsIn, earlyStopping):
     model = getModel(train_X.shape[1], train_X.shape[2], train_y.shape[1])
-    model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False)
+    model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=True)
     return model
 
 def predInv(model, test_X, scaler):

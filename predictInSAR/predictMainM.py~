@@ -60,11 +60,11 @@ def getModel(x1,x2,y1):
 
    # 1D_1D architecture -- values empirically tested in several signals
    model.add(LSTM(256, input_shape=(x1, x2), return_sequences=True))
-   model.add(Dropout(0.1))
+   model.add(Dropout(0.5))
    model.add(LSTM(128, return_sequences=False))
-   model.add(Dropout(0.2))
+   model.add(Dropout(0.5))
    model.add(Dense(128))
-   model.add(Dropout(0.25))
+   model.add(Dropout(0.5))
    model.add(Dense(y1))
    model.compile(loss='mse', optimizer='adam')
    return model
@@ -207,7 +207,7 @@ nfeatures = 1
 predInDays = 265        # 9 months
 predInSamples = int(predInDays/sampleTime)
 epochs = 2000
-noMSamples = 16
+noMSamples = 8
 
 train_y6, train_X6  = genTrain(scaledCD[theseInds[-6:], :],predInSamples)
 train_y5p, train_X5p = genTrain(scaledCD[theseInds[-nPoints5p:], :],predInSamples)
