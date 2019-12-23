@@ -207,7 +207,7 @@ nfeatures = 1
 predInDays = 265        # 9 months
 predInSamples = int(predInDays/sampleTime)
 epochs = 2000
-noMSamples = 10
+noMSamples = 16
 
 train_y6, train_X6  = genTrain(scaledCD[theseInds[-6:], :],predInSamples)
 train_y5p, train_X5p = genTrain(scaledCD[theseInds[-nPoints5p:], :],predInSamples)
@@ -268,7 +268,7 @@ for ii in range(0,2000):
     rmseSarima = np.zeros(9)
     rmseSin = np.zeros(9)
     for ind in range(1,9):
-        rmseLSTM1[ind-1]  = calcErr(y_hatLSTM_M[0:ind*5], test_y[0:ind*5])
+        rmseLSTMM[ind-1]  = calcErr(y_hatLSTM_M[0:ind*5], test_y[0:ind*5])
         rmseLSTM1[ind-1]  = calcErr(y_hatLSTM1[0:ind*5], test_y[0:ind*5])
         rmseLSTM6[ind-1]  = calcErr(y_hatLSTM6[0:ind*5], test_y[0:ind*5])
         rmseLSTM5p[ind-1] = calcErr(y_hatLSTM5p[0:ind*5], test_y[0:ind*5])
@@ -284,12 +284,12 @@ for ii in range(0,2000):
 
     plt.close()
     thisfig = plt.figure(figsize=(12,8))
-    plotPredictions(values, s, "LSTM1: RMSE = " + str(rmseLSTM1), y_hatLSTM1, "green", 1)
-    plotPredictions(values, s, "LSTM2: RMSE = "+  str(rmseLSTM6), y_hatLSTM6, "blue", 0)
-    plotPredictions(values, s, "LSTM3: RMSE = "+  str(rmseLSTM5p), y_hatLSTM5p, "pink", 0)
-    plotPredictions(values, s, "Sarima: RMSE = " +str(rmseSarima), y_hatSarima, "red", 0)
-    plotPredictions(values, s, "Sinusoid: RMSE = " +str(rmseSin), y_hatSin, "yellow", 0)
-    plotPredictions(values, s, "LSTM_M: RMSE = " +str(rmseLSTMM), y_hatLSTM_M, "cyan", 0)
+    plotPredictions(values, s, "LSTM1: RMSE = " + str(rmseLSTM1[8]), y_hatLSTM1, "green", 1)
+    plotPredictions(values, s, "LSTM2: RMSE = "+  str(rmseLSTM6[8]), y_hatLSTM6, "blue", 0)
+    plotPredictions(values, s, "LSTM3: RMSE = "+  str(rmseLSTM5p[8]), y_hatLSTM5p, "pink", 0)
+    plotPredictions(values, s, "Sarima: RMSE = " +str(rmseSarima[8]), y_hatSarima, "red", 0)
+    plotPredictions(values, s, "Sinusoid: RMSE = " +str(rmseSin[8]), y_hatSin, "yellow", 0)
+    plotPredictions(values, s, "LSTM_M: RMSE = " +str(rmseLSTMM[8]), y_hatLSTM_M, "cyan", 0)
     plt.xticks(xInds, dates, rotation=30)
 
     if ii == 0:
