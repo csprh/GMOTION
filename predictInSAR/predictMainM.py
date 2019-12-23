@@ -162,7 +162,7 @@ def getTrainM(scaledCD, predInSamples, noMSamples, theseInds, thisInd, arrayLat,
         this_train_X = this_train_X.reshape((this_train_X.shape[0], look_back, 1))
 
         this_test_X  = scaled[(-predInSamples*2): -predInSamples]
-        this_test_X = this_test_X.reshape((1, this_test_X.shape[0],  1))
+        this_test_X =  this_test_X.reshape((1, this_test_X.shape[0],  1))
         if i == 0:
             train_X = this_train_X
             train_y = trainSS.values[:, -look_forward:]
@@ -207,7 +207,7 @@ nfeatures = 1
 predInDays = 265        # 9 months
 predInSamples = int(predInDays/sampleTime)
 epochs = 2000
-noMSamples = 16
+noMSamples = 8
 
 train_y6, train_X6  = genTrain(scaledCD[theseInds[-6:], :],predInSamples)
 train_y5p, train_X5p = genTrain(scaledCD[theseInds[-nPoints5p:], :],predInSamples)
