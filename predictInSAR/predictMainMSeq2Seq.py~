@@ -105,7 +105,7 @@ def trainModel(train_y, train_X, epochsIn, earlyStopping):
 
 def predInv(model, test_X, scaler):
     y_hat = model.predict(test_X)
-    y_hat = scaler.inverse_transform(y_hat)[0,:]
+    y_hat = scaler.inverse_transform(y_hat[0,0,1])[0,:]
     return y_hat
 
 def getLSTMPred(train_y, train_X, test_X, scaler, epochsIn, earlyStopping):
@@ -225,7 +225,7 @@ yearInSamples = int(365.25/sampleTime)
 nfeatures = 1
 predInDays = 265        # 9 months
 predInSamples = int(predInDays/sampleTime)
-epochs = 2000
+epochs = 2
 noMSamples = 8
 
 train_y6, train_X6  = genTrain(scaledCD[theseInds[-6:], :],predInSamples)

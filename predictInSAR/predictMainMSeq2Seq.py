@@ -105,7 +105,7 @@ def trainModel(train_y, train_X, epochsIn, earlyStopping):
 
 def predInv(model, test_X, scaler):
     y_hat = model.predict(test_X)
-    y_hat = scaler.inverse_transform(y_hat)[0,:]
+    y_hat = scaler.inverse_transform(y_hat[:,:,0])[0,:]
     return y_hat
 
 def getLSTMPred(train_y, train_X, test_X, scaler, epochsIn, earlyStopping):
