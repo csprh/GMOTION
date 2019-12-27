@@ -225,7 +225,7 @@ yearInSamples = int(365.25/sampleTime)
 nfeatures = 1
 predInDays = 265        # 9 months
 predInSamples = int(predInDays/sampleTime)
-epochs = 2
+epochs = 2000
 noMSamples = 8
 
 train_y6, train_X6  = genTrain(scaledCD[theseInds[-6:], :],predInSamples)
