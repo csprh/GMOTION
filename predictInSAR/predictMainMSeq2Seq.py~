@@ -54,7 +54,7 @@ def getSarimaPred(train, yearInSamples, predSamples):
    y_hat, confint = thissarima.predict(n_periods=predSamples, return_conf_int=True)
    return y_hat
 
-def getModel(x1,x2,y1):
+def getModelOld(x1,x2,y1):
 
    model = Sequential()
 
@@ -68,6 +68,21 @@ def getModel(x1,x2,y1):
    model.add(Dense(y1))
    model.compile(loss='mse', optimizer='adam')
    return model
+
+# train the model
+def getModel(x1,x2,y1):
+	# prepare data
+
+    model = Sequential()
+    model.add(LSTM(200, activation='relu', input_shape=(x1, s2)))
+    model.add(RepeatVector(y1))
+    model.add(LSTM(200, activation='relu', return_sequences=True))
+    model.add(Dropout(0.5))
+    model.add(TimeDistributed(Dense(100, activation='relu')))
+    model.add(TimeDistributed(Dense(1)))
+    model.compile(loss='mse', optimizer='adam')
+    return model
+
 
 def plotPredictions(seq, s, n, yhat, thisColor, plotSignal):
     # plot forecasting
@@ -320,6 +335,7 @@ for ii in range(0,2000):
     plt.close(); print('\n')
     be.clear_session(); reset_keras()
     print('100%% done of position '+str(chooseSeq))
+
 
 
 
