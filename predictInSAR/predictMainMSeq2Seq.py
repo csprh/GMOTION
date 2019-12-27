@@ -141,7 +141,7 @@ def genTrain(scaledCD, predInSamples):
             train_y = np.concatenate((train_y,this_train_y), axis=0)
             train_X = np.concatenate((train_X,this_train_X), axis=0)
     train_X = train_X.reshape((train_X.shape[0], look_back, 1))
-    #train_y = train_y.reshape((train_y.shape[0], look_back, 1))
+    train_y = train_y.reshape((train_y.shape[0], train_y.shape[1], 1))
     return train_y, train_X
 
 def getNClosestSamples(theseInds, thisInd, arrayLat, arrayLon, noMSamples):
@@ -189,6 +189,7 @@ def getTrainM(scaledCD, predInSamples, noMSamples, theseInds, thisInd, arrayLat,
             train_X = np.concatenate((train_X,this_train_X), axis=2)
             test_X  = np.concatenate((test_X,this_test_X), axis=2)
 
+    train_y = train_y.reshape((train_y.shape[0], train_y.shape[1], 1))
     return train_y, train_X, test_X
 
 
@@ -224,20 +225,21 @@ yearInSamples = int(365.25/sampleTime)
 nfeatures = 1
 predInDays = 265        # 9 months
 predInSamples = int(predInDays/sampleTime)
-epochs = 2000
+epochs = 2
 noMSamples = 8
 
 train_y6, train_X6  = genTrain(scaledCD[theseInds[-6:], :],predInSamples)
 train_y5p, train_X5p = genTrain(scaledCD[theseInds[-nPoints5p:], :],predInSamples)
 
+
 config = tf.ConfigProto()
 config.gpu_options.allow_growth = True
 config.gpu_options.per_process_gpu_memory_fraction = 0.5
 be.tensorflow_backend.set_session(tf.Session(config=config))
-#model_y6 =  trainModel(train_y6, train_X6, epochs, 0)
-#model_y6.save_weights(filepath  = 'y6.h5')
-#model_y5p =  trainModel(train_y5p, train_X5p, epochs, 0)
-#model_y5p.save_weights(filepath  = 'y5p2.h5')
+model_y6 =  trainModel(train_y6, train_X6, epochs, 0)
+model_y6.save_weights(filepath  = 'y6_Seq2Seq.h5')
+model_y5p =  trainModel(train_y5p, train_X5p, epochs, 0)
+model_y5p.save_weights(filepath  = 'y5p2_Seq2Seq.h5')
 
 
 rmseLSTM1Array = np.array([])
@@ -270,9 +272,9 @@ for ii in range(0,2000):
     y_hatLSTM1, model =  getLSTMPred(train_y1, train_X1,  test_X, scaler, epochs,0)
 
 
-    model.load_weights('y6.h5')
+    model.load_weights('y6_Seq2Seq.h5')
     y_hatLSTM6 =  predInv(model, test_X, scaler)
-    model.load_weights('y5p2.h5')
+    model.load_weights('y5p2_Seq2Seq.h5')
     y_hatLSTM5p = predInv(model, test_X, scaler)
 
     y_hatSin    = getFittedSinPred(values[:-predInSamples], yearInSamples, predInSamples)
