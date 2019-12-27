@@ -10,6 +10,8 @@ from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM
 from keras.layers import Dropout
+from keras.layers import TimeDistributed
+from keras.layers import RepeatVector
 from keras import backend as be
 import numpy as np
 import math
@@ -74,7 +76,7 @@ def getModel(x1,x2,y1):
 	# prepare data
 
     model = Sequential()
-    model.add(LSTM(200, activation='relu', input_shape=(x1, s2)))
+    model.add(LSTM(200, activation='relu', input_shape=(x1, x2)))
     model.add(RepeatVector(y1))
     model.add(LSTM(200, activation='relu', return_sequences=True))
     model.add(Dropout(0.2))
