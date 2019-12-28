@@ -79,9 +79,7 @@ def getModel(x1,x2,y1):
     model.add(LSTM(200, activation='relu', input_shape=(x1, x2)))
     model.add(RepeatVector(y1))
     model.add(LSTM(200, activation='relu', return_sequences=True))
-    model.add(Dropout(0.2))
     model.add(TimeDistributed(Dense(100, activation='relu')))
-    model.add(Dropout(0.2))
     model.add(TimeDistributed(Dense(1)))
     model.compile(loss='mse', optimizer='adam')
     return model
