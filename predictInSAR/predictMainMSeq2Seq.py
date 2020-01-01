@@ -27,6 +27,7 @@ from keras.callbacks import ModelCheckpoint
 from scipy import optimize
 from reset_keras import reset_keras
 import mpu
+import random
 
 def sinFunc(x, a, b, c):
     thisFreq = int(365.25/6)
@@ -72,7 +73,7 @@ def getModelOld(x1,x2,y1):
    return model
 
 # train the model
-def getModel(x1,x2,y1):
+def getModelRelu(x1,x2,y1):
 	# prepare data
 
     model = Sequential()
@@ -80,6 +81,19 @@ def getModel(x1,x2,y1):
     model.add(RepeatVector(y1))
     model.add(LSTM(200, activation='relu', return_sequences=True))
     model.add(TimeDistributed(Dense(100, activation='relu')))
+    model.add(TimeDistributed(Dense(1)))
+    model.compile(loss='mse', optimizer='adam')
+    return model
+
+# train the model
+def getModel(x1,x2,y1):
+	# prepare data
+
+    model = Sequential()
+    model.add(LSTM(200,  input_shape=(x1, x2)))
+    model.add(RepeatVector(y1))
+    model.add(LSTM(200,  return_sequences=True))
+    model.add(TimeDistributed(Dense(100)))
     model.add(TimeDistributed(Dense(1)))
     model.compile(loss='mse', optimizer='adam')
     return model
@@ -234,10 +248,10 @@ config = tf.ConfigProto()
 config.gpu_options.allow_growth = True
 config.gpu_options.per_process_gpu_memory_fraction = 0.5
 be.tensorflow_backend.set_session(tf.Session(config=config))
-model_y6 =  trainModel(train_y6, train_X6, epochs, 0)
-model_y6.save_weights(filepath  = 'y6_Seq2Seq.h5')
-model_y5p =  trainModel(train_y5p, train_X5p, epochs, 0)
-model_y5p.save_weights(filepath  = 'y5p2_Seq2Seq.h5')
+#model_y6 =  trainModel(train_y6, train_X6, epochs, 0)
+#model_y6.save_weights(filepath  = 'y6_Seq2Seq.h5')
+#model_y5p =  trainModel(train_y5p, train_X5p, epochs, 0)
+#model_y5p.save_weights(filepath  = 'y5p2_Seq2Seq.h5')
 
 
 rmseLSTM1Array = np.array([])
@@ -246,8 +260,12 @@ rmseLSTM5pArray = np.array([])
 rmseSarimaArray = np.array([])
 rmseSinArray = np.array([])
 
+sh = list(range(0,cdTSmooth.shape[0]))
+random.shuffle(sh)
+
 for ii in range(0,2000):
-    chooseSeq = theseInds[-(ii+1)]
+    chooseSeq = sh[ii]
+#    chooseSeq = theseInds[-(ii+1)]
 
     values = cdTSmooth[chooseSeq, :]
     scaled = scaledCD[chooseSeq, :]
@@ -325,16 +343,16 @@ for ii in range(0,2000):
         rmseSarimaArray = np.vstack((rmseSarimaArray, rmseSarima))
         rmseSinArray = np.vstack((rmseSinArray, rmseSin))
 
-    np.save('M-Seq2Seq-LSTMM.npy', rmseLSTMMArray)
-    np.save('M-Seq2Seq-LSTM1.npy', rmseLSTM1Array)
-    np.save('M-Seq2Seq-LSTM6.npy', rmseLSTM6Array)
-    np.save('M-Seq2Seq-LSTM5p.npy', rmseLSTM5pArray)
-    np.save('M-Seq2Seq-Sarima.npy', rmseSarimaArray)
-    np.save('M-Seq2Seq-Sinu.npy', rmseSinArray)
+    np.save('M-Seq2Seq-LSTMM_R.npy', rmseLSTMMArray)
+    np.save('M-Seq2Seq-LSTM1_R.npy', rmseLSTM1Array)
+    np.save('M-Seq2Seq-LSTM6_R.npy', rmseLSTM6Array)
+    np.save('M-Seq2Seq-LSTM5p_R.npy', rmseLSTM5pArray)
+    np.save('M-Seq2Seq-Sarima_R.npy', rmseSarimaArray)
+    np.save('M-Seq2Seq-Sinu_R.npy', rmseSinArray)
 
     plt.legend(loc='best')
     #plt.show()
-    thisfig.savefig("Pred-M-Seq2Seq-"+str(chooseSeq)+".pdf", bbox_inches='tight')
+    thisfig.savefig("Pred-M-Seq2Seq_R-"+str(chooseSeq)+".pdf", bbox_inches='tight')
     plt.close(); print('\n')
     be.clear_session(); reset_keras()
     print('100%% done of position '+str(chooseSeq))

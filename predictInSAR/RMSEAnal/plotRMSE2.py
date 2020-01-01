@@ -13,16 +13,26 @@ import scipy.io as sio
 import seaborn as sns
 import pandas as pd
 
-l1 = np.load('LSTM1.npy')
-l2 = np.load('LSTM6.npy')
-l3 = np.load('LSTM5p.npy')
-l4 = np.load('Sarima.npy')
-l5 = np.load('Sinu.npy')
+l1In = np.load('M-LSTM1.npy')
+l2In = np.load('M-LSTM6.npy')
+l3In = np.load('M-LSTM5p.npy')
+l4In = np.load('M-LSTMM.npy')
+l5In = np.load('M-Sarima.npy')
+l6In = np.load('M-Sinu.npy')
+
+thisPos = 0
+l1 = l1In[:,thisPos]
+l2 = l2In[:,thisPos]
+l3 = l3In[:,thisPos]
+l4 = l4In[:,thisPos]
+l5 = l5In[:,thisPos]
+l6 = l6In[:,thisPos]
 
 
-rmses = [l1, l2, l3, l4, l5]
 
-dataset = pd.DataFrame({'LSTM1': l1, 'LSTM2': l2, 'LSTM3': l3, 'Sarima': l4, 'Sinu': l4})
+rmses = [l1, l2, l3, l4, l5, l6]
+
+dataset = pd.DataFrame({'LSTM1': l1, 'LSTM2': l2, 'LSTM3': l3, 'LSTM4': l4,   'Sarima': l5, 'Sinu': l6})
 
 thisfig = plt.figure(figsize=(12,8))
 
