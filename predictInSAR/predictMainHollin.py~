@@ -208,21 +208,22 @@ def getTrainM(scaledCD, predInSamples, noMSamples, theseInds, thisInd, arrayLat,
 
 
 Hollin = 1
-if Hollin == 1
-    mat_contents = sio.loadmat('Hollin_hill_081D_03666_031013.mat')
-    matlab_datenum = [736195, 736234, 736274, 736314, 736354, 736382]
-
-if Hollin == 2
-    mat_contents = sio.loadmat('Hollin_hill_154D_03567_081313.mat')
-    matlab_datenum = [736092,736131,736171,736211,736251,736279]
-
-if Hollin == 3
-    mat_contents = sio.loadmat('Hollin_hill_132A_03624_131311.mat')
-    matlab_datenum = [736282,736321,736361,736401,736441,736469];
 dates = []; offset_days = 366
+if Hollin == 1:
+    mat_contents = sio.loadmat('Hollin_hill_081D_03666_031013.mat')
+    matlab_datenum = [736195, 736447, 736699, 736951, 737203, 737455]
+    xInds = [1,43,85,127,169,210]
+if Hollin == 2:
+    mat_contents = sio.loadmat('Hollin_hill_154D_03567_081313.mat')
+    matlab_datenum = [736092, 736369, 736646, 736923, 737200, 737477]
+    xInds = [1, 47,93,139,185,230]
+if Hollin == 3:
+    mat_contents = sio.loadmat('Hollin_hill_132A_03624_131311.mat')
+    matlab_datenum = [736282, 736508, 736734, 736960, 737186, 737412];
+    xInds = [1, 38, 75, 112, 149, 186]
 for d in matlab_datenum:
     dates.append(date.fromordinal(int(d-offset_days)).strftime("%d %B %Y"))
-xInds = [1, 40, 80, 120, 160, 188]
+
 
 
 
@@ -311,7 +312,7 @@ for ii in range(0,nPoints):
         rmseSinArray = np.vstack((rmseSinArray, rmseSin))
 
 
-    if Hollin == 1
+    if Hollin == 1:
        np.save('LSTM1_Hollin1.npy', rmseLSTM1Array)
        np.save('Sarima_Hollin1.npy', rmseSarimaArray)
        np.save('Sinu_Hollin1.npy', rmseSinArray)
@@ -319,7 +320,7 @@ for ii in range(0,nPoints):
        plt.legend(loc='best')
        #plt.show()
        thisfig.savefig("Pred-Hollin1-"+str(chooseSeq)+".pdf", bbox_inches='tight')
-    if Hollin == 2
+    if Hollin == 2:
        np.save('LSTM1_Hollin2.npy', rmseLSTM1Array)
        np.save('Sarima_Hollin2.npy', rmseSarimaArray)
        np.save('Sinu_Hollin2.npy', rmseSinArray)
@@ -327,7 +328,7 @@ for ii in range(0,nPoints):
        plt.legend(loc='best')
        #plt.show()
        thisfig.savefig("Pred-Hollin2-"+str(chooseSeq)+".pdf", bbox_inches='tight')
-    if Hollin == 3
+    if Hollin == 3:
        np.save('LSTM1_Hollin1.npy', rmseLSTM1Array)
        np.save('Sarima_Hollin1.npy', rmseSarimaArray)
        np.save('Sinu_Hollin1.npy', rmseSinArray)
