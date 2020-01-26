@@ -183,6 +183,27 @@ be.tensorflow_backend.set_session(tf.Session(config=config))
 #model_y5p =  trainModel(train_y5p, train_X5p, epochs, 0)
 #model_y5p.save_weights(filepath  = 'y5p2.h5')
 
+#3432, 3743, 3744, 9242, 11587, 9306
+#3689, 7816
+
+#11587 / P1
+#[-1.3979125, 53.716713]
+#3744 / P2
+#[-1.3844931, 53.703594]
+#3743 / P3
+#[-1.3845427, 53.70359]
+#9306 / P4
+#[-1.3844283, 53.71405]
+#9242 / P5
+#[-1.3843958, 53.71393]
+#3432 / P6
+#[-1.3830938, 53.703094]
+#7816 / P7
+#[-1.3880703, 53.710693]
+#3689 / P8
+#[-1.3971751, 53.70243]
+
+
 
 rmseLSTM1Array = np.array([])
 rmseLSTM6Array = np.array([])
