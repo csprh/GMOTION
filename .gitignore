@@ -7,5 +7,4 @@
 *.r
 *.zip
 *.xls
-*.csv
 ./deform-prediction/Normanton_interp1day_may15-dec18_TSmooth.txt 
