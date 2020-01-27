@@ -69,7 +69,7 @@ def getModelOld(x1,x2,y1):
    model.add(Dense(128))
    model.add(Dropout(0.5))
    model.add(Dense(y1))
-   model.compile(loss='mse', optimizer='adam')
+   model.compile(loss='mlse', optimizer='adam')
    return model
 
 # train the model
@@ -243,7 +243,7 @@ for ii in range(0,nPoints):
     ndates = len(values)
 
     test_y = values[-predInSamples:]
-    test_X  = scaled[(-predInSamples*2)+2 : -predInSamples+2]
+    test_X  = scaled[(-predInSamples*2) : -predInSamples]
     test_X = test_X.reshape((1, test_X.shape[0],  nfeatures))
 
     # define training period of n past observations

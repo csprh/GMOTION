@@ -243,7 +243,7 @@ for ii in range(0,nPoints):
     ndates = len(values)
 
     test_y = values[-predInSamples:]
-    test_X  = scaled[(-predInSamples*2)+2 : -predInSamples+2]
+    test_X  = scaled[(-predInSamples*2) : -predInSamples]
     test_X = test_X.reshape((1, test_X.shape[0],  nfeatures))
 
     # define training period of n past observations
