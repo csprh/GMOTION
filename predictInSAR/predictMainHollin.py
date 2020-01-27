@@ -121,10 +121,10 @@ def trainModel(train_y, train_X, epochsIn, earlyStopping):
         checkpoint = ModelCheckpoint(filepath, monitor='val_accuracy', verbose=1, save_best_only=True, mode='max')
         cl = checkpoint
         # Fit the model
-        es = EarlyStopping(monitor='val_accuracy', mode='min', verbose=1, patience=200)
+        es = EarlyStopping(monitor='val_accuracy', mode='max', verbose=1, patience=200)
         #es = EarlyStopping(monitor='loss', mode='min', verbose=1, patience=10)
         # fit model
-        history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False, validation_split=0.3, callbacks=[cl, es])
+        history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=True, validation_split=0.3, callbacks=[cl, es])
         #history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False, callbacks=[es])
         model.load_weights("weights.best.hdf5")
     else:
