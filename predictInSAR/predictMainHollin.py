@@ -111,7 +111,7 @@ def plotPredictions(seq, s, n, yhat, thisColor, plotSignal):
 
 def trainModel(train_y, train_X, epochsIn, earlyStopping):
 
-    model = getModelOld(train_X.shape[1], train_X.shape[2], train_y.shape[1])
+    model = getModel(train_X.shape[1], train_X.shape[2], train_y.shape[1])
 
     if earlyStopping == 1:
 
@@ -143,7 +143,7 @@ def trainModelOld(train_y, train_X, epochsIn, earlyStopping):
 
 def predInv(model, test_X, scaler):
     y_hat = model.predict(test_X)
-    y_hat = scaler.inverse_transform(y_hat)[0,:]
+    y_hat = scaler.inverse_transform(y_hat[:,:,0])[0,:]
     return y_hat
 
 def getLSTMPred(train_y, train_X, test_X, scaler, epochsIn, earlyStopping):
@@ -179,7 +179,7 @@ def genTrain(scaledCD, predInSamples):
             train_y = np.concatenate((train_y,this_train_y), axis=0)
             train_X = np.concatenate((train_X,this_train_X), axis=0)
     train_X = train_X.reshape((train_X.shape[0], look_back, 1))
-    #train_y = train_y.reshape((train_y.shape[0], train_y.shape[1], 1))
+    train_y = train_y.reshape((train_y.shape[0], train_y.shape[1], 1))
     return train_y, train_X
 
 
