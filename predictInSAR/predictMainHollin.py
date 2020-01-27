@@ -114,9 +114,12 @@ def trainModel(train_y, train_X, epochsIn, earlyStopping):
     model = getModelOld(train_X.shape[1], train_X.shape[2], train_y.shape[1])
 
     if earlyStopping == 1:
-        es = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=100)
+        #es = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=100)
+        es = EarlyStopping(monitor='loss', mode='min', verbose=1, patience=100)
         # fit model
-        history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False, validation_split=0.3, callbacks=[es])
+        #history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False, validation_split=0.3, callbacks=[es])
+        history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False, callbacks=[es])
+
     else:
         #checkpoint = ModelCheckpoint('tmp.h5', monitor='val_loss', verbose=1, save_best_only=True, mode='min')
         #callbacks_list = [checkpoint]
