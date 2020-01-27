@@ -63,13 +63,13 @@ def getModelOld(x1,x2,y1):
 
    # 1D_1D architecture -- values empirically tested in several signals
    model.add(LSTM(256, input_shape=(x1, x2), return_sequences=True))
-   model.add(Dropout(0.5))
+   model.add(Dropout(0.4))
    model.add(LSTM(128, return_sequences=False))
-   model.add(Dropout(0.5))
+   model.add(Dropout(0.3))
    model.add(Dense(128))
-   model.add(Dropout(0.5))
+   model.add(Dropout(0.2))
    model.add(Dense(y1))
-   model.compile(loss='mae', optimizer='adam')
+   model.compile(loss='mse', optimizer='adam')
    return model
 
 # train the model
