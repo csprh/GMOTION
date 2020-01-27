@@ -107,12 +107,12 @@ def plotPredictions(seq, s, n, yhat, thisColor, plotSignal):
     if plotSignal==1:
         plt.plot(np.arange(1,len(seq)+1), seq, label='Real Sequence', color="black")
     plt.plot(np.arange(s,s+len(yhat)), yhat, label='Forecast-'+n, color=thisColor)
-    plt.ylabel('Cumulative Displacement')
+    plt.ylabel('Cumulative Displacement', prop={"size":18})
 
 
 def trainModel(train_y, train_X, epochsIn, earlyStopping):
     model = getModel(train_X.shape[1], train_X.shape[2], train_y.shape[1])
-    model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=True)
+    model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False)
     return model
 
 def predInv(model, test_X, scaler):
@@ -121,7 +121,7 @@ def predInv(model, test_X, scaler):
     return y_hat
 
 def getLSTMPred(train_y, train_X, test_X, scaler, epochsIn, earlyStopping):
-    model = trainModel(train_y, train_X, epochsIn, earlyStopping)
+    model = trainModelOld(train_y, train_X, epochsIn, earlyStopping)
     y_hat = predInv(model, test_X, scaler)
     return y_hat, model
 
@@ -296,9 +296,9 @@ for ii in range(0,nPoints):
 
     plt.close()
     thisfig = plt.figure(figsize=(12,8))
-    plotPredictions(values, s, "LSTM1: RMSE = " + str(rmseLSTM1[8]), y_hatLSTM1, "green", 1)
-    plotPredictions(values, s, "Sarima: RMSE = " + str(rmseSarima[8]), y_hatSarima, "red", 0)
-    plotPredictions(values, s, "Sinusoid: RMSE = " +str(rmseSin[8]), y_hatSin, "yellow", 0)
+    plotPredictions(values, s, "LSTM1: RMSE = " + ["%.4f" % rmseLSTM1[8]], y_hatLSTM1, "green", 1)
+    plotPredictions(values, s, "Sarima: RMSE = " + ["%.4f" % rmseSarima[8]], y_hatSarima, "red", 0)
+    plotPredictions(values, s, "Sinusoid: RMSE = " + ["%.4f" % rmseSin[8]], y_hatSin, "yellow", 0)
     plt.xticks(xInds, dates, rotation=30)
 
     if ii == 0:
@@ -317,7 +317,7 @@ for ii in range(0,nPoints):
        np.save('Sarima_Hollin1.npy', rmseSarimaArray)
        np.save('Sinu_Hollin1.npy', rmseSinArray)
 
-       plt.legend(loc='best')
+       plt.legend(loc='best',prop={"size":18})
        #plt.show()
        thisfig.savefig("Pred-Hollin1-"+str(chooseSeq)+".pdf", bbox_inches='tight')
     if Hollin == 2:
@@ -325,7 +325,7 @@ for ii in range(0,nPoints):
        np.save('Sarima_Hollin2.npy', rmseSarimaArray)
        np.save('Sinu_Hollin2.npy', rmseSinArray)
 
-       plt.legend(loc='best')
+       plt.legend(loc='best',prop={"size":18})
        #plt.show()
        thisfig.savefig("Pred-Hollin2-"+str(chooseSeq)+".pdf", bbox_inches='tight')
     if Hollin == 3:
@@ -333,7 +333,7 @@ for ii in range(0,nPoints):
        np.save('Sarima_Hollin3.npy', rmseSarimaArray)
        np.save('Sinu_Hollin3.npy', rmseSinArray)
 
-       plt.legend(loc='best')
+       plt.legend(loc='best', prop={"size":18})
        #plt.show()
        thisfig.savefig("Pred-Hollin3-"+str(chooseSeq)+".pdf", bbox_inches='tight')
     plt.close(); print('\n')
