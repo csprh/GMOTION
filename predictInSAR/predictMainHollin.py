@@ -69,7 +69,7 @@ def getModelOld(x1,x2,y1):
    model.add(Dense(128))
    model.add(Dropout(0.5))
    model.add(Dense(y1))
-   model.compile(loss='msle', optimizer='adam')
+   model.compile(loss='mae', optimizer='adam')
    return model
 
 # train the model
