@@ -63,13 +63,13 @@ def getModelOld(x1,x2,y1):
 
    # 1D_1D architecture -- values empirically tested in several signals
    model.add(LSTM(256, input_shape=(x1, x2), return_sequences=True))
-   model.add(Dropout(0.5))
+   model.add(Dropout(0.4))
    model.add(LSTM(128, return_sequences=False))
-   model.add(Dropout(0.5))
+   model.add(Dropout(0.3))
    model.add(Dense(128))
-   model.add(Dropout(0.5))
+   model.add(Dropout(0.2))
    model.add(Dense(y1))
-   model.compile(loss='mae', optimizer='adam')
+   model.compile(loss='mse', optimizer='adam')
    return model
 
 # train the model
@@ -107,7 +107,7 @@ def plotPredictions(seq, s, n, yhat, thisColor, plotSignal):
     if plotSignal==1:
         plt.plot(np.arange(1,len(seq)+1), seq, label='Real Sequence', color="black")
     plt.plot(np.arange(s,s+len(yhat)), yhat, label='Forecast-'+n, color=thisColor)
-    plt.ylabel('Cumulative Displacement', fontsize=14)
+    plt.ylabel('Cumulative Displacement', fontsize=16)
 
 def trainModel(train_y, train_X, epochsIn, earlyStopping):
 
@@ -294,7 +294,7 @@ for ii in range(0,nPoints):
        np.save('Sarima_Hollin1.npy', rmseSarimaArray)
        np.save('Sinu_Hollin1.npy', rmseSinArray)
 
-       plt.legend(loc='best',prop={"size":18})
+       plt.legend(loc='best',prop={"size":16})
        #plt.show()
        thisfig.savefig("Pred-Hollin1-"+str(chooseSeq)+".pdf", bbox_inches='tight')
     if Hollin == 2:
@@ -302,7 +302,7 @@ for ii in range(0,nPoints):
        np.save('Sarima_Hollin2.npy', rmseSarimaArray)
        np.save('Sinu_Hollin2.npy', rmseSinArray)
 
-       plt.legend(loc='best',  prop={"size":18})
+       plt.legend(loc='best',  prop={"size":16})
        #plt.show()
        thisfig.savefig("Pred-Hollin2-"+str(chooseSeq)+".pdf", bbox_inches='tight')
     if Hollin == 3:
@@ -310,7 +310,7 @@ for ii in range(0,nPoints):
        np.save('Sarima_Hollin3.npy', rmseSarimaArray)
        np.save('Sinu_Hollin3.npy', rmseSinArray)
 
-       plt.legend(loc='best', prop={"size":18})
+       plt.legend(loc='best', prop={"size":16})
        #plt.show()
        thisfig.savefig("Pred-Hollin3-"+str(chooseSeq)+".pdf", bbox_inches='tight')
     plt.close(); print('\n')
