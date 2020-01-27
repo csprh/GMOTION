@@ -118,7 +118,7 @@ def trainModel(train_y, train_X, epochsIn, earlyStopping):
 
 
         filepath="weights.best.hdf5"
-        checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
+        checkpoint = ModelCheckpoint(filepath, monitor='val_accuracy', verbose=1, save_best_only=True, mode='max')
         cl = checkpoint
         # Fit the model
         es = EarlyStopping(monitor='val_accuracy', mode='max', verbose=1, patience=200)
