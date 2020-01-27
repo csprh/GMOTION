@@ -124,7 +124,7 @@ def trainModel(train_y, train_X, epochsIn, earlyStopping):
 #        es = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=500)
         #es = EarlyStopping(monitor='loss', mode='min', verbose=1, patience=10)
         # fit model
-        history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False, validation_split=0.3, callbacks=[cl])
+        history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False, validation_split=0.3, callbacks=cl)
         #history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False, callbacks=[es])
         model.load_weights("weights.best.hdf5")
     else:
