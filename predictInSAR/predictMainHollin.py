@@ -109,8 +109,24 @@ def plotPredictions(seq, s, n, yhat, thisColor, plotSignal):
     plt.plot(np.arange(s,s+len(yhat)), yhat, label='Forecast-'+n, color=thisColor)
     plt.ylabel('Cumulative Displacement')
 
-
 def trainModel(train_y, train_X, epochsIn, earlyStopping):
+
+    model = getModelOld(train_X.shape[1], train_X.shape[2], train_y.shape[1])
+
+    if earlyStopping == 1:
+        es = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=100)
+        # fit model
+        history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False, validation_split=0.3, callbacks=[es])
+    else:
+        #checkpoint = ModelCheckpoint('tmp.h5', monitor='val_loss', verbose=1, save_best_only=True, mode='min')
+        #callbacks_list = [checkpoint]
+        #history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False, validation_split=0.1, callbacks=callbacks_list)
+        history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=True)
+
+        #model.load_weights('tmp.h5')
+    return model
+
+def trainModelOld(train_y, train_X, epochsIn, earlyStopping):
     model = getModelOld(train_X.shape[1], train_X.shape[2], train_y.shape[1])
     model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=True)
     return model
@@ -155,55 +171,6 @@ def genTrain(scaledCD, predInSamples):
     train_X = train_X.reshape((train_X.shape[0], look_back, 1))
     #train_y = train_y.reshape((train_y.shape[0], train_y.shape[1], 1))
     return train_y, train_X
-
-def getNClosestSamples(theseInds, thisInd, arrayLat, arrayLon, noMSamples):
-    thisLat = arrayLat[thisInd]
-    thisLon = arrayLon[thisInd]
-    coords_1 = (arrayLat[thisInd], arrayLon[thisInd])
-
-    thisLen = len(arrayLat)
-    theseDists = np.zeros(thisLen)
-    for ii in range(0, thisLen):
-        coords_2 = (arrayLat[ii], arrayLon[ii])
-        theseDists[ii] = mpu.haversine_distance(coords_1, coords_2)
-    distInds = np.argsort(theseDists)
-
-    return distInds[0:noMSamples]
-
-def getTrainM(scaledCD, predInSamples, noMSamples, theseInds, thisInd, arrayLat, arrayLon):
-
-    indArray = getNClosestSamples(theseInds, thisInd, arrayLat, arrayLon, noMSamples)
-    train_X = []
-    test_X = []
-    train_y = []
-    look_back = predInSamples
-    look_forward = predInSamples
-    nSamples = scaledCD.shape[0]
-
-    for i in range(0,noMSamples):
-        thisInLoopInd = indArray[i]
-        scaled = scaledCD[thisInLoopInd,:]
-        train=scaled[:-predInSamples]
-
-        train=train.reshape(len(train),1)
-        trainSS = series_to_supervised(train, 1, look_back, look_forward)
-
-        this_train_X = trainSS.values[:, :look_back];
-        this_train_X = this_train_X.reshape((this_train_X.shape[0], look_back, 1))
-
-        this_test_X  = scaled[(-predInSamples*2): -predInSamples]
-        this_test_X =  this_test_X.reshape((1, this_test_X.shape[0],  1))
-        if i == 0:
-            train_X = this_train_X
-            train_y = trainSS.values[:, -look_forward:]
-            test_X  = this_test_X
-        else:
-            train_X = np.concatenate((train_X,this_train_X), axis=2)
-            test_X  = np.concatenate((test_X,this_test_X), axis=2)
-
-    train_y = train_y.reshape((train_y.shape[0], train_y.shape[1], 1))
-    return train_y, train_X, test_X
-
 
 
 
@@ -276,7 +243,7 @@ for ii in range(0,nPoints):
     singleTrain = singleTrain.transpose()
 
     train_y1, train_X1  = genTrain(singleTrain,predInSamples)
-    y_hatLSTM1, model =  getLSTMPred(train_y1, train_X1,  test_X, scaler, epochs,0)
+    y_hatLSTM1, model =  getLSTMPred(train_y1, train_X1,  test_X, scaler, epochs,1)
     y_hatSin    = getFittedSinPred(values[:-predInSamples], yearInSamples, predInSamples)
     y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
 
