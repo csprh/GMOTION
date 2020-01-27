@@ -114,12 +114,19 @@ def trainModel(train_y, train_X, epochsIn, earlyStopping):
     model = getModelOld(train_X.shape[1], train_X.shape[2], train_y.shape[1])
 
     if earlyStopping == 1:
-        #es = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=100)
-        es = EarlyStopping(monitor='loss', mode='min', verbose=1, patience=100)
-        # fit model
-        #history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False, validation_split=0.3, callbacks=[es])
-        history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False, callbacks=[es])
 
+
+
+        filepath="weights.best.hdf5"
+        checkpoint = ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=True, mode='min')
+        cl = [checkpoint]
+        # Fit the model
+#        es = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=500)
+        #es = EarlyStopping(monitor='loss', mode='min', verbose=1, patience=10)
+        # fit model
+        history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False, validation_split=0.3, callbacks=[cl])
+        #history = model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=False, callbacks=[es])
+        model.load_weights("weights.best.hdf5")
     else:
         #checkpoint = ModelCheckpoint('tmp.h5', monitor='val_loss', verbose=1, save_best_only=True, mode='min')
         #callbacks_list = [checkpoint]
@@ -236,7 +243,7 @@ for ii in range(0,nPoints):
     ndates = len(values)
 
     test_y = values[-predInSamples:]
-    test_X  = scaled[(-predInSamples*2)+1 : -predInSamples+1]
+    test_X  = scaled[(-predInSamples*2) : -predInSamples]
     test_X = test_X.reshape((1, test_X.shape[0],  nfeatures))
 
     # define training period of n past observations
