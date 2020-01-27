@@ -255,8 +255,8 @@ for ii in range(0,nPoints):
     train_y1, train_X1  = genTrain(singleTrain,predInSamples)
     y_hatLSTM1, model =  getLSTMPred(train_y1, train_X1,  test_X, scaler, epochs,1)
     y_hatSin    = getFittedSinPred(values[:-predInSamples], yearInSamples, predInSamples)
-    #y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
-    y_hatSarima= y_hatSin
+    y_hatSarima = getSarimaPred(values[:-predInSamples], yearInSamples, predInSamples)
+    #y_hatSarima= y_hatSin
 
     rmseLSTM1 = np.zeros(9)
     rmseSarima = np.zeros(9)
