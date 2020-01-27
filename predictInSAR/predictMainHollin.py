@@ -107,7 +107,7 @@ def plotPredictions(seq, s, n, yhat, thisColor, plotSignal):
     if plotSignal==1:
         plt.plot(np.arange(1,len(seq)+1), seq, label='Real Sequence', color="black")
     plt.plot(np.arange(s,s+len(yhat)), yhat, label='Forecast-'+n, color=thisColor)
-    plt.ylabel('Cumulative Displacement')
+    plt.ylabel('Cumulative Displacement', fontsize=14)
 
 def trainModel(train_y, train_X, epochsIn, earlyStopping):
 
@@ -243,7 +243,7 @@ for ii in range(0,nPoints):
     ndates = len(values)
 
     test_y = values[-predInSamples:]
-    test_X  = scaled[(-predInSamples*2)+1 : -predInSamples+1]
+    test_X  = scaled[(-predInSamples*2)+2 : -predInSamples+2]
     test_X = test_X.reshape((1, test_X.shape[0],  nfeatures))
 
     # define training period of n past observations
