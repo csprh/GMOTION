@@ -184,7 +184,7 @@ def genTrain(scaledCD, predInSamples):
 
 
 
-Hollin = 1
+Hollin = 2
 dates = []; offset_days = 366
 if Hollin == 1:
     mat_contents = sio.loadmat('Hollin_hill_081D_03666_031013.mat')
@@ -243,7 +243,7 @@ for ii in range(0,nPoints):
     ndates = len(values)
 
     test_y = values[-predInSamples:]
-    test_X  = scaled[(-predInSamples*2) : -predInSamples]
+    test_X  = scaled[(-predInSamples*2)+1 : -predInSamples+1]
     test_X = test_X.reshape((1, test_X.shape[0],  nfeatures))
 
     # define training period of n past observations
@@ -294,7 +294,7 @@ for ii in range(0,nPoints):
        np.save('Sarima_Hollin1.npy', rmseSarimaArray)
        np.save('Sinu_Hollin1.npy', rmseSinArray)
 
-       plt.legend(loc='best',prop={"size":20})
+       plt.legend(loc='best',prop={"size":18})
        #plt.show()
        thisfig.savefig("Pred-Hollin1-"+str(chooseSeq)+".pdf", bbox_inches='tight')
     if Hollin == 2:
@@ -302,7 +302,7 @@ for ii in range(0,nPoints):
        np.save('Sarima_Hollin2.npy', rmseSarimaArray)
        np.save('Sinu_Hollin2.npy', rmseSinArray)
 
-       plt.legend(loc='best',  prop={"size":20})
+       plt.legend(loc='best',  prop={"size":18})
        #plt.show()
        thisfig.savefig("Pred-Hollin2-"+str(chooseSeq)+".pdf", bbox_inches='tight')
     if Hollin == 3:
@@ -310,7 +310,7 @@ for ii in range(0,nPoints):
        np.save('Sarima_Hollin3.npy', rmseSarimaArray)
        np.save('Sinu_Hollin3.npy', rmseSinArray)
 
-       plt.legend(loc='best', prop={"size":20})
+       plt.legend(loc='best', prop={"size":18})
        #plt.show()
        thisfig.savefig("Pred-Hollin3-"+str(chooseSeq)+".pdf", bbox_inches='tight')
     plt.close(); print('\n')
