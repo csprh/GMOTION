@@ -184,7 +184,7 @@ def genTrain(scaledCD, predInSamples):
 
 
 
-Hollin = 2
+Hollin = 3
 dates = []; offset_days = 366
 if Hollin == 1:
     mat_contents = sio.loadmat('Hollin_hill_081D_03666_031013.mat')
