@@ -130,7 +130,7 @@ yearInSamples = int(365.25/sampleTime)
 nfeatures = 1
 predInDays = 265        # 9 months
 
-epochs = 2
+epochs = 2000
 
 config = tf.compat.v1.ConfigProto()
 config.gpu_options.allow_growth = True

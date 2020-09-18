@@ -191,7 +191,6 @@ for XX in range(0,3):
     thisfig.savefig('REB_MOD1_X'+str(predInSamplesX)+'_Y'+str(predInSamplesY)+".pdf", bbox_inches='tight')
 
     plt.close(); print('\n')
-    config = tf.ConfigProto()
 
     tf.compat.v1.keras.backend.clear_session(); reset_keras()
     #be.clear_session(); reset_keras()
