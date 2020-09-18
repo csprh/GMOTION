@@ -73,7 +73,7 @@ def calcErr(yhat, inv_y):
     rmse = math.sqrt(mean_squared_error(yhat, inv_y))
     return rmse
 
-def genTrain(scaledCD, look_back, look_forward):
+def genTrain(scaledCD, look_back, look_forward, sampleBound):
 
     train_X = []
     train_y = []
@@ -81,7 +81,7 @@ def genTrain(scaledCD, look_back, look_forward):
 
     for i in range(0,nSamples):
         scaled = scaledCD[i,:]
-        train=scaled[:-look_forward]
+        train=scaled[:-sampleBound]
 
         train=train.reshape(len(train),1)
         trainSS = series_to_supervised(train, 1, look_back, look_forward)
@@ -141,6 +141,7 @@ rmseLSTM1Array = np.array([])
 
 sh = list(range(0,cdTSmooth.shape[0]))
 random.shuffle(sh)
+sampleBound = 44
 
 predXX = (44, 88, 132)
 predYY = (11, 22, 44)
@@ -158,8 +159,8 @@ for XX in range(0,3):
     scaled = scaledCD[chooseSeq, :]
     ndates = len(values)
 
-    test_y = values[-predInSamplesY:]
-    test_X  = scaled[(-predInSamplesX-predInSamplesY): -predInSamplesY]
+    test_y = values[-sampleBound:-sampleBound+predInSamplesY]
+    test_X  = scaled[(-predInSamplesX-sampleBound): -sampleBound]
     test_X = test_X.reshape((1, test_X.shape[0],  nfeatures))
 
     # define training period of n past observations
@@ -168,12 +169,12 @@ for XX in range(0,3):
     singleTrain = singleTrain[..., np.newaxis]
     singleTrain = singleTrain.transpose()
 
-    train_y1, train_X1  = genTrain(singleTrain,predInSamplesX, predInSamplesY )
+    train_y1, train_X1  = genTrain(singleTrain,predInSamplesX, predInSamplesY,  sampleBound)
 
     y_hatLSTM1, model =  getLSTMPred(train_y1, train_X1,  test_X, scaler, epochs,0)
 
     rmseLSTM1  = calcErr(y_hatLSTM1, test_y)
-    s = ndates - predInSamplesY
+    s = ndates - sampleBound
 
     plt.close()
     thisfig = plt.figure(figsize=(12,8))

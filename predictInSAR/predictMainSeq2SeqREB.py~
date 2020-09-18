@@ -141,6 +141,7 @@ rmseLSTM1Array = np.array([])
 
 sh = list(range(0,cdTSmooth.shape[0]))
 random.shuffle(sh)
+sampleBound = 44
 
 predXX = (44, 88, 132)
 predYY = (11, 22, 44)
@@ -150,7 +151,7 @@ for XX in range(0,3):
   predInSamplesX = predXX[XX]
   predInSamplesY = predYY[YY]
 
-  for ii in range(0,310):
+  for ii in range(0,100):
     chooseSeq = theseInds[-(ii+1)]
     #chooseSeq = sh[ii]
 
@@ -158,7 +159,7 @@ for XX in range(0,3):
     scaled = scaledCD[chooseSeq, :]
     ndates = len(values)
 
-    test_y = values[-predInSamplesY:]
+    test_y = values[-sampleBound:sampleBound-predInSamplesY]
     test_X  = scaled[(-predInSamplesX-predInSamplesY): -predInSamplesY]
     test_X = test_X.reshape((1, test_X.shape[0],  nfeatures))
 
@@ -168,7 +169,7 @@ for XX in range(0,3):
     singleTrain = singleTrain[..., np.newaxis]
     singleTrain = singleTrain.transpose()
 
-    train_y1, train_X1  = genTrain(singleTrain,predInSamplesX, predInSamplesY )
+    train_y1, train_X1  = genTrain(singleTrain,predInSamplesX, predInSamplesY,  sampleBound)
 
     y_hatLSTM1, model =  getLSTMPred(train_y1, train_X1,  test_X, scaler, epochs,0)
 
