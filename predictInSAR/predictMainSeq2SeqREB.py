@@ -150,8 +150,9 @@ for XX in range(0,3):
   predInSamplesX = predXX[XX]
   predInSamplesY = predYY[YY]
 
-  for ii in range(0,2000):
-    chooseSeq = sh[ii]
+  for ii in range(0,100):
+    chooseSeq = theseInds[-(ii+1)]
+    #chooseSeq = sh[ii]
 
     values = cdTSmooth[chooseSeq, :]
     scaled = scaledCD[chooseSeq, :]
