@@ -22,42 +22,55 @@ load interpLocationNorm3
 interpLocation.arrayAC2 = arrayAC2;
 
 subplot(1,3,1);
-plot(interpLocation.arrayAC2,interpLocation.arraySin,'.', 'Color',[0.85,0.33,0.10],'MarkerSize', 1); hold on;
-plot(interpLocation.arrayAC2(Ps1(1)),interpLocation.arraySin(Ps1(1)),'+r', 'MarkerSize', 14);
-plot(interpLocation.arrayAC2(Ps1(2)),interpLocation.arraySin(Ps1(2)),'+g', 'MarkerSize', 14);
-plot(interpLocation.arrayAC2(Ps1(3)),interpLocation.arraySin(Ps1(3)),'+b', 'MarkerSize', 14);
-plot(interpLocation.arrayAC2(Ps1(4)),interpLocation.arraySin(Ps1(4)),'+c', 'MarkerSize', 14);
-plot(interpLocation.arrayAC2(Ps1(5)),interpLocation.arraySin(Ps1(5)),'+y', 'MarkerSize', 14);
-plot(interpLocation.arrayAC2(Ps1(6)),interpLocation.arraySin(Ps1(6)),'+k', 'MarkerSize', 14);
-plot(interpLocation.arrayAC2(Ps1(7)),interpLocation.arraySin(Ps1(7)),'*b', 'MarkerSize', 14);
-plot(interpLocation.arrayAC2(Ps1(8)),interpLocation.arraySin(Ps1(8)),'*c', 'MarkerSize', 14);
-legend('All Points', 'P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8', 'FontSize', 13); 
+load c4
+colormap(c4);
+dscatter(interpLocation.arrayAC2,interpLocation.arraySin); hold on;
+dscatter(interpLocation.arrayAC2,interpLocation.arraySin,'plottype','contour');
+%plot(interpLocation.arrayAC2,interpLocation.arraySin,'.', 'Color',[0.85,0.33,0.10],'MarkerSize', 1); hold on;
+p1 = plot(interpLocation.arrayAC2(Ps1(1)),interpLocation.arraySin(Ps1(1)),'+r', 'MarkerSize', 14);
+p2 = plot(interpLocation.arrayAC2(Ps1(2)),interpLocation.arraySin(Ps1(2)),'+g', 'MarkerSize', 14);
+p3 = plot(interpLocation.arrayAC2(Ps1(3)),interpLocation.arraySin(Ps1(3)),'+b', 'MarkerSize', 14);
+p4 = plot(interpLocation.arrayAC2(Ps1(4)),interpLocation.arraySin(Ps1(4)),'+c', 'MarkerSize', 14);
+p5 = plot(interpLocation.arrayAC2(Ps1(5)),interpLocation.arraySin(Ps1(5)),'+m', 'MarkerSize', 14);
+p6 = plot(interpLocation.arrayAC2(Ps1(6)),interpLocation.arraySin(Ps1(6)),'+k', 'MarkerSize', 14);
+p7 = plot(interpLocation.arrayAC2(Ps1(7)),interpLocation.arraySin(Ps1(7)),'*b', 'MarkerSize', 14);
+p8 = plot(interpLocation.arrayAC2(Ps1(8)),interpLocation.arraySin(Ps1(8)),'*c', 'MarkerSize', 14);
+legend([p1 p2 p3 p4 p5 p6 p7 p8],'P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8', 'FontSize', 13); 
 title('SIndex$$_{ACF}$$ vs SIndex$$_{Sin}$$','interpreter','latex', 'FontSize', 18);
 xlabel('SIndex$$_{ACF}$$','interpreter','latex', 'FontSize', 18);
 ylabel('SIndex$$_{Sin}$$','interpreter','latex', 'FontSize', 18);
+pbaspect([1 1 1])
 subplot(1,3,2);
-plot(interpLocation.arrayAC2,interpLocation.arrayS,'.', 'Color',[0.85,0.33,0.10], 'MarkerSize', 1); hold on;
+
+dscatter(interpLocation.arrayAC2,interpLocation.arrayS); hold on;
+dscatter(interpLocation.arrayAC2,interpLocation.arrayS,'plottype','contour');
+%plot(interpLocation.arrayAC2,interpLocation.arrayS,'.', 'Color',[0.85,0.33,0.10], 'MarkerSize', 1); hold on;
 plot(interpLocation.arrayAC2(Ps1(1)),interpLocation.arrayS(Ps1(1)),'+r', 'MarkerSize', 14);
 plot(interpLocation.arrayAC2(Ps1(2)),interpLocation.arrayS(Ps1(2)),'+g', 'MarkerSize', 14);
 plot(interpLocation.arrayAC2(Ps1(3)),interpLocation.arrayS(Ps1(3)),'+b', 'MarkerSize', 14);
 plot(interpLocation.arrayAC2(Ps1(4)),interpLocation.arrayS(Ps1(4)),'+c', 'MarkerSize', 14);
-plot(interpLocation.arrayAC2(Ps1(5)),interpLocation.arrayS(Ps1(5)),'+y', 'MarkerSize', 14);
+plot(interpLocation.arrayAC2(Ps1(5)),interpLocation.arrayS(Ps1(5)),'+m', 'MarkerSize', 14);
 plot(interpLocation.arrayAC2(Ps1(6)),interpLocation.arrayS(Ps1(6)),'+k', 'MarkerSize', 14);
 plot(interpLocation.arrayAC2(Ps1(7)),interpLocation.arrayS(Ps1(7)),'*b', 'MarkerSize', 14);
 plot(interpLocation.arrayAC2(Ps1(8)),interpLocation.arrayS(Ps1(8)),'*c', 'MarkerSize', 14);
 title('SIndex$$_{ACF}$$ vs SIndex$$_{STL}$$','interpreter','latex', 'FontSize', 18);
 xlabel('SIndex$$_{ACF}$$','interpreter','latex', 'FontSize', 18);
 ylabel('SIndex$$_{STL}$$','interpreter','latex', 'FontSize', 18);
+pbaspect([1 1 1])
 subplot(1,3,3);
-plot(interpLocation.arrayS,interpLocation.arraySin,'.', 'Color',[0.85,0.33,0.10], 'MarkerSize', 1); hold on;
+
+dscatter(interpLocation.arrayS,interpLocation.arraySin); hold on;
+dscatter(interpLocation.arrayS,interpLocation.arraySin,'plottype','contour');
+%plot(interpLocation.arrayS,interpLocation.arraySin,'.', 'Color',[0.85,0.33,0.10], 'MarkerSize', 1); hold on;
 plot(interpLocation.arrayS(Ps1(1)),interpLocation.arraySin(Ps1(1)),'+r', 'MarkerSize', 14);
 plot(interpLocation.arrayS(Ps1(2)),interpLocation.arraySin(Ps1(2)),'+g', 'MarkerSize', 14);
 plot(interpLocation.arrayS(Ps1(3)),interpLocation.arraySin(Ps1(3)),'+b', 'MarkerSize', 14);
 plot(interpLocation.arrayS(Ps1(4)),interpLocation.arraySin(Ps1(4)),'+c', 'MarkerSize', 14);
-plot(interpLocation.arrayS(Ps1(5)),interpLocation.arraySin(Ps1(5)),'+y', 'MarkerSize', 14);
+plot(interpLocation.arrayS(Ps1(5)),interpLocation.arraySin(Ps1(5)),'+m', 'MarkerSize', 14);
 plot(interpLocation.arrayS(Ps1(6)),interpLocation.arraySin(Ps1(6)),'+k', 'MarkerSize', 14);
 plot(interpLocation.arrayS(Ps1(7)),interpLocation.arraySin(Ps1(7)),'*b', 'MarkerSize', 14);
 plot(interpLocation.arrayS(Ps1(8)),interpLocation.arraySin(Ps1(8)),'*c', 'MarkerSize', 14);
 title('SIndex$$_{STL}$$ vs SIndex$$_{Sin}$$','interpreter','latex', 'FontSize', 18);
 xlabel('SIndex$$_{STL}$$','interpreter','latex', 'FontSize', 18);
 ylabel('SIndex$$_{Sin}$$','interpreter','latex', 'FontSize', 18);
+pbaspect([1 1 1])

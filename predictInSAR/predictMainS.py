@@ -192,7 +192,7 @@ for ii in range(0,6):
     s = ndates - predInSamples
 
     plt.close()
-    thisfig = plt.figure(figsize=(12,8))
+    thisfig = plt.figure(figsize=(6,4))
     #plotPredictions(values, s, "LSTM1: RMSE = " + str(rmseLSTM1), y_hatLSTM1, "green", 1)
     #plotPredictions(values, s, "LSTM2: RMSE = "+  str(rmseLSTM6), y_hatLSTM6, "blue", 0)
     #plotPredictions(values, s, "LSTM3: RMSE = "+  str(rmseLSTM5p), y_hatLSTM5p, "pink", 0)

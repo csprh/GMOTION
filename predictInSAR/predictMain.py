@@ -200,7 +200,7 @@ be.tensorflow_backend.set_session(tf.Session(config=config))
 #[-1.3830938, 53.703094]
 #7816 / P7
 #[-1.3880703, 53.710693]
-#3689 / P8
+#7689 / P8
 #[-1.3971751, 53.70243]
 
 

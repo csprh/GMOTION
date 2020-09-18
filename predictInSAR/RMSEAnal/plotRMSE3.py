@@ -36,14 +36,15 @@ def showPlot(thisPos, plotName, plotTitle):
 
         mInd = ((np.round(1+ii*np.ones([numberProcessed,]))))
         mInd =  mInd.astype(int)
-        thisdataset = pd.DataFrame({'LSTM3': l3_0, 'LSTM8': l8_0,  'Sarima': l9_0, 'Sinu': l10_0, 'Months Predicted': mInd} )
+        thisdataset = pd.DataFrame({'LSTM8': l8_0,  'Sarima': l9_0, 'Sinu': l10_0, 'Months Predicted': mInd} )
         if ii == 0:
             dataset = thisdataset
         else:
             dataset = pd.concat([dataset,thisdataset])
 
     thisfig = plt.figure(figsize=(12,8))
-    dfNew = pd.melt(dataset, id_vars=['Months Predicted'], value_vars=['LSTM3', 'LSTM8', 'Sarima', 'Sinu'])
+    dfNew = pd.melt(dataset, id_vars=['Months Predicted'], value_vars=[ 'LSTM8', 'Sarima', 'Sinu'])
+
     sns.set(style="whitegrid")
     dfNew.rename({'variable': 'Prediction method'}, axis=1, inplace=True)
 
@@ -54,6 +55,6 @@ def showPlot(thisPos, plotName, plotTitle):
 
     plt.show()
 
-showPlot(0,'GroupPlot.pdf','Prediction over 9 Months')
+showPlot(0,'GroupPlotPaper.pdf','Prediction over 9 Months')
 
 

@@ -36,19 +36,19 @@ def showPlot(thisPos, plotName, plotTitle):
 
         mInd = ((np.round(1+ii*np.ones([len(l5_0),]))))
         mInd =  mInd.astype(int)
-        thisdataset = pd.DataFrame({'LSTM5': l5_0,  'LSTM8': l8_0, 'LSTM9': l9_0,  'Sarima': l9_0, 'Sinu': l10_0, 'Months Predicted': mInd} )
+        thisdataset = pd.DataFrame({'LSTM5': l5_0,  'LSTM8': l8_0, 'Sarima': l9_0, 'Sinu': l10_0, 'Months Predicted': mInd} )
         if ii == 0:
             dataset = thisdataset
         else:
             dataset = pd.concat([dataset,thisdataset])
 
     thisfig = plt.figure(figsize=(12,8))
-    dfNew = pd.melt(dataset, id_vars=['Months Predicted'], value_vars=['LSTM5', 'LSTM8', 'LSTM9', 'Sarima', 'Sinu'])
+    dfNew = pd.melt(dataset, id_vars=['Months Predicted'], value_vars=['LSTM5', 'LSTM8', 'Sarima', 'Sinu'])
     sns.set(style="whitegrid")
     dfNew.rename({'variable': 'Prediction method'}, axis=1, inplace=True)
 
-    ax = sns.boxplot(data=dfNew, x='Prediction method', y='value', hue = 'Months Predicted')
-    plt.ylabel('RMSE (Distribution in Quartiles and Outliers: For 210 Signals)')
+    ax = sns.boxplot(data=dfNew, x='Prediction method', y='value', hue = 'Months Predicted', showfliers=False)
+    plt.ylabel('RMSE (Distribution in Quartiles: For 2000 Signals)')
     plt.title(plotTitle)
     thisfig.savefig(plotName, bbox_inches='tight')
 

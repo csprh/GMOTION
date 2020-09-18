@@ -46,7 +46,7 @@ def showPlot(thisPos, plotName, plotTitle):
 
     rmses = [l1, l2, l3, l4, l5, l6, l7, l8, l9, l10]
 
-    dataset = pd.DataFrame({'LSTM1': l1, 'LSTM2': l2, 'LSTM3': l3, 'LSTM4': l4, 'LSTM5': l5, 'LSTM6': l6, 'LSTM7': l7, 'LSTM8': l8,  'Sarima': l9, 'Sinu': l10})
+    dataset = pd.DataFrame({'LSTM1': l1, 'LSTM2': l2, 'LSTM3': l3, 'LSTM4': l4, 'Seq2Seq1': l5, 'Seq2Seq2': l6, 'Seq2Seq3': l7, 'Seq2Seq4': l8,  'Sarima': l9, 'Sinu': l10})
 
     thisfig = plt.figure(figsize=(12,8))
 
