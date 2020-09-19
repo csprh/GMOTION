@@ -45,9 +45,6 @@ def getModel(x1,x2,y1):
 def plotPredictions2(x, y, yhat):
     # plot forecasting
 
-    endValue = seq[s-1]
-    yhat = np.concatenate([np.array([endValue]),yhat])
-
     plt.plot(np.arange(0,len(x)), x, label='X', color="black")
     plt.plot(np.arange(len(x),len(x)+len(y)), y, label='Y', color="blue")
     plt.plot(np.arange(len(x),len(x)+len(y)), yhat, label='Yhat', color="red")
