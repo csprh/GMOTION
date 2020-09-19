@@ -130,7 +130,7 @@ yearInSamples = int(365.25/sampleTime)
 nfeatures = 1
 predInDays = 265        # 9 months
 
-epochs = 2000
+epochs = 20
 
 config = tf.compat.v1.ConfigProto()
 config.gpu_options.allow_growth = True
@@ -144,14 +144,14 @@ random.shuffle(sh)
 sampleBound = 44
 
 predXX = (44, 88, 132)
-predYY = (11, 22, 44)
+predYY = (44, 22, 44)
 
 for XX in range(0,3):
  for YY in range(0,3):
   predInSamplesX = predXX[XX]
   predInSamplesY = predYY[YY]
 
-  for ii in range(0,100):
+  for ii in range(0,310):
     chooseSeq = theseInds[-(ii+1)]
     #chooseSeq = sh[ii]
 
@@ -159,7 +159,10 @@ for XX in range(0,3):
     scaled = scaledCD[chooseSeq, :]
     ndates = len(values)
 
-    test_y = values[-sampleBound:-sampleBound+predInSamplesY]
+    if sampleBound == predInSamplesY:
+       test_y = values[-sampleBound:]
+    else:
+       test_y = values[-sampleBound:-sampleBound+predInSamplesY]
     test_X  = scaled[(-predInSamplesX-sampleBound): -sampleBound]
     test_X = test_X.reshape((1, test_X.shape[0],  nfeatures))
 
