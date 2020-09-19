@@ -144,7 +144,7 @@ random.shuffle(sh)
 sampleBound = 44
 
 predXX = (44, 88, 132)
-predYY = (44, 22, 44)
+predYY = (11, 22, 44)
 
 for XX in range(0,3):
  for YY in range(0,3):
