@@ -42,6 +42,16 @@ def getModel(x1,x2,y1):
     model.compile(loss='mse', optimizer='adam')
     return model
 
+def plotPredictions2(x, y, yhat):
+    # plot forecasting
+
+    endValue = seq[s-1]
+    yhat = np.concatenate([np.array([endValue]),yhat])
+
+    plt.plot(np.arange(0,len(x)), x, label='X', color="black")
+    plt.plot(np.arange(len(x),len(x)+len(y)), y, label='Y', color="blue")
+    plt.plot(np.arange(len(x),len(x)+len(y)), yhat, label='Yhat', color="red")
+    plt.ylabel('Prediction')
 
 def plotPredictions(seq, s, n, yhat, thisColor, plotSignal):
     # plot forecasting
@@ -181,7 +191,8 @@ for XX in range(0,3):
 
     plt.close()
     thisfig = plt.figure(figsize=(12,8))
-    plotPredictions(values, s, "LSTM1: RMSE = " + str(rmseLSTM1), y_hatLSTM1, "green", 1)
+    #plotPredictions(values, s, "LSTM1: RMSE = " + str(rmseLSTM1), y_hatLSTM1, "green", 1)
+    plotPredictions2(test_X, test_y, y_hatLSTM1)
     plt.xticks(xInds, dates, rotation=30)
 
     if ii == 0:
