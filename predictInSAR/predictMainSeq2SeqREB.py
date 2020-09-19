@@ -171,7 +171,7 @@ for XX in range(0,3):
     else:
        test_y = values[-sampleBound:-sampleBound+predInSamplesY]
     test_X  = scaled[(-predInSamplesX-sampleBound): -sampleBound]
-    test_X_orig = test_X
+    test_X_orig = values[(-predInSamplesX-sampleBound): -sampleBound]
     test_X = test_X.reshape((1, test_X.shape[0],  nfeatures))
 
     # define training period of n past observations

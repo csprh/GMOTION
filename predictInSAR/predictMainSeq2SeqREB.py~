@@ -171,6 +171,7 @@ for XX in range(0,3):
     else:
        test_y = values[-sampleBound:-sampleBound+predInSamplesY]
     test_X  = scaled[(-predInSamplesX-sampleBound): -sampleBound]
+    test_X_orig = test_X
     test_X = test_X.reshape((1, test_X.shape[0],  nfeatures))
 
     # define training period of n past observations
@@ -189,7 +190,7 @@ for XX in range(0,3):
     plt.close()
     thisfig = plt.figure(figsize=(12,8))
     #plotPredictions(values, s, "LSTM1: RMSE = " + str(rmseLSTM1), y_hatLSTM1, "green", 1)
-    plotPredictions2(test_X, test_y, y_hatLSTM1)
+    plotPredictions2(test_X_orig, test_y, y_hatLSTM1)
     plt.xticks(xInds, dates, rotation=30)
 
     if ii == 0:
