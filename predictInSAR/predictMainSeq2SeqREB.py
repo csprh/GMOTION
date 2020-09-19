@@ -177,7 +177,7 @@ for XX in range(0,3):
     y_hatLSTM1, model =  getLSTMPred(train_y1, train_X1,  test_X, scaler, epochs,0)
 
     rmseLSTM1  = calcErr(y_hatLSTM1, test_y)
-    s = ndates - sampleBound
+    s = ndates - sampleBound - 1
 
     plt.close()
     thisfig = plt.figure(figsize=(12,8))
