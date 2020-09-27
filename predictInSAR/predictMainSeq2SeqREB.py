@@ -63,7 +63,7 @@ def plotPredictions(seq, s, n, yhat, thisColor, plotSignal):
 
 def trainModel(train_y, train_X, epochsIn, earlyStopping):
     model = getModel(train_X.shape[1], train_X.shape[2], train_y.shape[1])
-    model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=1, shuffle=True)
+    model.fit(train_X, train_y, epochs=epochsIn, batch_size=128, verbose=0, shuffle=True)
     return model
 
 def predInv(model, test_X, scaler):
