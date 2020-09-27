@@ -151,12 +151,14 @@ random.shuffle(sh)
 sampleBound = 44
 
 predXX = (44, 88, 132)
-predYY = (11, 22, 44)
+#predYY = (11, 22, 44)
+#predYY = (5)
 
 for XX in range(0,3):
- for YY in range(0,3):
+ #for YY in range(0,3):
   predInSamplesX = predXX[XX]
-  predInSamplesY = predYY[YY]
+  #predInSamplesY = predYY[YY]
+  predInSamplesY = 5
 
   for ii in range(0,310):
     chooseSeq = theseInds[-(ii+1)]

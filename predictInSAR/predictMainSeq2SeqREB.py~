@@ -151,12 +151,14 @@ random.shuffle(sh)
 sampleBound = 44
 
 predXX = (44, 88, 132)
-predYY = (11, 22, 44)
+#predYY = (11, 22, 44)
+#predYY = (5)
 
 for XX in range(0,3):
- for YY in range(0,3):
+ #for YY in range(0,3):
   predInSamplesX = predXX[XX]
-  predInSamplesY = predYY[YY]
+  #predInSamplesY = predYY[YY]
+  predInSamplesY = 5
 
   for ii in range(0,310):
     chooseSeq = theseInds[-(ii+1)]
@@ -171,7 +173,7 @@ for XX in range(0,3):
     else:
        test_y = values[-sampleBound:-sampleBound+predInSamplesY]
     test_X  = scaled[(-predInSamplesX-sampleBound): -sampleBound]
-    test_X_orig = test_X
+    test_X_orig = values[(-predInSamplesX-sampleBound): -sampleBound]
     test_X = test_X.reshape((1, test_X.shape[0],  nfeatures))
 
     # define training period of n past observations

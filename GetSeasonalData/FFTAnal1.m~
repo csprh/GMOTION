@@ -59,8 +59,8 @@ xx = 1: 222
 
 pp = sin(2*pi * (xx / (61.0)));
 
-[pxx2,w2] = periodogram(pp,hamming(size(x,2)),512);
-[pxx,w] = periodogram(x',hamming(size(x,2)),512);
+[pxx2,w2] = periodogram(pp,hamming(size(x,2)),1024);
+[pxx,w] = periodogram(x',hamming(size(x,2)),1024);
 
 
 pxx = 10*log10(pxx');
@@ -68,7 +68,21 @@ pxx = 10*log10(pxx');
 samplingFreq = 61;
 eachBin = samplingFreq / 257;
 
+pxx = pxx(:,1:64);
+[histOut,X] = hist(pxx,400)
+imagesc((flipud(log(histOut))));
+xlabel('Normalised Frequency (x \pi rad / Sample)', 'fontsize', 14);
+xticklabels = [0 0.125 0.5 0.75 0.125];
+xticks = linspace(1, size(histOut, 2), numel(xticklabels));
+set(gca, 'XTick', xticks, 'XTickLabel', xticklabels)
 
-histOut = hist(pxx,200)
-imagesc(log(histOut));
+ylabel('PSD (dB)', 'fontsize', 14);
+yticklabels = X(200:-20:1);
+yticks = linspace(1, size(histOut, 2), numel(yticklabels));
+
+set(gca, 'YTick', yticks, 'YTickLabel', yticklabels);
+
+tix=get(gca,'ytick')';
+set(gca,'yticklabel',num2str(yticklabels,'%.2f'))
+
 %plot(w,10*log10(pxx))

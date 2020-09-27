@@ -59,8 +59,8 @@ xx = 1: 222
 
 pp = sin(2*pi * (xx / (61.0)));
 
-[pxx2,w2] = periodogram(pp,hamming(size(x,2)),512);
-[pxx,w] = periodogram(x',hamming(size(x,2)),512);
+[pxx2,w2] = periodogram(pp,hamming(size(x,2)),1024);
+[pxx,w] = periodogram(x',hamming(size(x,2)),1024);
 
 
 pxx = 10*log10(pxx');
@@ -68,21 +68,26 @@ pxx = 10*log10(pxx');
 samplingFreq = 61;
 eachBin = samplingFreq / 257;
 
-
-[histOut,X] = hist(pxx,200)
+pxx = pxx(:,1:64);
+[histOut,X] = hist(pxx,400)
 imagesc((flipud(log(histOut))));
-xlabel('Normalised Frequency (x \pi rad / Sample)', 'fontsize', 14);
-xticklabels = [0 0.25 0.5 0.75 1];
+xlabel('Normalised Frequency (Cycles Per Year)', 'fontsize', 14);
+xticklabels = [0 0.0625 0.125];
 xticks = linspace(1, size(histOut, 2), numel(xticklabels));
-set(gca, 'XTick', xticks, 'XTickLabel', xticklabels)
+xticks = 0:18:5*18;
+set(gca, 'XTick', xticks, 'XTickLabel', xticks/18)
+%set(gca, 'XTick', xticks, 'XTickLabel', xticklabels)
 
 ylabel('PSD (dB)', 'fontsize', 14);
-yticklabels = X(200:-20:1);
-yticks = linspace(1, size(histOut, 2), numel(yticklabels));
+yticklabels = X(400:-40:1);
+yticks = linspace(1, size(histOut, 1), numel(yticklabels));
 
 set(gca, 'YTick', yticks, 'YTickLabel', yticklabels);
 
 tix=get(gca,'ytick')';
+line([18,18],[405, 1], 'LineStyle', '--', 'Color', 'yellow');
+line([36,36],[405, 1], 'LineStyle', '--', 'Color', 'yellow');
+line([56,56],[405, 1], 'LineStyle', '--', 'Color', 'yellow');
 set(gca,'yticklabel',num2str(yticklabels,'%.2f'))
 
 %plot(w,10*log10(pxx))

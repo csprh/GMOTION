@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import pickle
+import matplotlib
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
+
+import numpy as np
+import math
+import scipy.io as sio
+
+import seaborn as sns
+import pandas as pd
+
+
+
+
+
+
+thisPos = 0
+numberProcessed = 310
+
+
+def showPlot(plotName, plotTitle):
+
+
+    for ii in range(0,3):
+        if ii == 0:
+          l1In = np.squeeze(np.load('REB_MOD1_X44_Y11.npy'))
+          l2In = np.squeeze(np.load('REB_MOD1_X88_Y11.npy'))
+          l3In = np.squeeze(np.load('REB_MOD1_X132_Y11.npy'))
+          predM = 2
+        if ii == 1:
+          l1In = np.squeeze(np.load('REB_MOD1_X44_Y22.npy'))
+          l2In = np.squeeze(np.load('REB_MOD1_X88_Y22.npy'))
+          l3In = np.squeeze(np.load('REB_MOD1_X132_Y22.npy'))
+          predM = 4
+        if ii == 2:
+          l1In = np.squeeze(np.load('REB_MOD1_X44_Y44.npy'))
+          l2In = np.squeeze(np.load('REB_MOD1_X88_Y44.npy'))
+          l3In = np.squeeze(np.load('REB_MOD1_X132_Y44.npy'))
+          predM = 9
+        numberP = 244
+        l1In = l1In[:numberP]
+        l2In = l2In[:numberP]
+        l3In = l3In[:numberP]
+
+
+        mInd = ((np.round(predM*np.ones([numberP,]))))
+        mInd =  mInd.astype(int)
+        thisdataset = pd.DataFrame({'$N_x$:9Months': l1In, '$N_x$:18Months': l2In, '$N_x$:27Months': l3In, 'Months Predicted ($N_y$)': mInd} )
+        if ii == 0:
+            dataset = thisdataset
+        else:
+            dataset = pd.concat([dataset,thisdataset])
+
+    thisfig = plt.figure(figsize=(9,6))
+    dfNew = pd.melt(dataset, id_vars=['Months Predicted ($N_y$)'], value_vars=['$N_x$:9Months','$N_x$:18Months','$N_x$:27Months'])
+    sns.set(style="whitegrid")
+    dfNew.rename({'variable': 'Training Length'}, axis=1, inplace=True)
+
+    ax = sns.boxplot(data=dfNew, x='Training Length', y='value', hue = 'Months Predicted ($N_y$)',showfliers=False)
+    plt.ylabel('RMSE (Distribution in Quartiles: For 310 Signals)')
+
+    plt.title(plotTitle)
+    thisfig.savefig(plotName, bbox_inches='tight')
+
+    plt.show()
+showPlot('X44.pdf','Seq2Seq1: Prediction of 2,4 and 9 Months (Seasonal)')
