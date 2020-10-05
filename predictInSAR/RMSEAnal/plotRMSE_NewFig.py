@@ -27,10 +27,10 @@ def showPlot(plotName, plotTitle):
 
     for ii in range(0,3):
         if ii == 0:
-          l1In = np.squeeze(np.load('REB_MOD1_X44_Y11.npy'))
-          l2In = np.squeeze(np.load('REB_MOD1_X88_Y11.npy'))
-          l3In = np.squeeze(np.load('REB_MOD1_X132_Y11.npy'))
-          predM = 2
+          l1In = np.squeeze(np.load('REB_MOD1_X44_Y5.npy'))
+          l2In = np.squeeze(np.load('REB_MOD1_X88_Y5.npy'))
+          l3In = np.squeeze(np.load('REB_MOD1_X132_Y5.npy'))
+          predM = 1
         if ii == 1:
           l1In = np.squeeze(np.load('REB_MOD1_X44_Y22.npy'))
           l2In = np.squeeze(np.load('REB_MOD1_X88_Y22.npy'))
@@ -41,7 +41,7 @@ def showPlot(plotName, plotTitle):
           l2In = np.squeeze(np.load('REB_MOD1_X88_Y44.npy'))
           l3In = np.squeeze(np.load('REB_MOD1_X132_Y44.npy'))
           predM = 9
-        numberP = 310
+        numberP = 250
         l1In = l1In[:numberP]
         l2In = l2In[:numberP]
         l3In = l3In[:numberP]
@@ -67,4 +67,4 @@ def showPlot(plotName, plotTitle):
     thisfig.savefig(plotName, bbox_inches='tight')
 
     plt.show()
-showPlot('X44.pdf','Seq2Seq1: Prediction of 2,4 and 9 Months (Seasonal)')
+showPlot('X44.pdf','Seq2Seq1: Prediction of 1,4 and 9 Months (Seasonal)')
